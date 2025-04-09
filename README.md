@@ -29,3 +29,13 @@ Este é o backend da aplicação **English Teaching Assistant**, uma plataforma 
 | GET    | `/relatorios`            | Relatórios de desempenho do aluno |
 
 ---
+
+## Como rodar
+
+No terminal, rode:
+```bash
+docker compose up -d
+```
+
+Rode o projeto
+
