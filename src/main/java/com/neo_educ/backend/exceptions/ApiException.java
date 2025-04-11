@@ -1,4 +1,4 @@
-package com.neo_educ.backend.infra.exceptions;
+package com.neo_educ.backend.exceptions;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
