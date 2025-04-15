@@ -2,6 +2,7 @@ package com.neo_educ.backend.dto.auth;
 
 public record LoginResponseDTO(
         String token,
-        long expiresIn
+        long expiresIn,
+        TeacherDTO user
 ) {
 }

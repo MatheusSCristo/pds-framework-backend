@@ -3,6 +3,8 @@ package com.neo_educ.backend.controller;
 import com.neo_educ.backend.dto.auth.LoginDTO;
 import com.neo_educ.backend.dto.auth.LoginResponseDTO;
 import com.neo_educ.backend.dto.auth.RegisterDTO;
+import com.neo_educ.backend.dto.auth.TeacherDTO;
+import com.neo_educ.backend.mappers.TeacherMapper;
 import com.neo_educ.backend.model.TeacherEntity;
 import com.neo_educ.backend.service.AuthService;
 import com.neo_educ.backend.service.JwtService;
@@ -19,9 +21,12 @@ public class AuthController {
 
     private final AuthService authService;
 
-    public AuthController(JwtService jwtService, AuthService authService) {
+    private final TeacherMapper teacherMapper;
+
+    public AuthController(JwtService jwtService, AuthService authService,TeacherMapper teacherMapper) {
         this.jwtService = jwtService;
         this.authService = authService;
+        this.teacherMapper=teacherMapper;
     }
 
     @PostMapping("/signup")
@@ -36,9 +41,9 @@ public class AuthController {
         TeacherEntity authenticatedUser = authService.authenticate(loginDTO);
         String jwtToken = jwtService.generateToken(authenticatedUser);
         long expiresIn=jwtService.getExpirationTime();
-
+        TeacherDTO authenticatedDTO=teacherMapper.toDTO(authenticatedUser);
         LoginResponseDTO loginResponse = new LoginResponseDTO(
-                jwtToken,expiresIn
+                jwtToken,expiresIn,authenticatedDTO
         );
 
         return ResponseEntity.ok(loginResponse);
