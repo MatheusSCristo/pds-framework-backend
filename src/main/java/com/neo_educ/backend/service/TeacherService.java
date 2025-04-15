@@ -13,7 +13,6 @@ public class TeacherService {
     @Autowired
     private TeacherRepository teacherRepository;
 
-
     public UserDetails findByEmailOrThrowError(String email) {
         return teacherRepository.findByEmail(email).orElseThrow(() -> new EntityNotFoundException("Entity with email " + email + " not found"));
     }

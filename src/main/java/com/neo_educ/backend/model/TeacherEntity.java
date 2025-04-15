@@ -25,9 +25,6 @@ public class TeacherEntity extends AbstractModel implements UserDetails {
     private String email;
     private String password;
     private String phone;
-    private String state;
-    private String city;
-    private String country;
 
     @Override
     @Transient

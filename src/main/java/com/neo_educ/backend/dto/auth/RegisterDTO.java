@@ -12,11 +12,5 @@ public record RegisterDTO(
      @JsonProperty("password")
      String password,
      @JsonProperty("phone")
-     String phone,
-     @JsonProperty("state")
-     String state,
-     @JsonProperty("city")
-     String city,
-        @JsonProperty("country")
-     String country
+     String phone
 ){}

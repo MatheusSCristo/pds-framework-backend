@@ -7,8 +7,6 @@ public record TeacherDTO(
         @JsonProperty("last_name")
         String lastName,
         String email,
-        String city,
-        String country,
-        String state
+        String phone
 ) {
 }

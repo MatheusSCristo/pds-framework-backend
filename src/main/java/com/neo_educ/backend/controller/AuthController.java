@@ -34,7 +34,6 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDTO> authenticate(@RequestBody LoginDTO loginDTO) {
         TeacherEntity authenticatedUser = authService.authenticate(loginDTO);
-
         String jwtToken = jwtService.generateToken(authenticatedUser);
         long expiresIn=jwtService.getExpirationTime();
 

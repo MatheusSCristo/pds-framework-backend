@@ -44,10 +44,7 @@ public class AuthService {
                 .name(input.name())
                 .lastName(input.lastName())
                 .email(input.email())
-                .city(input.city())
                 .phone(input.phone())
-                .country(input.country())
-                .state(input.state())
                 .password(encodedPassword)
                 .build();
         return teacherRepository.save(user);
