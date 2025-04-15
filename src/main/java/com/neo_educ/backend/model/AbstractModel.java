@@ -1,7 +1,6 @@
-package com.neo_educ.backend.core;
+package com.neo_educ.backend.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

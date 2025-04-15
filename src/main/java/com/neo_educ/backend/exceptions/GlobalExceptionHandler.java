@@ -1,4 +1,4 @@
-package com.neo_educ.backend.infra.exceptions;
+package com.neo_educ.backend.exceptions;
 
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
