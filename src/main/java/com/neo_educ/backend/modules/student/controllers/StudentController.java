@@ -19,9 +19,13 @@ public class StudentController {
 
   @PostMapping("/")
   public ResponseEntity<Object> create(@RequestBody CreateStudentRequestDTO createStudentRequestDTO) {
-    var result= createStudentUseCase.execute(createStudentRequestDTO);
+    try {
+      var result= createStudentUseCase.execute(createStudentRequestDTO);
 
-    return ResponseEntity.ok().body(result);
+      return ResponseEntity.ok().body(result);
+    } catch (Exception e) {
+      return ResponseEntity.badRequest().body(e.getMessage());
+    }
   }
 
 }

@@ -1,7 +1,9 @@
 package com.neo_educ.backend.modules.student.entity;
 
-import com.neo_educ.backend.core.AbstractModel;
+import com.neo_educ.backend.model.AbstractModel;
 import jakarta.persistence.Entity;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 @EqualsAndHashCode(callSuper = true)
@@ -12,8 +14,13 @@ import lombok.*;
 @Entity(name = "student")
 public class StudentEntity extends AbstractModel {
 
+  @NotBlank(message = "O campo [name] não pode ser vazio")
   private String name;
+
+  @Email(message = "O campo [email] deve conter um email válido")
   private String email;
+
+  @NotBlank(message = "O campo [proficiencyLevel] não pode ser vazio")
   private String proficiencyLevel;
 
 }
