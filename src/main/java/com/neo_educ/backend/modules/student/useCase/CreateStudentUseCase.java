@@ -2,7 +2,7 @@ package com.neo_educ.backend.modules.student.useCase;
 
 import com.neo_educ.backend.exceptions.student.StudentAlreadyExistsException;
 import com.neo_educ.backend.modules.student.dto.CreateStudentRequestDTO;
-import com.neo_educ.backend.modules.student.dto.CreateStudentResponseDTO;
+import com.neo_educ.backend.modules.student.dto.StudentResponseDTO;
 import com.neo_educ.backend.modules.student.entity.StudentEntity;
 import com.neo_educ.backend.modules.student.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +14,7 @@ public class CreateStudentUseCase {
   @Autowired
   private StudentRepository studentRepository;
 
-  public CreateStudentResponseDTO execute(CreateStudentRequestDTO createStudentRequestDTO) {
+  public StudentResponseDTO execute(CreateStudentRequestDTO createStudentRequestDTO) {
     if(studentRepository.findByEmail(createStudentRequestDTO.email()).isPresent()) {
       throw new StudentAlreadyExistsException();
     }
@@ -27,7 +27,7 @@ public class CreateStudentUseCase {
 
     StudentEntity saved = studentRepository.save(entity);
 
-    return CreateStudentResponseDTO.fromEntity(saved);
+    return StudentResponseDTO.fromEntity(saved);
   }
 
 }
