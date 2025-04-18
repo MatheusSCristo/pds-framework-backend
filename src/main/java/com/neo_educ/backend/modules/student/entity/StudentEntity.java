@@ -5,10 +5,11 @@ import jakarta.persistence.Entity;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-@Builder
+@SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity(name = "student")
