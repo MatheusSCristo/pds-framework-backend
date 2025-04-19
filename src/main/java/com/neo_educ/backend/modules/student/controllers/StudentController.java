@@ -7,6 +7,8 @@ import com.neo_educ.backend.modules.student.useCase.GetStudentInformationsUseCas
 import com.neo_educ.backend.modules.student.useCase.UpdateStudentInformationsUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -28,7 +30,10 @@ public class StudentController {
   @PostMapping("/")
   public ResponseEntity<Object> create(@RequestBody StudentRequestDTO studentRequestDTO) {
     try {
-      var result= createStudentUseCase.execute(studentRequestDTO);
+      Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+      String teacherEmail = authentication.getName();
+
+      var result= createStudentUseCase.execute(studentRequestDTO, teacherEmail);
 
       return ResponseEntity.ok().body(result);
     } catch (Exception e) {
@@ -39,7 +44,10 @@ public class StudentController {
   @GetMapping("/{studentId}")
   public ResponseEntity<Object> getStudentInformations(@PathVariable Long studentId) {
     try {
-      var result = getStudentInformationsUseCase.execute(studentId);
+      Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+      String teacherEmail = authentication.getName();
+
+      var result = getStudentInformationsUseCase.execute(studentId, teacherEmail);
 
       return ResponseEntity.ok().body(result);
     } catch (Exception e) {
@@ -50,7 +58,10 @@ public class StudentController {
   @DeleteMapping("/{studentId}")
   public ResponseEntity<Object> delete(@PathVariable Long studentId) {
     try {
-      this.deleteStudentUseCase.execute(studentId);
+      Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+      String teacherEmail = authentication.getName();
+
+      this.deleteStudentUseCase.execute(studentId, teacherEmail);
 
       return ResponseEntity.noContent().build();
     } catch (Exception e) {
@@ -61,7 +72,10 @@ public class StudentController {
   @PutMapping("/{studentId}")
   public ResponseEntity<Object> updateStudentInformations(@PathVariable Long studentId, @RequestBody StudentRequestDTO studentRequestDTO) {
     try {
-      var result = this.updateStudentInformationsUseCase.execute(studentRequestDTO, studentId);
+      Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+      String teacherEmail = authentication.getName();
+
+      var result = this.updateStudentInformationsUseCase.execute(studentRequestDTO, studentId, teacherEmail);
 
       return ResponseEntity.ok().body(result);
     } catch (Exception e) {

@@ -14,8 +14,8 @@ public class CreateStudentUseCase {
   @Autowired
   private StudentRepository studentRepository;
 
-  public StudentResponseDTO execute(StudentRequestDTO StudentRequestDTO) {
-    if(studentRepository.findByEmail(StudentRequestDTO.email()).isPresent()) {
+  public StudentResponseDTO execute(StudentRequestDTO StudentRequestDTO, String teacherEmail) {
+    if(studentRepository.findByEmailAndTeacherEmail(StudentRequestDTO.email(), teacherEmail).isPresent()) {
       throw new StudentAlreadyExistsException();
     }
 
@@ -23,6 +23,7 @@ public class CreateStudentUseCase {
         .name(StudentRequestDTO.name())
         .email(StudentRequestDTO.email())
         .proficiencyLevel(StudentRequestDTO.proficiencyLevel())
+        .teacherEmail(teacherEmail)
         .build();
 
     StudentEntity saved = studentRepository.save(entity);

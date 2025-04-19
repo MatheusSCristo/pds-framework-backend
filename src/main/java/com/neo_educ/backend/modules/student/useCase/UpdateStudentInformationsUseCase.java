@@ -17,12 +17,12 @@ public class UpdateStudentInformationsUseCase {
   @Autowired
   private StudentRepository studentRepository;
 
-  public StudentResponseDTO execute(StudentRequestDTO studentRequestDTO, Long studentId) {
+  public StudentResponseDTO execute(StudentRequestDTO studentRequestDTO, Long studentId, String teacherEmail) {
     if(studentRequestDTO.name() == null && studentRequestDTO.email() == null && studentRequestDTO.proficiencyLevel() == null) {
       throw new InvalidUpdateStudentInformationsRequestException();
     }
 
-    StudentEntity student = this.studentRepository.findById(studentId)
+    StudentEntity student = this.studentRepository.findByIdAndTeacherEmail(studentId, teacherEmail)
         .orElseThrow(StudentNotFoundException::new);
 
     if(studentRequestDTO.name() != null) {

@@ -29,8 +29,11 @@ public class StudentEntity extends AbstractModel {
   private String proficiencyLevel;
 
   @ManyToOne
-  @JoinColumn(name = "teacher_id", nullable = false)
+  @JoinColumn(name = "teacher_email", referencedColumnName = "email", nullable = false, insertable = false, updatable = false)
   private TeacherEntity teacher;
+
+  @Column(name = "teacher_email", nullable = false)
+  private String teacherEmail;
 
   @OneToMany(mappedBy = "student", cascade = CascadeType.REMOVE)
   private List<NotesEntity> notes;
