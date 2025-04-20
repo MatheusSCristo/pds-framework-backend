@@ -7,8 +7,6 @@ import com.neo_educ.backend.modules.notes.repository.NotesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @Service
 public class GetOneNoteInformationUseCase {
 
