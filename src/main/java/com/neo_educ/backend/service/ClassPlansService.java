@@ -39,4 +39,14 @@ public class ClassPlansService {
 
     return classPlansRepository.save(entity);
   }
+
+  public ClassPlansEntity findByID(Long id) {
+    Optional<ClassPlansEntity> optionalClassPlan = classPlansRepository.findById(id);
+
+    if (optionalClassPlan.isEmpty()) {
+      throw new RuntimeException("Plano de aula não encontrado com o ID: " + id);
+    }
+
+    return optionalClassPlan.get();
+  }
 }
