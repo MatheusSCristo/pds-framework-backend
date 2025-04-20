@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 
 import com.neo_educ.backend.enums.ClassPlanStatus;
 
-public record ClassPlansFindByIdDTO (
+public record ClassPlansOutputDTO (
   String topic,
   LocalDateTime classDate,
   String inputData,

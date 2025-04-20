@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.neo_educ.backend.dto.class_plans.ClassPlansCreateDTO;
+import com.neo_educ.backend.dto.class_plans.ClassPlansUpdateDTO;
 import com.neo_educ.backend.enums.ClassPlanStatus;
 import com.neo_educ.backend.model.ClassPlansEntity;
 import com.neo_educ.backend.model.TeacherEntity;
@@ -53,5 +54,20 @@ public class ClassPlansService {
 
   public List<ClassPlansEntity> findAll() {
     return classPlansRepository.findAll();
+  }
+
+  public ClassPlansEntity update(Long id, ClassPlansUpdateDTO data) {
+    Optional<ClassPlansEntity> optionalClassPlan = classPlansRepository.findById(id);
+
+    if (optionalClassPlan.isEmpty()) {
+      throw new RuntimeException("Plano de aula não encontrado com o ID: " + id);
+    }
+
+    ClassPlansEntity entity = optionalClassPlan.get();
+    entity.setTopic(data.topic());
+    entity.setClassDate(data.classDate());
+    entity.setInputData(data.inputData());
+
+    return classPlansRepository.save(entity);
   }
 }
