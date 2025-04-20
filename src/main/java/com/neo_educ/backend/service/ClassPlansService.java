@@ -57,17 +57,19 @@ public class ClassPlansService {
   }
 
   public ClassPlansEntity update(Long id, ClassPlansUpdateDTO data) {
-    Optional<ClassPlansEntity> optionalClassPlan = classPlansRepository.findById(id);
 
-    if (optionalClassPlan.isEmpty()) {
-      throw new RuntimeException("Plano de aula não encontrado com o ID: " + id);
-    }
-
-    ClassPlansEntity entity = optionalClassPlan.get();
+    ClassPlansEntity entity = this.findByID(id);
     entity.setTopic(data.topic());
     entity.setClassDate(data.classDate());
     entity.setInputData(data.inputData());
 
     return classPlansRepository.save(entity);
+  }
+
+  public void delete(Long id) {
+
+    ClassPlansEntity entity = this.findByID(id);
+    this.classPlansRepository.delete(entity);
+    
   }
 }
