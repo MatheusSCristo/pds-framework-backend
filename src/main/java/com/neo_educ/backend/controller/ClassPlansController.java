@@ -1,5 +1,7 @@
 package com.neo_educ.backend.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,14 +19,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
-
-
 @RestController
 @RequestMapping("/class-plans")
 public class ClassPlansController {
-  
+
   @Autowired
-  private ClassPlansService service; 
+  private ClassPlansService service;
 
   @Autowired
   private ClassPlansMapper mapper;
@@ -36,12 +36,19 @@ public class ClassPlansController {
   }
 
   @GetMapping("/{id}")
-public ResponseEntity<ClassPlansFindByIdDTO> findById(@PathVariable Long id) {
-  ClassPlansEntity entity = this.service.findByID(id);
-  ClassPlansFindByIdDTO dto = this.mapper.toFindByIdDTO(entity);
+  public ResponseEntity<ClassPlansFindByIdDTO> findById(@PathVariable Long id) {
+    ClassPlansEntity entity = this.service.findByID(id);
+    ClassPlansFindByIdDTO dto = this.mapper.toFindByIdDTO(entity);
 
-  return ResponseEntity.ok(dto);
-}
+    return ResponseEntity.ok(dto);
+  }
 
+  @GetMapping()
+  public ResponseEntity<List<ClassPlansFindByIdDTO>> findAll() {
+    List<ClassPlansEntity> entities = this.service.findAll();
+    List<ClassPlansFindByIdDTO> response = this.mapper.toFindAll(entities);
+
+    return ResponseEntity.ok(response);
+  }
 
 }

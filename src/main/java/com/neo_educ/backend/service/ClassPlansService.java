@@ -10,6 +10,7 @@ import com.neo_educ.backend.model.TeacherEntity;
 import com.neo_educ.backend.repository.ClassPlansRepository;
 import com.neo_educ.backend.repository.TeacherRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -48,5 +49,9 @@ public class ClassPlansService {
     }
 
     return optionalClassPlan.get();
+  }
+
+  public List<ClassPlansEntity> findAll() {
+    return classPlansRepository.findAll();
   }
 }
