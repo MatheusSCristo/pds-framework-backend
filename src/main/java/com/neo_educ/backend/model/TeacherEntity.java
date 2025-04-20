@@ -1,8 +1,8 @@
 package com.neo_educ.backend.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
+import com.neo_educ.backend.modules.notes.entity.NotesEntity;
+import com.neo_educ.backend.modules.student.entity.StudentEntity;
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.springframework.security.core.GrantedAuthority;
@@ -22,9 +22,17 @@ public class TeacherEntity extends AbstractModel implements UserDetails {
 
     private String name;
     private String lastName;
+
+    @Column(unique = true, nullable = false)
     private String email;
     private String password;
     private String phone;
+
+    @OneToMany(mappedBy = "teacher", cascade = CascadeType.REMOVE)
+    private List<StudentEntity> students;
+
+    @OneToMany(mappedBy = "teacher", cascade = CascadeType.REMOVE)
+    private List<NotesEntity> notes;
 
     @Override
     @Transient

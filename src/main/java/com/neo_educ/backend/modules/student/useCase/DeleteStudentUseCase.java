@@ -12,12 +12,11 @@ public class DeleteStudentUseCase {
   @Autowired
   private StudentRepository studentRepository;
 
-  public void execute(Long studentId) {
-    if(!studentRepository.existsById(studentId)) {
-      throw new StudentNotFoundException();
-    }
+  public void execute(Long studentId, String teacherEmail) {
+    var student = studentRepository.findByIdAndTeacherEmail(studentId, teacherEmail)
+        .orElseThrow(StudentNotFoundException::new);
 
-    studentRepository.deleteById(studentId);
+    studentRepository.delete(student);
   }
 
 }

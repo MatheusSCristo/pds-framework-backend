@@ -1,11 +1,15 @@
 package com.neo_educ.backend.modules.student.entity;
 
 import com.neo_educ.backend.model.AbstractModel;
-import jakarta.persistence.Entity;
+import com.neo_educ.backend.model.TeacherEntity;
+import com.neo_educ.backend.modules.notes.entity.NotesEntity;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+
+import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
@@ -23,5 +27,16 @@ public class StudentEntity extends AbstractModel {
 
   @NotBlank(message = "O campo [proficiencyLevel] não pode ser vazio")
   private String proficiencyLevel;
+
+  @ManyToOne
+  @JoinColumn(name = "teacher_email", referencedColumnName = "email", nullable = false, insertable = false, updatable = false)
+  private TeacherEntity teacher;
+
+  @Column(name = "teacher_email", nullable = false)
+  private String teacherEmail;
+
+  @OneToMany(mappedBy = "student", cascade = CascadeType.REMOVE)
+  private List<NotesEntity> notes;
+
 
 }
