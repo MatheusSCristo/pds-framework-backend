@@ -2,9 +2,7 @@ package com.neo_educ.backend.modules.notes.controllers;
 
 import com.neo_educ.backend.modules.notes.dto.NotesRequestDTO;
 import com.neo_educ.backend.modules.notes.dto.NotesResponseDTO;
-import com.neo_educ.backend.modules.notes.useCase.CreateNoteUseCase;
-import com.neo_educ.backend.modules.notes.useCase.GetAllNotesUseCase;
-import com.neo_educ.backend.modules.notes.useCase.GetOneNoteInformationUseCase;
+import com.neo_educ.backend.modules.notes.useCase.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -25,6 +23,12 @@ public class NotesController {
 
   @Autowired
   private GetOneNoteInformationUseCase getOneNoteInformationUseCase;
+
+  @Autowired
+  private DeleteNoteUseCase deleteNoteUseCase;
+
+  @Autowired
+  private UpdateNoteInformationsUseCase updateNoteInformationsUseCase;
 
   @PostMapping("/")
   public ResponseEntity<Object> create(@PathVariable Long studentId, @RequestBody NotesRequestDTO notesRequestDTO) {
@@ -67,4 +71,33 @@ public class NotesController {
       return ResponseEntity.badRequest().body(e.getMessage());
     }
   }
+
+  @DeleteMapping("/{noteId}")
+  public ResponseEntity<Object> delete(@PathVariable Long studentId, @PathVariable Long noteId) {
+    try {
+      Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+      String teacherEmail = authentication.getName();
+
+      this.deleteNoteUseCase.execute(teacherEmail, studentId, noteId);
+
+      return ResponseEntity.noContent().build();
+    } catch (Exception e) {
+      return ResponseEntity.badRequest().body(e.getMessage());
+    }
+  }
+
+  @PutMapping("/{noteId}")
+  public ResponseEntity<Object> updateNoteInformations(@PathVariable Long noteId, @PathVariable Long studentId, @RequestBody NotesRequestDTO notesRequestDTO) {
+    try {
+      Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+      String teacherEmail = authentication.getName();
+
+      var result = this.updateNoteInformationsUseCase.execute(teacherEmail, studentId, noteId, notesRequestDTO);
+
+      return ResponseEntity.ok().body(result);
+    } catch (Exception e) {
+      return ResponseEntity.badRequest().body(e.getMessage());
+    }
+  }
+
 }
