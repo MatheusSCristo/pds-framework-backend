@@ -1,4 +1,4 @@
-package com.neo_educ.backend.repository;
+package com.neo_educ.backend.core.repository;
 
 import com.neo_educ.backend.model.ClassPlansEntity;
 

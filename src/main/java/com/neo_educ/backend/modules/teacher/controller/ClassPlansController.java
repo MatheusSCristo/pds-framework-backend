@@ -1,18 +1,16 @@
-package com.neo_educ.backend.controller;
-
+package com.neo_educ.backend.modules.teacher.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.neo_educ.backend.dto.class_plans.ClassPlansCreateDTO;
 import com.neo_educ.backend.dto.class_plans.ClassPlansOutputDTO;
 import com.neo_educ.backend.dto.class_plans.ClassPlansUpdateDTO;
-import com.neo_educ.backend.mappers.ClassPlansMapper;
 import com.neo_educ.backend.model.ClassPlansEntity;
+import com.neo_educ.backend.modules.teacher.mappers.ClassPlansMapper;
 import com.neo_educ.backend.service.ClassPlansService;
 
 import org.springframework.web.bind.annotation.PostMapping;

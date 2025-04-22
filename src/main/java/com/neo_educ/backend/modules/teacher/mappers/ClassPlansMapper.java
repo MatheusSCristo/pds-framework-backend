@@ -1,5 +1,4 @@
-package com.neo_educ.backend.mappers;
-
+package com.neo_educ.backend.modules.teacher.mappers;
 import java.util.List;
 
 import org.springframework.stereotype.Component;

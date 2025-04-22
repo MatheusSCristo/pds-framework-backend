@@ -3,13 +3,13 @@ package com.neo_educ.backend.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.neo_educ.backend.core.repository.ClassPlansRepository;
 import com.neo_educ.backend.dto.class_plans.ClassPlansCreateDTO;
 import com.neo_educ.backend.dto.class_plans.ClassPlansUpdateDTO;
 import com.neo_educ.backend.enums.ClassPlanStatus;
 import com.neo_educ.backend.model.ClassPlansEntity;
-import com.neo_educ.backend.model.TeacherEntity;
-import com.neo_educ.backend.repository.ClassPlansRepository;
-import com.neo_educ.backend.repository.TeacherRepository;
+import com.neo_educ.backend.modules.teacher.entity.TeacherEntity;
+import com.neo_educ.backend.modules.teacher.repository.TeacherRepository;
 
 import java.util.List;
 import java.util.Optional;
