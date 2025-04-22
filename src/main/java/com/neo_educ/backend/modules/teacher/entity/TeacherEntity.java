@@ -1,6 +1,7 @@
 package com.neo_educ.backend.modules.teacher.entity;
 
 import com.neo_educ.backend.core.model.AbstractModel;
+import com.neo_educ.backend.model.ClassPlansEntity;
 import com.neo_educ.backend.modules.notes.entity.NotesEntity;
 import com.neo_educ.backend.modules.student.entity.StudentEntity;
 import jakarta.persistence.*;
@@ -9,6 +10,7 @@ import lombok.experimental.SuperBuilder;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -29,6 +31,9 @@ public class TeacherEntity extends AbstractModel implements UserDetails {
     private String password;
     private String phone;
 
+    @Builder.Default
+    @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ClassPlansEntity> classPlans = new ArrayList<>();
     @OneToMany(mappedBy = "teacher", cascade = CascadeType.REMOVE)
     private List<StudentEntity> students;
 
