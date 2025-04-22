@@ -1,4 +1,4 @@
-package com.neo_educ.backend.model;
+package com.neo_educ.backend.core.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;

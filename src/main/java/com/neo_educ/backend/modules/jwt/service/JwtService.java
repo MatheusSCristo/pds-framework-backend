@@ -1,4 +1,4 @@
-package com.neo_educ.backend.service;
+package com.neo_educ.backend.modules.jwt.service;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

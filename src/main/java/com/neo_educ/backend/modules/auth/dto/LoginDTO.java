@@ -1,4 +1,4 @@
-package com.neo_educ.backend.dto.auth;
+package com.neo_educ.backend.modules.auth.dto;
 
 public record LoginDTO(
         String email,

@@ -1,7 +1,7 @@
 package com.neo_educ.backend.modules.notes.entity;
 
-import com.neo_educ.backend.model.AbstractModel;
-import com.neo_educ.backend.model.TeacherEntity;
+import com.neo_educ.backend.core.model.AbstractModel;
+import com.neo_educ.backend.modules.teacher.entity.TeacherEntity;
 import com.neo_educ.backend.modules.student.entity.StudentEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

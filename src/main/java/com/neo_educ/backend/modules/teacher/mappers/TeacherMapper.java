@@ -1,7 +1,7 @@
-package com.neo_educ.backend.mappers;
+package com.neo_educ.backend.modules.teacher.mappers;
 
-import com.neo_educ.backend.dto.auth.TeacherDTO;
-import com.neo_educ.backend.model.TeacherEntity;
+import com.neo_educ.backend.modules.teacher.dto.TeacherDTO;
+import com.neo_educ.backend.modules.teacher.entity.TeacherEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
 
