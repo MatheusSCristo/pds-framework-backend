@@ -1,9 +1,8 @@
-package com.neo_educ.backend.controller;
+package com.neo_educ.backend.modules.teacher.controller;
 
-import com.neo_educ.backend.dto.auth.TeacherDTO;
-import com.neo_educ.backend.mappers.TeacherMapper;
-import com.neo_educ.backend.model.TeacherEntity;
-import com.neo_educ.backend.repository.TeacherRepository;
+import com.neo_educ.backend.modules.teacher.dto.TeacherDTO;
+import com.neo_educ.backend.modules.teacher.mappers.TeacherMapper;
+import com.neo_educ.backend.modules.teacher.entity.TeacherEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -16,21 +15,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/teachers")
 public class TeacherController {
 
-
-    private final TeacherMapper teacherMapper;
-
-
     @Autowired
-    TeacherController(TeacherMapper teacherMapper) {
-        this.teacherMapper = teacherMapper;
-    }
+    private TeacherMapper teacherMapper;
 
     @GetMapping("/me")
     public ResponseEntity<TeacherDTO> authenticatedUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        TeacherEntity currentUser =  (TeacherEntity) authentication.getPrincipal();
-
+        TeacherEntity currentUser = (TeacherEntity) authentication.getPrincipal();
         return ResponseEntity.ok(teacherMapper.toDTO(currentUser));
     }
 }

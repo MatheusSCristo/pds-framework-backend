@@ -1,6 +1,6 @@
 package com.neo_educ.backend.configs;
 
-import com.neo_educ.backend.service.JwtService;
+import com.neo_educ.backend.modules.jwt.service.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

@@ -1,19 +1,18 @@
-package com.neo_educ.backend.service;
+package com.neo_educ.backend.modules.teacher.useCase;
 
-import com.neo_educ.backend.repository.TeacherRepository;
+import com.neo_educ.backend.modules.teacher.repository.TeacherRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
-public class TeacherService {
+public class FindTeacherUseCase {
 
     @Autowired
     private TeacherRepository teacherRepository;
 
-    public UserDetails findByEmailOrThrowError(String email) {
+    public UserDetails execute(String email) {
         return teacherRepository.findByEmail(email).orElseThrow(() -> new EntityNotFoundException("Entity with email " + email + " not found"));
     }
 }
