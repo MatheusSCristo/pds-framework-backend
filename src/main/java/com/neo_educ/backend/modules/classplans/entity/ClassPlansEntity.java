@@ -1,9 +1,8 @@
-package com.neo_educ.backend.model;
-
+package com.neo_educ.backend.modules.classplans.entity;
 import java.time.LocalDateTime;
 
 import com.neo_educ.backend.core.model.AbstractModel;
-import com.neo_educ.backend.enums.ClassPlanStatus;
+import com.neo_educ.backend.modules.classplans.enums.ClassPlanStatus;
 import com.neo_educ.backend.modules.teacher.entity.TeacherEntity;
 
 import jakarta.persistence.Column;

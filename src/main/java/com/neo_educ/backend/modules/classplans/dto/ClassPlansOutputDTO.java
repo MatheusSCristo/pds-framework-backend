@@ -1,8 +1,10 @@
-package com.neo_educ.backend.dto.class_plans;
+package com.neo_educ.backend.modules.classplans.dto;
 
 import java.time.LocalDateTime;
 
-import com.neo_educ.backend.enums.ClassPlanStatus;
+import com.neo_educ.backend.modules.classplans.enums.ClassPlanStatus;
+
+
 
 public record ClassPlansOutputDTO (
   Long id,

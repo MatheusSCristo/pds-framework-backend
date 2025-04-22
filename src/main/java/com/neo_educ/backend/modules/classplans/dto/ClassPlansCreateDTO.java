@@ -1,4 +1,4 @@
-package com.neo_educ.backend.dto.class_plans;
+package com.neo_educ.backend.modules.classplans.dto;
 
 import java.time.LocalDateTime;
 

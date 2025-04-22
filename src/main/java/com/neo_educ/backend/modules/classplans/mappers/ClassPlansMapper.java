@@ -1,10 +1,11 @@
-package com.neo_educ.backend.modules.teacher.mappers;
+package com.neo_educ.backend.modules.classplans.mappers;
 import java.util.List;
 
 import org.springframework.stereotype.Component;
 
-import com.neo_educ.backend.dto.class_plans.ClassPlansOutputDTO;
-import com.neo_educ.backend.model.ClassPlansEntity;
+import com.neo_educ.backend.modules.classplans.dto.ClassPlansOutputDTO;
+import com.neo_educ.backend.modules.classplans.entity.ClassPlansEntity;
+
 
 @Component
 public class ClassPlansMapper {
