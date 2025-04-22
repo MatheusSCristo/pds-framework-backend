@@ -14,6 +14,7 @@ public class ClassPlansMapper {
     if (entity == null) return null;
 
     return new ClassPlansOutputDTO(
+      entity.getId(),
       entity.getTopic(),
       entity.getClassDate(),
       entity.getInputData(),

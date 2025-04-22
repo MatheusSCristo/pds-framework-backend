@@ -24,10 +24,10 @@ public class ClassPlansService {
   private TeacherRepository teacherRepository;
 
   public ClassPlansEntity create(ClassPlansCreateDTO data) {
-    Optional<TeacherEntity> optionalTeacher = teacherRepository.findById(data.teacher_id());
+    Optional<TeacherEntity> optionalTeacher = teacherRepository.findByEmail(data.teacher_email());
 
     if (optionalTeacher.isEmpty()) {
-      throw new RuntimeException("Professor não encontrado com ID: " + data.teacher_id());
+      throw new RuntimeException("Professor não encontrado com ID: " + data.teacher_email());
     }
 
     TeacherEntity teacher = optionalTeacher.get();

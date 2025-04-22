@@ -6,5 +6,5 @@ public record ClassPlansCreateDTO(
   String topic,
   LocalDateTime classDate,
   String inputData,
-  Long teacher_id
+  String teacher_email
 ) {} 

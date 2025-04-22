@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import com.neo_educ.backend.enums.ClassPlanStatus;
 
 public record ClassPlansOutputDTO (
+  Long id,
   String topic,
   LocalDateTime classDate,
   String inputData,

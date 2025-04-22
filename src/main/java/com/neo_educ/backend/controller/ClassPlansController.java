@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.neo_educ.backend.dto.class_plans.ClassPlansCreateDTO;
@@ -19,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PutMapping;
 
 
@@ -57,7 +57,7 @@ public class ClassPlansController {
     return ResponseEntity.ok(response);
   }
 
-  @PutMapping("/{id}")
+  @PutMapping("/update/{id}")
   public ResponseEntity<ClassPlansOutputDTO> update(@PathVariable Long id, @RequestBody ClassPlansUpdateDTO dto) {
     ClassPlansEntity entity = this.service.update(id, dto);
     ClassPlansOutputDTO response = this.mapper.toDTO(entity);
