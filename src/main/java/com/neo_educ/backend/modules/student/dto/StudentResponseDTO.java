@@ -1,20 +1,15 @@
 package com.neo_educ.backend.modules.student.dto;
 
-import com.neo_educ.backend.modules.student.entity.StudentEntity;
+import com.neo_educ.backend.modules.interests.enums.InterestsEnum;
+import com.neo_educ.backend.modules.student.enums.ProficiencyLevel;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
-public record StudentResponseDTO(Long id, String name, String email, String proficiencyLevel, LocalDateTime createdAt, LocalDateTime updatedAt, String teacherEmail) {
+public record StudentResponseDTO(Long id, String name, String email, ProficiencyLevel proficiencyLevel,
+                                 List<InterestsEnum> interests,
+                                 LocalDateTime createdAt,
+                                 LocalDateTime updatedAt, String teacherEmail) {
 
-  public static StudentResponseDTO fromEntity(StudentEntity studentEntity) {
-    return new StudentResponseDTO(
-        studentEntity.getId(),
-        studentEntity.getName(),
-        studentEntity.getEmail(),
-        studentEntity.getProficiencyLevel(),
-        studentEntity.getCreatedAt(),
-        studentEntity.getUpdatedAt(),
-        studentEntity.getTeacherEmail()
-    );
-  }
+
 }

@@ -1,6 +1,6 @@
 package com.neo_educ.backend.configs;
 
-import com.neo_educ.backend.modules.teacher.useCase.FindTeacherUseCase;
+import com.neo_educ.backend.modules.teacher.service.TeacherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,11 +14,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @Configuration
 public class AuthConfig {
     @Autowired
-    private FindTeacherUseCase findTeacherUseCase;
+    private TeacherService teacherService;
 
     @Bean
     UserDetailsService userDetailsService() {
-        return username -> findTeacherUseCase.execute(username);
+        return username -> teacherService.findTeacherByEmail(username);
     }
 
     @Bean

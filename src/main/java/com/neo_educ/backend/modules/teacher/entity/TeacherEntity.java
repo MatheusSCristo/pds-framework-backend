@@ -30,7 +30,8 @@ public class TeacherEntity extends AbstractModel implements UserDetails {
     private String email;
     private String password;
     private String phone;
-
+    @Column(name="invite_token")
+    private String inviteToken;
     @Builder.Default
     @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ClassPlansEntity> classPlans = new ArrayList<>();

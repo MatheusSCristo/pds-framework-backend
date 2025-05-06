@@ -1,11 +1,14 @@
 package com.neo_educ.backend.modules.student.entity;
 
 import com.neo_educ.backend.core.model.AbstractModel;
+import com.neo_educ.backend.modules.interests.enums.InterestsEnum;
+import com.neo_educ.backend.modules.student.enums.ProficiencyLevel;
 import com.neo_educ.backend.modules.teacher.entity.TeacherEntity;
 import com.neo_educ.backend.modules.notes.entity.NotesEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -19,24 +22,30 @@ import java.util.List;
 @Entity(name = "student")
 public class StudentEntity extends AbstractModel {
 
-  @NotBlank(message = "O campo [name] não pode ser vazio")
-  private String name;
+    private String name;
 
-  @Email(message = "O campo [email] deve conter um email válido")
-  private String email;
+    @Column(name = "last_name")
+    private String lastName;
 
-  @NotBlank(message = "O campo [proficiencyLevel] não pode ser vazio")
-  private String proficiencyLevel;
+    private String email;
 
-  @ManyToOne
-  @JoinColumn(name = "teacher_email", referencedColumnName = "email", nullable = false, insertable = false, updatable = false)
-  private TeacherEntity teacher;
+    @NotBlank
+    private String phone;
 
-  @Column(name = "teacher_email", nullable = false)
-  private String teacherEmail;
+    @NotNull
+    @ElementCollection(targetClass = InterestsEnum.class)
+    @CollectionTable(name = "interests", joinColumns = @JoinColumn(name = "student_id"))
+    @Enumerated(EnumType.STRING)
+    @Column(name = "interest")
+    private List<InterestsEnum> interests;
 
-  @OneToMany(mappedBy = "student", cascade = CascadeType.REMOVE)
-  private List<NotesEntity> notes;
+    private ProficiencyLevel proficiencyLevel;
+
+    @ManyToOne
+    private TeacherEntity teacher;
+
+    @OneToMany(mappedBy = "student", cascade = CascadeType.REMOVE)
+    private List<NotesEntity> notes;
 
 
 }
