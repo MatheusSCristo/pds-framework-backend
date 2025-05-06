@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public record RegisterDTO(
         @JsonProperty("name")
      String name,
-     @JsonProperty("last_name")
      String lastName,
      @JsonProperty("email")
      String email,

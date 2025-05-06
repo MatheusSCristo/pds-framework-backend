@@ -9,6 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class SignupUseCase {
@@ -28,13 +29,17 @@ public class SignupUseCase {
         }
 
         String encodedPassword = passwordEncoder.encode(input.password());
+        String token = UUID.randomUUID().toString().replace("-", "");
         TeacherEntity user = TeacherEntity.builder()
                 .name(input.name())
                 .lastName(input.lastName())
                 .email(input.email())
                 .phone(input.phone())
                 .password(encodedPassword)
+                .inviteToken(token)
                 .build();
+
+
         return teacherRepository.save(user);
     }
 }

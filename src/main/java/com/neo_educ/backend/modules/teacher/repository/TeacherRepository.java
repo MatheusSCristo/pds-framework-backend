@@ -9,4 +9,7 @@ public interface TeacherRepository extends AbstractRepository<TeacherEntity> {
 
     Optional<TeacherEntity> findByEmail(String email);
 
+    Optional<TeacherEntity> findByInviteToken(String token);
+
+
 }
