@@ -18,7 +18,7 @@ public class StudentController {
     @Autowired
     private StudentService studentService;
 
-    @PostMapping("")
+    @PostMapping("/")
     public ResponseEntity<ApiResponse> create(@RequestBody StudentRequestDTO studentRequestDTO) {
         try {
             studentService.createStudent(studentRequestDTO);
