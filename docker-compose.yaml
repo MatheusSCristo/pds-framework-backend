@@ -11,7 +11,7 @@ services:
     ports:
       - '5432:5432'
     volumes:
-      - postgres_data:/var/lib/postgresql/data  # Volume para persistência dos dados
+      - postgres_data1:/var/lib/postgresql/data1  # Volume para persistência dos dados
 
 volumes:
-  postgres_data:  # Define o volume para armazenar os dados do banco
+  postgres_data1:  # Define o volume para armazenar os dados do banco
