@@ -84,4 +84,11 @@ public class ClassPlansService {
     this.classPlansRepository.delete(entity);
   }
 
+  public ClassPlansEntity patchAiGeneratedContent(Long id, String input) {
+    ClassPlansEntity entity = this.findByID(id);
+    entity.setAiGeneratedContent(input);
+    
+    return classPlansRepository.save(entity);
+  }
+
 }

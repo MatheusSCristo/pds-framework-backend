@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.neo_educ.backend.modules.classplans.dto.ClassPlansCreateDTO;
+import com.neo_educ.backend.modules.classplans.dto.ClassPlansIaContentDTO;
 import com.neo_educ.backend.modules.classplans.dto.ClassPlansOutputDTO;
 import com.neo_educ.backend.modules.classplans.dto.ClassPlansUpdateDTO;
 import com.neo_educ.backend.modules.classplans.entity.ClassPlansEntity;
@@ -86,5 +87,15 @@ public class ClassPlansController {
 
     return ResponseEntity.ok("Plano de Aula deletado com sucesso.");
   }
+
+  @PutMapping("roteiro-ia/{id}")
+  public ResponseEntity<ClassPlansOutputDTO> generateIA(@PathVariable Long id, @RequestBody ClassPlansIaContentDTO body) {
+
+    ClassPlansEntity entity = this.service.patchAiGeneratedContent(id, body.input());
+    ClassPlansOutputDTO response = this.mapper.toDTO(entity);
+
+    return ResponseEntity.ok(response);
+  }
+  
   
 }
