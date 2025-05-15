@@ -17,6 +17,8 @@ import com.neo_educ.backend.modules.classplans.mappers.ClassPlansMapper;
 import com.neo_educ.backend.modules.classplans.service.ClassPlansService;
 import com.neo_educ.backend.modules.teacher.entity.TeacherEntity;
 
+import jakarta.validation.Valid;
+
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -36,7 +38,7 @@ public class ClassPlansController {
   private ClassPlansMapper mapper;
 
   @PostMapping()
-  public ResponseEntity<ClassPlansOutputDTO> createClassPlan(@RequestBody ClassPlansCreateDTO dto) {
+  public ResponseEntity<ClassPlansOutputDTO> createClassPlan(@Valid @RequestBody ClassPlansCreateDTO dto) {
     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
     TeacherEntity teacher = (TeacherEntity) auth.getPrincipal();
@@ -71,7 +73,7 @@ public class ClassPlansController {
   }
 
   @PutMapping("/update/{id}")
-  public ResponseEntity<ClassPlansOutputDTO> update(@PathVariable Long id, @RequestBody ClassPlansUpdateDTO dto) {
+  public ResponseEntity<ClassPlansOutputDTO> update(@PathVariable Long id, @Valid @RequestBody ClassPlansUpdateDTO dto) {
 
     ClassPlansEntity entity = this.service.update(id, dto);
     ClassPlansOutputDTO response = this.mapper.toDTO(entity);
