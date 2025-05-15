@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import com.neo_educ.backend.exceptions.common.NotFoundException;
 
 @ControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
@@ -30,6 +29,14 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return ApiException.toResponseEntity(apiException);
     }
 
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<Object> handleValidationException(MethodArgumentNotValidException ex) {
+        Map<String, String> errors = new HashMap<>();
+        ex.getBindingResult().getFieldErrors()
+                .forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
+        return ResponseEntity.badRequest().body(errors);
+    }
+
 
 
     @ExceptionHandler(Exception.class)
@@ -38,18 +45,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return ApiException.toResponseEntity(apiException);
     }
 
-    @ExceptionHandler(NotFoundException.class)
-    public ResponseEntity<Object> handleNotFoundException(NotFoundException ex) {
-        ApiException apiException = new ApiException(HttpStatus.NOT_FOUND, ex.getMessage(), ex);
-        return ApiException.toResponseEntity(apiException);
-    }
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Object> handleValidationException(MethodArgumentNotValidException ex) {
-        Map<String, String> errors = new HashMap<>();
-        ex.getBindingResult().getFieldErrors()
-                .forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
-        return ResponseEntity.badRequest().body(errors);
-    }
+
 
 }

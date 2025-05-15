@@ -3,10 +3,10 @@ package com.neo_educ.backend.modules.classplans.service;
 import java.util.List;
 import java.util.Optional;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.neo_educ.backend.exceptions.common.NotFoundException;
 import com.neo_educ.backend.modules.chat.service.ChatService;
 import com.neo_educ.backend.modules.classplans.dto.ClassPlansCreateDTO;
 import com.neo_educ.backend.modules.classplans.dto.ClassPlansUpdateDTO;
@@ -41,7 +41,7 @@ public class ClassPlansService {
 
   public ClassPlansEntity create(ClassPlansCreateDTO data, Long teacherID) {
 
-    TeacherEntity teacher = teacherRepository.findById(teacherID).orElseThrow(() -> new NotFoundException("Professor não encontrado"));
+    TeacherEntity teacher = teacherRepository.findById(teacherID).orElseThrow(() -> new EntityNotFoundException("Professor não encontrado"));
       
     ClassPlansEntity entity = new ClassPlansEntity();
 
@@ -65,7 +65,7 @@ public class ClassPlansService {
     Optional<ClassPlansEntity> optionalClassPlan = classPlansRepository.findById(id);
 
     if (optionalClassPlan.isEmpty()) {
-      throw new NotFoundException("Plano de aula não encontrado com o ID: " + id);
+      throw new EntityNotFoundException("Plano de aula não encontrado com o ID: " + id);
     }
 
     return optionalClassPlan.get();

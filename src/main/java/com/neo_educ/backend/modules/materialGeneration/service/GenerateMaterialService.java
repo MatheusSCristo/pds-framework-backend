@@ -2,6 +2,7 @@ package com.neo_educ.backend.modules.materialGeneration.service;
 
 import com.neo_educ.backend.exceptions.generateMaterial.LevelNullException;
 import com.neo_educ.backend.exceptions.generateMaterial.TopicNullException;
+import com.neo_educ.backend.modules.chat.service.ChatService;
 import com.neo_educ.backend.modules.interests.enums.InterestsEnum;
 import com.neo_educ.backend.modules.materialGeneration.dto.GenerateMaterialDTO;
 import com.neo_educ.backend.modules.materialGeneration.dto.GenerateStudentActivityDTO;
@@ -21,10 +22,12 @@ import java.util.List;
 public class GenerateMaterialService {
 
     @Autowired
-    private ChatClient chatClient;
+    private ChatService chatService;
 
     @Autowired
     private StudentService studentService;
+
+
 
     @Autowired
     private EnglishSetencesPromptTemplate promptTemplate;
@@ -39,7 +42,7 @@ public class GenerateMaterialService {
         }
 
         String prompt = promptTemplate.createMaterialPrompt(generateMaterialDTO);
-        return chatClient.prompt(prompt).call().content();
+        return chatService.chat(prompt);
     }
 
     public String generateStudentActivity(GenerateStudentActivityDTO studentActivityDTO) {
@@ -54,7 +57,7 @@ public class GenerateMaterialService {
             level = student.proficiencyLevel();
         }
         String prompt = promptTemplate.createActivityPrompt(interests, level, studentActivityDTO.subject());
-        return chatClient.prompt(prompt).call().content();
+        return chatService.chat(prompt);
 
     }
 
