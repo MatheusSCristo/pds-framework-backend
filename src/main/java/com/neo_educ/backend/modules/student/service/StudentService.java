@@ -8,12 +8,14 @@ import com.neo_educ.backend.modules.student.entity.StudentEntity;
 import com.neo_educ.backend.modules.student.mapper.StudentMapper;
 import com.neo_educ.backend.modules.student.repository.StudentRepository;
 import com.neo_educ.backend.modules.teacher.entity.TeacherEntity;
+import com.neo_educ.backend.modules.teacher.repository.TeacherRepository;
 import com.neo_educ.backend.modules.teacher.service.TeacherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class StudentService {
@@ -25,6 +27,13 @@ public class StudentService {
 
     @Autowired
     private TeacherService teacherService;
+
+
+    public List<StudentResponseDTO> getTeacherStudents(String email) {
+        List <StudentEntity> entities = studentRepository.findAllByTeacher_Email(email);
+        return entities.stream().map(item->studentMapper.toResponseDTO(item)).toList();
+    }
+
 
 
     public void createStudent(StudentRequestDTO studentRequestDTO) {

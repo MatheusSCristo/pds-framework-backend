@@ -1,5 +1,6 @@
 package com.neo_educ.backend.exceptions;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,14 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         ApiException apiException = new ApiException(HttpStatus.NOT_FOUND, ex);
         return ApiException.toResponseEntity(apiException);
     }
+
+    @ExceptionHandler(ExpiredJwtException.class)
+    public ResponseEntity<Object> handleEntityNotFoundException(ExpiredJwtException ex) {
+        ApiException apiException = new ApiException(HttpStatus.UNAUTHORIZED, ex);
+        return ApiException.toResponseEntity(apiException);
+    }
+
+
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Object> handleGenericException(Exception ex) {

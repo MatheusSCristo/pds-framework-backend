@@ -9,7 +9,11 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/students")
@@ -18,7 +22,7 @@ public class StudentController {
     @Autowired
     private StudentService studentService;
 
-    @PostMapping("/")
+    @PostMapping("")
     public ResponseEntity<ApiResponse> create(@RequestBody StudentRequestDTO studentRequestDTO) {
         try {
             studentService.createStudent(studentRequestDTO);
@@ -34,10 +38,23 @@ public class StudentController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiResponse);
         }
         catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(e.getMessage()));
         }
 
     }
+
+    @GetMapping("")
+    public ResponseEntity<Object> getTeacherStudents() {
+        try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String teacherEmail = authentication.getName();
+            List<StudentResponseDTO> student = studentService.getTeacherStudents(teacherEmail);
+            return ResponseEntity.ok().body(student);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
 
 
     @GetMapping("/{studentId}")
