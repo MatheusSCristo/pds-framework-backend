@@ -30,28 +30,30 @@ public class GenerateMaterialService {
     private EnglishSetencesPromptTemplate promptTemplate;
 
     public String generate(GenerateMaterialDTO generateMaterialDTO) {
-        if(generateMaterialDTO.topic() == null) {
+        if (generateMaterialDTO.topic() == null) {
             throw new TopicNullException();
         }
 
-        if(generateMaterialDTO.level() == null) {
+        if (generateMaterialDTO.level() == null) {
             throw new LevelNullException();
         }
 
-        String prompt  = promptTemplate.createMaterialPrompt(generateMaterialDTO);
+        String prompt = promptTemplate.createMaterialPrompt(generateMaterialDTO);
         return chatClient.prompt(prompt).call().content();
     }
 
-    public String generateStudentActivity(GenerateStudentActivityDTO studentActivityDTO){
+    public String generateStudentActivity(GenerateStudentActivityDTO studentActivityDTO) {
 
-        List<InterestsEnum> interests=new ArrayList<>();
-        ProficiencyLevel level=studentActivityDTO.setLevel();
-        if(studentActivityDTO.interests() || studentActivityDTO.level()) {
-            StudentResponseDTO student=studentService.findStudent(studentActivityDTO.studentId());
+        List<InterestsEnum> interests = new ArrayList<>();
+        ProficiencyLevel level = studentActivityDTO.setLevel();
+        StudentResponseDTO student = studentService.findStudent(studentActivityDTO.studentId());
+        if (studentActivityDTO.interests()) {
             interests.addAll(student.interests());
-            level=student.proficiencyLevel();
         }
-        String prompt=promptTemplate.createActivityPrompt(interests,level,studentActivityDTO.subject());
+        if (studentActivityDTO.level()) {
+            level = student.proficiencyLevel();
+        }
+        String prompt = promptTemplate.createActivityPrompt(interests, level, studentActivityDTO.subject());
         return chatClient.prompt(prompt).call().content();
 
     }

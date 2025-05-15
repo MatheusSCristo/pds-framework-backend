@@ -41,6 +41,7 @@ public class EnglishSetencesPromptTemplate {
     }
     public String createActivityPrompt(List<InterestsEnum> interests, ProficiencyLevel level,String subject) {
         StringBuilder prompt = new StringBuilder();
+        System.out.println(level);
 
         prompt.append("Você é um assistente especializado em ensino de inglês. ")
                 .append("Sua tarefa é gerar uma lista de atividades em inglês para um aluno, ")
