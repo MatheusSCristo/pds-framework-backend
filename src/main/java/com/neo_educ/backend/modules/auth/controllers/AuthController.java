@@ -3,11 +3,10 @@ package com.neo_educ.backend.modules.auth.controllers;
 import com.neo_educ.backend.modules.auth.dto.LoginDTO;
 import com.neo_educ.backend.modules.auth.dto.LoginResponseDTO;
 import com.neo_educ.backend.modules.auth.dto.RegisterDTO;
+import com.neo_educ.backend.modules.auth.service.AuthService;
 import com.neo_educ.backend.modules.teacher.dto.TeacherDTO;
 import com.neo_educ.backend.modules.teacher.mappers.TeacherMapper;
 import com.neo_educ.backend.modules.teacher.entity.TeacherEntity;
-import com.neo_educ.backend.modules.auth.useCase.LoginUseCase;
-import com.neo_educ.backend.modules.auth.useCase.SignupUseCase;
 import com.neo_educ.backend.modules.jwt.service.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -31,20 +30,17 @@ public class AuthController {
     private AuthenticationManager authenticationManager;
 
     @Autowired
-    private SignupUseCase signupuseCase;
-
-    @Autowired
-    private LoginUseCase loginUseCase;
+    private AuthService authService;
 
     @PostMapping("/signup")
-    public ResponseEntity<TeacherEntity> register(@RequestBody RegisterDTO registerDTO) {
-        TeacherEntity teacher = signupuseCase.execute(registerDTO);
+    public ResponseEntity<TeacherEntity> signUp(@RequestBody RegisterDTO registerDTO) {
+        TeacherEntity teacher = authService.signUp(registerDTO);
         return ResponseEntity.ok(teacher);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponseDTO> authenticate(@RequestBody LoginDTO loginDTO) {
-        TeacherEntity authenticatedUser=loginUseCase.execute(loginDTO);
+    public ResponseEntity<LoginResponseDTO> signIn(@RequestBody LoginDTO loginDTO) {
+        TeacherEntity authenticatedUser=authService.signIn(loginDTO);
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         loginDTO.email(),
