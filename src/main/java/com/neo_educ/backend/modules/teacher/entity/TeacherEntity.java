@@ -25,7 +25,6 @@ public class TeacherEntity extends AbstractModel implements UserDetails {
 
     private String name;
     private String lastName;
-
     @Column(unique = true, nullable = false)
     private String email;
     private String password;

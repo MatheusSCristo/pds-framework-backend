@@ -1,6 +1,6 @@
 package com.neo_educ.backend.modules.materialGeneration.utils;
 
-import com.neo_educ.backend.modules.interests.enums.InterestsEnum;
+import com.neo_educ.backend.modules.student.enums.InterestsEnum;
 import com.neo_educ.backend.modules.materialGeneration.dto.GenerateMaterialDTO;
 import com.neo_educ.backend.modules.student.enums.ProficiencyLevel;
 import org.springframework.stereotype.Component;

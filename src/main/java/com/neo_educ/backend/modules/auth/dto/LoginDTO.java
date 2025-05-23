@@ -1,6 +1,8 @@
 package com.neo_educ.backend.modules.auth.dto;
 
+import jakarta.validation.constraints.NotBlank;
+
 public record LoginDTO(
-        String email,
-        String password
+        @NotBlank String email,
+        @NotBlank String password
 ){}

@@ -1,9 +1,12 @@
-package com.neo_educ.backend.modules.auth.useCase;
+package com.neo_educ.backend.modules.auth.service;
 
 import com.neo_educ.backend.exceptions.teacher.TeacherAlreadyRegisteredException;
-import com.neo_educ.backend.modules.teacher.entity.TeacherEntity;
+import com.neo_educ.backend.modules.auth.dto.LoginDTO;
 import com.neo_educ.backend.modules.auth.dto.RegisterDTO;
+import com.neo_educ.backend.modules.teacher.entity.TeacherEntity;
 import com.neo_educ.backend.modules.teacher.repository.TeacherRepository;
+import com.neo_educ.backend.modules.teacher.service.TeacherService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -12,7 +15,10 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
-public class SignupUseCase {
+public class AuthService {
+
+    @Autowired
+    private TeacherService teacherService;
 
     @Autowired
     private TeacherRepository teacherRepository;
@@ -20,12 +26,16 @@ public class SignupUseCase {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public TeacherEntity execute(RegisterDTO input) {
+    public TeacherEntity signIn(LoginDTO input) {
+        return teacherService.findTeacherByEmail(input.email());
+    }
+
+    public TeacherEntity signUp(RegisterDTO input) {
 
         Optional<TeacherEntity> existingTeacher = teacherRepository.findByEmail(input
                 .email());
         if (existingTeacher.isPresent()) {
-            throw new TeacherAlreadyRegisteredException(input.email());
+            throw new TeacherAlreadyRegisteredException();
         }
 
         String encodedPassword = passwordEncoder.encode(input.password());

@@ -2,12 +2,14 @@ package com.neo_educ.backend.modules.classplans.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
+import com.neo_educ.backend.modules.classplans.dto.ClassPlansResponseDTO;
+import com.neo_educ.backend.modules.classplans.mappers.ClassPlansMapper;
+import com.neo_educ.backend.modules.llm.service.LLMService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import com.neo_educ.backend.modules.chat.service.ChatService;
 import com.neo_educ.backend.modules.classplans.dto.ClassPlansCreateDTO;
 import com.neo_educ.backend.modules.classplans.dto.ClassPlansUpdateDTO;
 import com.neo_educ.backend.modules.classplans.entity.ClassPlansEntity;
@@ -18,95 +20,82 @@ import com.neo_educ.backend.modules.teacher.repository.TeacherRepository;
 
 @Service
 public class ClassPlansService {
-  
-  private final String iaClassPlansContext = "Você é um assistente didático para professores de inglês. Quando o professor digitar um assunto (por exemplo: Present Perfect ou Vocabulary about Travel), você deve gerar um plano de aula completo para uma aula de inglês. O plano deve ser objetivo, prático e adaptado a estudantes de inglês como segunda língua. O professor pode usar esse plano diretamente em sala de aula.\n" + //
-        "\n" + //
-        "O plano deve conter:\n" + //
-        "- Objetivo(s) da aula\n" + //
-        "- Materiais necessários (se houver)\n" + //
-        "- Duração estimada\n" + //
-        "- Etapas da aula (com sugestões de atividades para introdução, prática e encerramento)\n" + //
-        "- Dicas para o professor\n" + //
-        "- Sugestões de dever de casa (opcional)\n" + 
-        "Esse é o assunto:";
 
-  @Autowired
-  private ClassPlansRepository classPlansRepository;
+    private final String iaClassPlansContext = "Você é um assistente didático para professores de inglês. Quando o professor digitar um assunto (por exemplo: Present Perfect ou Vocabulary about Travel), você deve gerar um plano de aula completo para uma aula de inglês. O plano deve ser objetivo, prático e adaptado a estudantes de inglês como segunda língua. O professor pode usar esse plano diretamente em sala de aula.\n" + //
+            "\n" + //
+            "O plano deve conter:\n" + //
+            "- Objetivo(s) da aula\n" + //
+            "- Materiais necessários (se houver)\n" + //
+            "- Duração estimada\n" + //
+            "- Etapas da aula (com sugestões de atividades para introdução, prática e encerramento)\n" + //
+            "- Dicas para o professor\n" + //
+            "- Sugestões de dever de casa (opcional)\n" +
+            "Esse é o assunto:";
 
-  @Autowired
-  private ChatService chatService;
+    @Autowired
+    private ClassPlansRepository classPlansRepository;
 
-  @Autowired
-  private TeacherRepository teacherRepository;
+    @Autowired
+    private LLMService llmService;
 
-  public ClassPlansEntity create(ClassPlansCreateDTO data, Long teacherID) {
+    @Autowired
+    private TeacherRepository teacherRepository;
 
-    TeacherEntity teacher = teacherRepository.findById(teacherID).orElseThrow(() -> new EntityNotFoundException("Professor não encontrado"));
-      
-    ClassPlansEntity entity = new ClassPlansEntity();
+    @Autowired
+    private ClassPlansMapper classPlansMapper;
 
-    String geminiResponse = this.chatService.chat(this.iaClassPlansContext + data.inputData());
+    public ClassPlansResponseDTO create(ClassPlansCreateDTO data, Long teacherID) {
 
-    entity.setTopic(data.topic());
-    entity.setClassDate(data.classDate());
-    entity.setInputData(data.inputData());
-    entity.setTeacher(teacher);
-    entity.setStatus(ClassPlanStatus.PENDING);
-    entity.setAiGeneratedContent(geminiResponse);
+        TeacherEntity teacher = teacherRepository.findById(teacherID).orElseThrow(() -> new EntityNotFoundException("Professor não encontrado"));
 
-    return classPlansRepository.save(entity);
+        ClassPlansEntity entity = new ClassPlansEntity();
 
-  }
+        String geminiResponse = this.llmService.chat(this.iaClassPlansContext + data.inputData());
 
+        entity.setTopic(data.topic());
+        entity.setClassDate(data.classDate());
+        entity.setInputData(data.inputData());
+        entity.setTeacher(teacher);
+        entity.setStatus(ClassPlanStatus.PENDING);
+        entity.setAiGeneratedContent(geminiResponse);
 
+        ClassPlansEntity classPlan = classPlansRepository.save(entity);
+        return classPlansMapper.toResponse(classPlan);
 
-  public ClassPlansEntity findByID(Long id) {
-
-    Optional<ClassPlansEntity> optionalClassPlan = classPlansRepository.findById(id);
-
-    if (optionalClassPlan.isEmpty()) {
-      throw new EntityNotFoundException("Plano de aula não encontrado com o ID: " + id);
     }
 
-    return optionalClassPlan.get();
 
-  }
+    public ClassPlansResponseDTO findByID(Long id) {
 
+        Optional<ClassPlansEntity> optionalClassPlan = classPlansRepository.findById(id);
 
+        if (optionalClassPlan.isEmpty()) {
+            throw new EntityNotFoundException("Plano de aula não encontrado com o ID: " + id);
+        }
 
-  public List<ClassPlansEntity> findAll(Long teacherID) {
+        return classPlansMapper.toResponse(optionalClassPlan.get());
 
-    return classPlansRepository.findAllByTeacher_Id(teacherID);
-
-  }
-
-
-
-  public ClassPlansEntity update(Long id, ClassPlansUpdateDTO data) {
-
-    ClassPlansEntity entity = this.findByID(id);
-    entity.setTopic(data.topic());
-    entity.setClassDate(data.classDate());
-    entity.setInputData(data.inputData());
-
-    return classPlansRepository.save(entity);
-
-  }
+    }
 
 
+    public List<ClassPlansResponseDTO> findAll(Long teacherID) {
 
-  public void delete(Long id) {
+        List<ClassPlansEntity> classPlans = classPlansRepository.findAllByTeacher_Id(teacherID);
+        return classPlans.stream().map(classPlansMapper::toResponse).toList();
 
-    ClassPlansEntity entity = this.findByID(id);
+    }
 
-    this.classPlansRepository.delete(entity);
-  }
+    public void delete(Long id) {
+        this.classPlansRepository.deleteById(id);
+    }
 
-  public ClassPlansEntity patchAiGeneratedContent(Long id, String input) {
-    ClassPlansEntity entity = this.findByID(id);
-    entity.setAiGeneratedContent(input);
-    
-    return classPlansRepository.save(entity);
-  }
+    public ClassPlansResponseDTO patchAiGeneratedContent(Long id, String input) {
+        ClassPlansEntity entity = classPlansRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Plano de aula não encontrado com o ID: " + id)
+        );
+        entity.setAiGeneratedContent(input);
+
+        ClassPlansEntity classPlan= classPlansRepository.save(entity);
+        return classPlansMapper.toResponse(classPlan);
+    }
 
 }

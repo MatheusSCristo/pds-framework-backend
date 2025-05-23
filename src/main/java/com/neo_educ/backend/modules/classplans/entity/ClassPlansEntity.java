@@ -37,6 +37,8 @@ public class ClassPlansEntity extends AbstractModel {
   private String aiGeneratedContent;
 
   @Enumerated(EnumType.STRING)
-  private ClassPlanStatus status;
+  private ClassPlanStatus status = ClassPlanStatus.PENDING;
+
+
   
 }

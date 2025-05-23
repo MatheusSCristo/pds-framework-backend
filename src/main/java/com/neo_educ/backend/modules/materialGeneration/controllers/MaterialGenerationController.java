@@ -19,22 +19,14 @@ public class MaterialGenerationController {
 
     @PostMapping("/")
     public ResponseEntity<Object> generate(@RequestBody GenerateMaterialDTO generateMaterialDTO) {
-        try {
             String result = generateMaterialService.generate(generateMaterialDTO);
             return ResponseEntity.ok().body(result);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
     }
 
     @PostMapping("/activity")
     public ResponseEntity<Object> generateStudentActivity(@RequestBody GenerateStudentActivityDTO studentActivityDTO) {
-        try {
             String result = generateMaterialService.generateStudentActivity(studentActivityDTO);
             return ResponseEntity.ok().body(result);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
     }
 
 }
