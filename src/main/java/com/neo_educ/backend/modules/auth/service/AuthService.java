@@ -35,7 +35,7 @@ public class AuthService {
         Optional<TeacherEntity> existingTeacher = teacherRepository.findByEmail(input
                 .email());
         if (existingTeacher.isPresent()) {
-            throw new TeacherAlreadyRegisteredException(input.email());
+            throw new TeacherAlreadyRegisteredException();
         }
 
         String encodedPassword = passwordEncoder.encode(input.password());

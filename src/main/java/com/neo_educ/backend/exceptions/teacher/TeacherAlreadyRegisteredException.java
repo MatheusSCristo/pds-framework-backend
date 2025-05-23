@@ -6,8 +6,8 @@ import org.springframework.http.HttpStatus;
 import java.io.Serializable;
 
 public class TeacherAlreadyRegisteredException extends RuntimeException implements CustomHttpStatusException {
-    public TeacherAlreadyRegisteredException(String email) {
-        super("Teacher with email " + email + " already registered");
+    public TeacherAlreadyRegisteredException() {
+        super("Email já cadastrado");
     }
 
     @Override
