@@ -55,12 +55,10 @@ public class StudentController {
         }
     }
 
-
-
     @GetMapping("/{studentId}")
     public ResponseEntity<Object> getStudentInformations(@PathVariable Long studentId) {
         try {
-            StudentResponseDTO student = studentService.findStudent(studentId);
+            StudentResponseDTO student = studentService.findStudentDTO(studentId);
             return ResponseEntity.ok().body(student);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());

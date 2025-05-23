@@ -50,10 +50,14 @@ public class StudentService {
         studentRepository.deleteById(studentId);
     }
 
-    public StudentResponseDTO findStudent(Long studentId) {
-        StudentEntity entity = studentRepository.findById(studentId)
+    public StudentEntity findStudent(Long studentId) {
+        return studentRepository.findById(studentId)
                 .orElseThrow(() -> new EntityNotFoundException("Estudante com ID: " + studentId + " não encontrado"));
 
+    }
+
+    public StudentResponseDTO findStudentDTO(Long studentId) {
+        StudentEntity entity = findStudent(studentId);
         return studentMapper.toResponseDTO(entity);
     }
 

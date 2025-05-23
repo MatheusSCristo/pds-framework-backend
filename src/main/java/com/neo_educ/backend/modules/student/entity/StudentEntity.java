@@ -3,6 +3,7 @@ package com.neo_educ.backend.modules.student.entity;
 import com.neo_educ.backend.core.model.AbstractModel;
 import com.neo_educ.backend.modules.student.enums.InterestsEnum;
 import com.neo_educ.backend.modules.student.enums.ProficiencyLevel;
+import com.neo_educ.backend.modules.studentActivity.entity.StudentActivityEntity;
 import com.neo_educ.backend.modules.teacher.entity.TeacherEntity;
 import com.neo_educ.backend.modules.notes.entity.NotesEntity;
 import jakarta.persistence.*;
@@ -45,6 +46,9 @@ public class StudentEntity extends AbstractModel {
 
     @OneToMany(mappedBy = "student", cascade = CascadeType.REMOVE)
     private List<NotesEntity> notes;
+
+    @OneToMany(mappedBy = "student", cascade = CascadeType.REMOVE)
+    private List<StudentActivityEntity> activities;
 
 
 }
