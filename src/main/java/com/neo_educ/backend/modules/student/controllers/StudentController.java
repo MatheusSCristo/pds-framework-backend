@@ -2,7 +2,7 @@ package com.neo_educ.backend.modules.student.controllers;
 
 import com.neo_educ.backend.core.response.ApiResponse;
 import com.neo_educ.backend.exceptions.student.StudentAlreadyExistsException;
-import com.neo_educ.backend.modules.student.dto.StudentRequestDTO;
+import com.neo_educ.backend.modules.student.dto.StudentRegisterDTO;
 import com.neo_educ.backend.modules.student.dto.StudentResponseDTO;
 import com.neo_educ.backend.modules.student.service.StudentService;
 import jakarta.persistence.EntityNotFoundException;
@@ -23,7 +23,7 @@ public class StudentController {
     private StudentService studentService;
 
     @PostMapping("")
-    public ResponseEntity<ApiResponse> create(@RequestBody StudentRequestDTO studentRequestDTO) {
+    public ResponseEntity<ApiResponse> create(@RequestBody StudentRegisterDTO studentRequestDTO) {
         try {
             studentService.createStudent(studentRequestDTO);
             return new ResponseEntity<>(HttpStatus.CREATED);
@@ -79,9 +79,9 @@ public class StudentController {
     }
 
     @PutMapping("/{studentId}")
-    public ResponseEntity<Object> updateStudentInformations(@PathVariable Long studentId, @RequestBody StudentRequestDTO studentRequestDTO) {
+    public ResponseEntity<Object> updateStudent(@PathVariable Long studentId, @RequestBody StudentRegisterDTO studentRegisterDto) {
         try {
-            var result = this.studentService.updateStudent(studentRequestDTO, studentId);
+            var result = this.studentService.updateStudent(studentRegisterDto, studentId);
 
             return ResponseEntity.ok().body(result);
         } catch (Exception e) {

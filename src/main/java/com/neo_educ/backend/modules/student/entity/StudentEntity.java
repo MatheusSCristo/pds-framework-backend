@@ -1,12 +1,11 @@
 package com.neo_educ.backend.modules.student.entity;
 
 import com.neo_educ.backend.core.model.AbstractModel;
-import com.neo_educ.backend.modules.interests.enums.InterestsEnum;
+import com.neo_educ.backend.modules.student.enums.InterestsEnum;
 import com.neo_educ.backend.modules.student.enums.ProficiencyLevel;
 import com.neo_educ.backend.modules.teacher.entity.TeacherEntity;
 import com.neo_educ.backend.modules.notes.entity.NotesEntity;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;

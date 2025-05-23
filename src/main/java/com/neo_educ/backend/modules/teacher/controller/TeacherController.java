@@ -1,6 +1,6 @@
 package com.neo_educ.backend.modules.teacher.controller;
 
-import com.neo_educ.backend.modules.teacher.dto.TeacherDTO;
+import com.neo_educ.backend.modules.teacher.dto.TeacherResponseDTO;
 import com.neo_educ.backend.modules.teacher.mappers.TeacherMapper;
 import com.neo_educ.backend.modules.teacher.entity.TeacherEntity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,7 @@ public class TeacherController {
     private TeacherMapper teacherMapper;
 
     @GetMapping("/me")
-    public ResponseEntity<TeacherDTO> authenticatedUser() {
+    public ResponseEntity<TeacherResponseDTO> authenticatedUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         TeacherEntity currentUser = (TeacherEntity) authentication.getPrincipal();
         return ResponseEntity.ok(teacherMapper.toDTO(currentUser));

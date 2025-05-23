@@ -3,11 +3,10 @@ package com.neo_educ.backend.modules.classplans.service;
 import java.util.List;
 import java.util.Optional;
 
+import com.neo_educ.backend.modules.llm.service.LLMService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import com.neo_educ.backend.modules.chat.service.ChatService;
 import com.neo_educ.backend.modules.classplans.dto.ClassPlansCreateDTO;
 import com.neo_educ.backend.modules.classplans.dto.ClassPlansUpdateDTO;
 import com.neo_educ.backend.modules.classplans.entity.ClassPlansEntity;
@@ -34,7 +33,7 @@ public class ClassPlansService {
   private ClassPlansRepository classPlansRepository;
 
   @Autowired
-  private ChatService chatService;
+  private LLMService llmService;
 
   @Autowired
   private TeacherRepository teacherRepository;
@@ -45,7 +44,7 @@ public class ClassPlansService {
       
     ClassPlansEntity entity = new ClassPlansEntity();
 
-    String geminiResponse = this.chatService.chat(this.iaClassPlansContext + data.inputData());
+    String geminiResponse = this.llmService.chat(this.iaClassPlansContext + data.inputData());
 
     entity.setTopic(data.topic());
     entity.setClassDate(data.classDate());

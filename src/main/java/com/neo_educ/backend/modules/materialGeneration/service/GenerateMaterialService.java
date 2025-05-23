@@ -2,16 +2,14 @@ package com.neo_educ.backend.modules.materialGeneration.service;
 
 import com.neo_educ.backend.exceptions.generateMaterial.LevelNullException;
 import com.neo_educ.backend.exceptions.generateMaterial.TopicNullException;
-import com.neo_educ.backend.modules.chat.service.ChatService;
-import com.neo_educ.backend.modules.interests.enums.InterestsEnum;
+import com.neo_educ.backend.modules.student.enums.InterestsEnum;
+import com.neo_educ.backend.modules.llm.service.LLMService;
 import com.neo_educ.backend.modules.materialGeneration.dto.GenerateMaterialDTO;
 import com.neo_educ.backend.modules.materialGeneration.dto.GenerateStudentActivityDTO;
 import com.neo_educ.backend.modules.materialGeneration.utils.EnglishSetencesPromptTemplate;
 import com.neo_educ.backend.modules.student.dto.StudentResponseDTO;
-import com.neo_educ.backend.modules.student.entity.StudentEntity;
 import com.neo_educ.backend.modules.student.enums.ProficiencyLevel;
 import com.neo_educ.backend.modules.student.service.StudentService;
-import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +20,7 @@ import java.util.List;
 public class GenerateMaterialService {
 
     @Autowired
-    private ChatService chatService;
+    private LLMService llmService;
 
     @Autowired
     private StudentService studentService;
@@ -42,7 +40,7 @@ public class GenerateMaterialService {
         }
 
         String prompt = promptTemplate.createMaterialPrompt(generateMaterialDTO);
-        return chatService.chat(prompt);
+        return llmService.chat(prompt);
     }
 
     public String generateStudentActivity(GenerateStudentActivityDTO studentActivityDTO) {
@@ -57,7 +55,7 @@ public class GenerateMaterialService {
             level = student.proficiencyLevel();
         }
         String prompt = promptTemplate.createActivityPrompt(interests, level, studentActivityDTO.subject());
-        return chatService.chat(prompt);
+        return llmService.chat(prompt);
 
     }
 

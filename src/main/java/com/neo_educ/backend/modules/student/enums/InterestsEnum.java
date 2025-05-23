@@ -1,4 +1,4 @@
-package com.neo_educ.backend.modules.interests.enums;
+package com.neo_educ.backend.modules.student.enums;
 
 import lombok.Getter;
 

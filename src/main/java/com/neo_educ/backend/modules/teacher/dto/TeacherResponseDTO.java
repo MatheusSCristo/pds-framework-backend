@@ -2,7 +2,7 @@ package com.neo_educ.backend.modules.teacher.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public record TeacherDTO(
+public record TeacherResponseDTO(
         String name,
         @JsonProperty("last_name")
         String lastName,

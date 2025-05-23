@@ -1,6 +1,5 @@
 package com.neo_educ.backend.modules.materialGeneration.dto;
 
-import com.neo_educ.backend.modules.interests.enums.InterestsEnum;
 import com.neo_educ.backend.modules.student.enums.ProficiencyLevel;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
