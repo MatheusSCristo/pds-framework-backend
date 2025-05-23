@@ -6,7 +6,7 @@ import com.neo_educ.backend.modules.classplans.enums.ClassPlanStatus;
 
 
 
-public record ClassPlansOutputDTO (
+public record ClassPlansResponseDTO(
   Long id,
   String topic,
   LocalDateTime classDate,

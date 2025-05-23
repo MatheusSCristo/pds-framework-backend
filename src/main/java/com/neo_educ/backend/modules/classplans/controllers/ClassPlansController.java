@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.neo_educ.backend.modules.classplans.dto.ClassPlansCreateDTO;
 import com.neo_educ.backend.modules.classplans.dto.ClassPlansIaContentDTO;
-import com.neo_educ.backend.modules.classplans.dto.ClassPlansOutputDTO;
+import com.neo_educ.backend.modules.classplans.dto.ClassPlansResponseDTO;
 import com.neo_educ.backend.modules.classplans.dto.ClassPlansUpdateDTO;
 import com.neo_educ.backend.modules.classplans.entity.ClassPlansEntity;
 import com.neo_educ.backend.modules.classplans.mappers.ClassPlansMapper;
@@ -38,49 +38,36 @@ public class ClassPlansController {
   private ClassPlansMapper mapper;
 
   @PostMapping()
-  public ResponseEntity<ClassPlansOutputDTO> createClassPlan(@Valid @RequestBody ClassPlansCreateDTO dto) {
+  public ResponseEntity<ClassPlansResponseDTO> createClassPlan(@Valid @RequestBody ClassPlansCreateDTO dto) {
     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
     TeacherEntity teacher = (TeacherEntity) auth.getPrincipal();
     Long teacherId = teacher.getId();
 
-    ClassPlansEntity entity = this.service.create(dto, teacherId);
-    ClassPlansOutputDTO response = this.mapper.toDTO(entity);
+    ClassPlansResponseDTO response= this.service.create(dto, teacherId);
 
     return ResponseEntity.ok(response);
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<ClassPlansOutputDTO> findById(@PathVariable Long id) {
+  public ResponseEntity<ClassPlansResponseDTO> findById(@PathVariable Long id) {
 
-    ClassPlansEntity entity = this.service.findByID(id);
-    ClassPlansOutputDTO dto = this.mapper.toDTO(entity);
-
-    return ResponseEntity.ok(dto);
+    ClassPlansResponseDTO response = this.service.findByID(id);
+    return ResponseEntity.ok(response);
   }
 
   @GetMapping()
-  public ResponseEntity<List<ClassPlansOutputDTO>> findAll() {
+  public ResponseEntity<List<ClassPlansResponseDTO>> findAll() {
     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
     TeacherEntity teacher = (TeacherEntity) auth.getPrincipal();
     Long teacherId = teacher.getId();
 
-    List<ClassPlansEntity> entities = this.service.findAll(teacherId);
-    List<ClassPlansOutputDTO> response = this.mapper.toManyDTO(entities);
+    List<ClassPlansResponseDTO> response = this.service.findAll(teacherId);
 
     return ResponseEntity.ok(response);
   }
 
-  @PutMapping("/update/{id}")
-  public ResponseEntity<ClassPlansOutputDTO> update(@PathVariable Long id, @Valid @RequestBody ClassPlansUpdateDTO dto) {
-
-    ClassPlansEntity entity = this.service.update(id, dto);
-    ClassPlansOutputDTO response = this.mapper.toDTO(entity);
-
-    return ResponseEntity.ok(response);
-
-  }
 
   @DeleteMapping("/{id}")
   public ResponseEntity<String> delete(@PathVariable Long id) {
@@ -91,11 +78,9 @@ public class ClassPlansController {
   }
 
   @PutMapping("roteiro-ia/{id}")
-  public ResponseEntity<ClassPlansOutputDTO> generateIA(@PathVariable Long id, @RequestBody ClassPlansIaContentDTO body) {
+  public ResponseEntity<ClassPlansResponseDTO> generateIA(@PathVariable Long id, @RequestBody ClassPlansIaContentDTO body) {
 
-    ClassPlansEntity entity = this.service.patchAiGeneratedContent(id, body.input());
-    ClassPlansOutputDTO response = this.mapper.toDTO(entity);
-
+    ClassPlansResponseDTO response = this.service.patchAiGeneratedContent(id, body.input());
     return ResponseEntity.ok(response);
   }
   
