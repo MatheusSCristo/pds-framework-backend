@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/student/{studentId}/notes")
+@RequestMapping("/notes")
 public class NotesController {
 
     @Autowired
@@ -28,20 +28,20 @@ public class NotesController {
         return ResponseEntity.ok().body(result);
     }
 
-    @GetMapping("/")
+    @GetMapping("/{studentId}")
     public ResponseEntity<Object> getAllNotes(@PathVariable Long studentId) {
         List<NotesResponseDTO> result = notesService.findAllNotes(studentId);
         return ResponseEntity.ok().body(result);
     }
 
     @GetMapping("/{noteId}")
-    public ResponseEntity<Object> getNote(@PathVariable Long studentId, @PathVariable Long noteId) {
+    public ResponseEntity<Object> getNote(@PathVariable Long noteId) {
         NotesResponseDTO result = notesService.findNote(noteId);
         return ResponseEntity.ok().body(result);
     }
 
     @DeleteMapping("/{noteId}")
-    public ResponseEntity<Object> delete(@PathVariable Long studentId, @PathVariable Long noteId) {
+    public ResponseEntity<Object> delete(@PathVariable Long noteId) {
         notesService.deleteNote(noteId);
         return ResponseEntity.noContent().build();
     }

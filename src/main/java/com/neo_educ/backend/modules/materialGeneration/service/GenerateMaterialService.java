@@ -51,7 +51,7 @@ public class GenerateMaterialService {
 
         List<InterestsEnum> interests = new ArrayList<>();
         ProficiencyLevel level = studentActivityDTO.setLevel();
-        StudentResponseDTO student = studentService.findStudent(studentActivityDTO.studentId());
+        StudentResponseDTO student = studentService.findStudentDTO(studentActivityDTO.studentId());
         if (studentActivityDTO.interests()) {
             interests.addAll(student.interests());
         }
