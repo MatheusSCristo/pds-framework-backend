@@ -9,6 +9,7 @@ import com.neo_educ.backend.modules.teacher.mappers.TeacherMapper;
 import com.neo_educ.backend.modules.teacher.entity.TeacherEntity;
 import com.neo_educ.backend.modules.jwt.service.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -33,20 +34,20 @@ public class AuthController {
     private AuthService authService;
 
     @PostMapping("/signup")
-    public ResponseEntity<TeacherEntity> signUp(@RequestBody RegisterDTO registerDTO) {
-        TeacherEntity teacher = authService.signUp(registerDTO);
-        return ResponseEntity.ok(teacher);
+    public ResponseEntity<Void> signUp(@RequestBody RegisterDTO registerDTO) {
+         authService.signUp(registerDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDTO> signIn(@RequestBody LoginDTO loginDTO) {
-        TeacherEntity authenticatedUser=authService.signIn(loginDTO);
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         loginDTO.email(),
                         loginDTO.password()
                 )
         );
+        TeacherEntity authenticatedUser=authService.signIn(loginDTO);
         String jwtToken = jwtService.generateToken(authenticatedUser);
         long expiresIn=jwtService.getExpirationTime();
         TeacherDTO authenticatedDTO=teacherMapper.toDTO(authenticatedUser);
