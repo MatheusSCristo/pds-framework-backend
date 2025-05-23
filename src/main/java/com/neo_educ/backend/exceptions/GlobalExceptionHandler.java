@@ -6,6 +6,7 @@ import jakarta.persistence.EntityNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
 
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.support.MethodArgumentNotValidException;
@@ -24,7 +25,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(ExpiredJwtException.class)
-    public ResponseEntity<Object> handleEntityNotFoundException(ExpiredJwtException ex) {
+    public ResponseEntity<Object> handleExpiredJwtException(ExpiredJwtException ex) {
         ApiException apiException = new ApiException(HttpStatus.UNAUTHORIZED, ex);
         return ApiException.toResponseEntity(apiException);
     }
@@ -32,20 +33,40 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Object> handleValidationException(MethodArgumentNotValidException ex) {
         Map<String, String> errors = new HashMap<>();
-        ex.getBindingResult().getFieldErrors()
-                .forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
+        if (ex.getBindingResult() != null) {
+            ex.getBindingResult().getFieldErrors()
+                    .forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
+        }
         return ResponseEntity.badRequest().body(errors);
     }
 
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<Object> handleValidationException(ConstraintViolationException ex) {
+        ApiException apiException = new ApiException(HttpStatus.BAD_REQUEST, ex);
+        return ApiException.toResponseEntity(apiException);
+    }
 
+
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<Object> handleCustomRuntimeExceptions(RuntimeException ex) {
+        if (ex instanceof CustomHttpStatusException customEx) {
+            ApiException apiException = new ApiException(customEx.getStatus(), ex);
+            return ApiException.toResponseEntity(apiException);
+        }
+
+        ApiException apiException = new ApiException(
+                HttpStatus.INTERNAL_SERVER_ERROR,
+                "Erro inesperado",
+                ex
+        );
+        return ApiException.toResponseEntity(apiException);
+    }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Object> handleGenericException(Exception ex) {
         ApiException apiException = new ApiException(HttpStatus.INTERNAL_SERVER_ERROR, "Erro inesperado", ex);
         return ApiException.toResponseEntity(apiException);
     }
-
-
 
 
 }

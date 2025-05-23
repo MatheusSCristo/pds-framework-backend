@@ -9,6 +9,7 @@ import com.neo_educ.backend.modules.student.mapper.StudentMapper;
 import com.neo_educ.backend.modules.student.repository.StudentRepository;
 import com.neo_educ.backend.modules.teacher.entity.TeacherEntity;
 import com.neo_educ.backend.modules.teacher.service.TeacherService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,10 +29,9 @@ public class StudentService {
 
 
     public List<StudentResponseDTO> getTeacherStudents(String email) {
-        List <StudentEntity> entities = studentRepository.findAllByTeacher_Email(email);
-        return entities.stream().map(item->studentMapper.toResponseDTO(item)).toList();
+        List<StudentEntity> entities = studentRepository.findAllByTeacher_Email(email);
+        return entities.stream().map(item -> studentMapper.toResponseDTO(item)).toList();
     }
-
 
 
     public void createStudent(StudentRegisterDTO studentRegisterDto) {
@@ -47,19 +47,15 @@ public class StudentService {
     }
 
     public void deleteStudent(Long studentId) {
-        var student = studentRepository.findById(studentId)
-                .orElseThrow(StudentNotFoundException::new);
-
-        studentRepository.delete(student);
+        studentRepository.deleteById(studentId);
     }
 
     public StudentResponseDTO findStudent(Long studentId) {
         StudentEntity entity = studentRepository.findById(studentId)
-                .orElseThrow(StudentNotFoundException::new);
+                .orElseThrow(() -> new EntityNotFoundException("Estudante com ID: " + studentId + " não encontrado"));
 
         return studentMapper.toResponseDTO(entity);
     }
-
 
 
 }

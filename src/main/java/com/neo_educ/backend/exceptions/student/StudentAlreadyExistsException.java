@@ -1,7 +1,15 @@
 package com.neo_educ.backend.exceptions.student;
 
-public class StudentAlreadyExistsException extends RuntimeException {
-  public StudentAlreadyExistsException() {
-    super("Este estudante já está cadastrado");
-  }
+import com.neo_educ.backend.exceptions.CustomHttpStatusException;
+import org.springframework.http.HttpStatus;
+
+public class StudentAlreadyExistsException extends RuntimeException implements CustomHttpStatusException {
+    public StudentAlreadyExistsException() {
+        super("Este estudante já está cadastrado");
+    }
+
+    @Override
+    public HttpStatus getStatus() {
+        return HttpStatus.BAD_REQUEST;
+    }
 }

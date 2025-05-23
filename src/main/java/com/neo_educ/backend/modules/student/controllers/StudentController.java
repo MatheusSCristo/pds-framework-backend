@@ -78,15 +78,5 @@ public class StudentController {
         }
     }
 
-    @PutMapping("/{studentId}")
-    public ResponseEntity<Object> updateStudent(@PathVariable Long studentId, @RequestBody StudentRegisterDTO studentRegisterDto) {
-        try {
-            var result = this.studentService.updateStudent(studentRegisterDto, studentId);
-
-            return ResponseEntity.ok().body(result);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-    }
 
 }
