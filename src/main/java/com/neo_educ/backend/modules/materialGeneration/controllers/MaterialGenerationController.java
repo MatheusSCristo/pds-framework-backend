@@ -1,9 +1,8 @@
 package com.neo_educ.backend.modules.materialGeneration.controllers;
 
-import com.neo_educ.backend.modules.materialGeneration.dto.GenerateMaterialDTO;
-import com.neo_educ.backend.modules.materialGeneration.dto.GenerateStudentActivityDTO;
-import com.neo_educ.backend.modules.materialGeneration.dto.GenerateStudentReportDTO;
+import com.neo_educ.backend.modules.materialGeneration.dto.*;
 import com.neo_educ.backend.modules.materialGeneration.service.GenerateMaterialService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,6 +33,17 @@ public class MaterialGenerationController {
     public ResponseEntity<Object> generateStudentReport(@RequestBody GenerateStudentReportDTO generateStudentReportDTO) {
         String result = generateMaterialService.generateStudentReport(generateStudentReportDTO);
         return ResponseEntity.ok().body(result);
+    }
+
+    @PostMapping("/exercise")
+    public ResponseEntity<Object> generateExercises(@RequestBody @Valid GenerateExerciseDTO generateExerciseDTO) {
+        String result = generateMaterialService.generateExercise(generateExerciseDTO);
+        return ResponseEntity.ok().body(result);
+    }
+
+    @PostMapping("exercise/export")
+    public ResponseEntity<Object> exportExercise(@RequestBody ExportExerciseDTO exportExerciseDTO) {
+
     }
 
 }

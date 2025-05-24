@@ -3,6 +3,7 @@ package com.neo_educ.backend.modules.materialGeneration.service;
 import com.neo_educ.backend.exceptions.generateMaterial.ActivityGenerateException;
 import com.neo_educ.backend.exceptions.generateMaterial.LevelNullException;
 import com.neo_educ.backend.exceptions.generateMaterial.TopicNullException;
+import com.neo_educ.backend.modules.materialGeneration.dto.GenerateExerciseDTO;
 import com.neo_educ.backend.modules.materialGeneration.dto.GenerateStudentReportDTO;
 import com.neo_educ.backend.modules.student.enums.InterestsEnum;
 import com.neo_educ.backend.modules.llm.service.LLMService;
@@ -76,6 +77,15 @@ public class GenerateMaterialService {
             return llmService.chat(prompt);
         } catch (Exception e) {
             throw new ActivityGenerateException();
+        }
+    }
+
+    public String generateExercise(GenerateExerciseDTO generateExerciseDTO) {
+        try {
+            String prompt = promptTemplate.createExercisePrompt(generateExerciseDTO);
+            return llmService.chat(prompt);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 

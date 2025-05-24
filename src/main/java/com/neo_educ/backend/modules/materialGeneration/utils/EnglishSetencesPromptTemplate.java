@@ -1,5 +1,6 @@
 package com.neo_educ.backend.modules.materialGeneration.utils;
 
+import com.neo_educ.backend.modules.materialGeneration.dto.GenerateExerciseDTO;
 import com.neo_educ.backend.modules.materialGeneration.dto.GradeAverageBySubject;
 import com.neo_educ.backend.modules.student.enums.InterestsEnum;
 import com.neo_educ.backend.modules.materialGeneration.dto.GenerateMaterialDTO;
@@ -103,6 +104,46 @@ public class EnglishSetencesPromptTemplate {
                 .append("> [Dicas sobre como o aluno pode organizar seus horários, criar uma rotina de estudos eficiente, manter hábitos saudáveis e evitar procrastinação.]\n\n")
                 .append("IMPORTANTE: Formate sua resposta com quebras de linha claras. Após cada cabeçalho (###), dê uma linha em branco. Cada dica deve estar separada por uma nova linha. NÃO escreva todas as dicas em um único parágrafo. Formatação limpa é essencial para exibição no frontend.")
                 .append("Por favor, siga rigorosamente este modelo na resposta. Não inclua textos fora dessas seções.");
+
+        return prompt.toString();
+    }
+
+    public String createExercisePrompt(GenerateExerciseDTO infos) {
+        StringBuilder prompt = new StringBuilder();
+
+        prompt.append("Você é um especialista em ensino de inglês como segunda língua. ")
+                .append("Sua tarefa é criar exercícios práticos e eficazes para estudantes de inglês.\n\n")
+
+                .append("## Instruções:\n\n")
+                .append("Gere ").append(infos.quantity())
+                .append(" exercícios focados no tópico ").append(infos.topic())
+                .append(" para um aluno de nível ").append(infos.level()).append(".\n\n");
+
+        if (infos.interests() != null && !infos.interests().isEmpty()) {
+            prompt.append("Interesses do aluno: ");
+            String interests = String.join(", ", infos.interests());
+            prompt.append(interests).append("\n\n");
+        }
+
+        prompt.append("## Diretrizes importantes:\n\n")
+                .append("- Adapte a complexidade vocabular e gramatical rigorosamente ao nível especificado (A1, A2, B1, B2, C1, C2)\n")
+                .append("- Varie os tipos de exercícios: completar frases, múltipla escolha, transformação de frases, produção de texto curto, correção de erros, etc.\n")
+                .append("- Se interesses específicos foram fornecidos, incorpore-os de forma natural nos contextos dos exercícios\n")
+                .append("- Mantenha o foco no tópico gramatical ou vocabular solicitado\n")
+                .append("- Forneça instruções claras em português para cada exercício\n")
+                .append("- Numere os exercícios sequencialmente\n\n")
+
+                .append("## Formato de resposta:\n\n")
+                .append("Apresente apenas os exercícios, sem explicações adicionais, introduções ou comentários. Cada exercício deve ter:\n")
+                .append("1. Número do exercício\n")
+                .append("2. Instrução clara em português\n")
+                .append("3. O exercício propriamente dito\n\n")
+
+                .append("Exemplo de formato:\n")
+                .append("**Exercício 1:** Complete as frases com a forma correta do verbo no presente simples.\n")
+                .append("a) She _______ (work) at a hospital.\n")
+                .append("b) They _______ (not/like) pizza.\n\n")
+                .append("Gere os exercícios agora.");
 
         return prompt.toString();
     }
