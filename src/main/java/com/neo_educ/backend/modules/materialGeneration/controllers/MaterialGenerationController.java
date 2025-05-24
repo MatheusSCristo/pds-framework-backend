@@ -2,6 +2,7 @@ package com.neo_educ.backend.modules.materialGeneration.controllers;
 
 import com.neo_educ.backend.modules.materialGeneration.dto.GenerateMaterialDTO;
 import com.neo_educ.backend.modules.materialGeneration.dto.GenerateStudentActivityDTO;
+import com.neo_educ.backend.modules.materialGeneration.dto.GenerateStudentReportDTO;
 import com.neo_educ.backend.modules.materialGeneration.service.GenerateMaterialService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +28,12 @@ public class MaterialGenerationController {
     public ResponseEntity<Object> generateStudentActivity(@RequestBody GenerateStudentActivityDTO studentActivityDTO) {
             String result = generateMaterialService.generateStudentActivity(studentActivityDTO);
             return ResponseEntity.ok().body(result);
+    }
+
+    @PostMapping("/report")
+    public ResponseEntity<Object> generateStudentReport(@RequestBody GenerateStudentReportDTO generateStudentReportDTO) {
+        String result = generateMaterialService.generateStudentReport(generateStudentReportDTO);
+        return ResponseEntity.ok().body(result);
     }
 
 }
