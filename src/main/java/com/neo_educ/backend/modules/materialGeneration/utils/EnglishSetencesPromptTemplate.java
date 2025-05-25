@@ -140,7 +140,7 @@ public class EnglishSetencesPromptTemplate {
                 .append("3. O exercício propriamente dito\n\n")
 
                 .append("Exemplo de formato:\n")
-                .append("**Exercício 1:** Complete as frases com a forma correta do verbo no presente simples.\n")
+                .append("Exercício 1) Complete as frases com a forma correta do verbo no presente simples.\n")
                 .append("a) She _______ (work) at a hospital.\n")
                 .append("b) They _______ (not/like) pizza.\n\n")
                 .append("Gere os exercícios agora.");

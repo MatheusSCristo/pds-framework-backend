@@ -6,6 +6,8 @@ import com.neo_educ.backend.modules.materialGeneration.service.GenerateMaterialS
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -47,7 +49,10 @@ public class MaterialGenerationController {
 
     @PostMapping("exercise/export")
     public ResponseEntity<Object> exportExercise(@RequestBody @Valid ExportExerciseDTO exportExerciseDTO) {
-        Boolean sucess = exportExerciseService.export(exportExerciseDTO);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String teacherEmail = authentication.getName();
+
+        Boolean sucess = exportExerciseService.export(exportExerciseDTO, teacherEmail);
 
         if(sucess) {
             return ResponseEntity.noContent().build();
