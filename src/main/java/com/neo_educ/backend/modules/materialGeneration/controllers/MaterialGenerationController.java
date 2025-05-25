@@ -41,9 +41,9 @@ public class MaterialGenerationController {
         return ResponseEntity.ok().body(result);
     }
 
-    @PostMapping("exercise/export")
+/*    @PostMapping("exercise/export")
     public ResponseEntity<Object> exportExercise(@RequestBody ExportExerciseDTO exportExerciseDTO) {
 
-    }
+    }*/
 
 }

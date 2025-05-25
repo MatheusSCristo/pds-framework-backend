@@ -85,7 +85,7 @@ public class GenerateMaterialService {
             String prompt = promptTemplate.createExercisePrompt(generateExerciseDTO);
             return llmService.chat(prompt);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new ActivityGenerateException();
         }
     }
 
