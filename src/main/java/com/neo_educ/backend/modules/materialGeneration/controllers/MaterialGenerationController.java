@@ -1,6 +1,7 @@
 package com.neo_educ.backend.modules.materialGeneration.controllers;
 
 import com.neo_educ.backend.modules.materialGeneration.dto.*;
+import com.neo_educ.backend.modules.materialGeneration.service.ExportExerciseService;
 import com.neo_educ.backend.modules.materialGeneration.service.GenerateMaterialService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,9 @@ public class MaterialGenerationController {
 
     @Autowired
     private GenerateMaterialService generateMaterialService;
+
+    @Autowired
+    private ExportExerciseService exportExerciseService;
 
     @PostMapping("/")
     public ResponseEntity<Object> generate(@RequestBody GenerateMaterialDTO generateMaterialDTO) {
@@ -41,9 +45,15 @@ public class MaterialGenerationController {
         return ResponseEntity.ok().body(result);
     }
 
-/*    @PostMapping("exercise/export")
-    public ResponseEntity<Object> exportExercise(@RequestBody ExportExerciseDTO exportExerciseDTO) {
+    @PostMapping("exercise/export")
+    public ResponseEntity<Object> exportExercise(@RequestBody @Valid ExportExerciseDTO exportExerciseDTO) {
+        Boolean sucess = exportExerciseService.export(exportExerciseDTO);
 
-    }*/
+        if(sucess) {
+            return ResponseEntity.noContent().build();
+        }
+
+        return ResponseEntity.status(500).body("Falha ao gerar ou enviar o PDF.");
+    }
 
 }
