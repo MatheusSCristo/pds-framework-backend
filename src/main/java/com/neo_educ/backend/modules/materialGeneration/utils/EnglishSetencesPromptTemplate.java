@@ -135,23 +135,37 @@ public class EnglishSetencesPromptTemplate {
                 .append("- IMPORTANTE: Para exercícios que solicitem escrita de textos, parágrafos, redações ou qualquer produção textual extensa, forneça APENAS o enunciado da questão. NÃO gere linhas em branco, linhas pontilhadas ou espaços para escrita.\n")
                 .append("- Para exercícios de completar ou responder com palavras/frases curtas, você pode usar espaços em branco (_______) normalmente.\n\n")
 
-                .append("## Formato de resposta:\n\n")
+                .append("## Formato de resposta OBRIGATÓRIO:\n\n")
+                .append("FORMATAÇÃO CRÍTICA: \n")
+                .append("- NÃO deixe linha em branco entre o cabeçalho do exercício (ex: 'Exercício 1) ...') e suas alternativas/conteúdo\n")
+                .append("- DEIXE uma linha em branco APENAS entre exercícios diferentes\n")
+                .append("- O cabeçalho do exercício deve estar IMEDIATAMENTE seguido por suas alternativas na linha seguinte\n\n")
+
                 .append("Apresente apenas os exercícios, sem explicações adicionais, introduções ou comentários. Cada exercício deve ter:\n")
                 .append("1. Número do exercício\n")
                 .append("2. Instrução clara em português\n")
                 .append("3. O exercício propriamente dito (sem linhas para escrita quando for produção textual)\n\n")
 
-                .append("Exemplos de formato correto:\n\n")
+                .append("Exemplos de formato CORRETO:\n\n")
                 .append("Para exercícios de completar:\n")
                 .append("Exercício 1) Complete as frases com a forma correta do verbo no presente simples.\n")
                 .append("a) She _______ (work) at a hospital.\n")
                 .append("b) They _______ (not/like) pizza.\n\n")
 
-                .append("Para exercícios de produção textual:\n")
-                .append("Exercício 2) Escreva um parágrafo de 5-6 linhas descrevendo sua rotina matinal usando o presente simples.\n\n")
-                .append("(Note que não há linhas em branco ou espaços para escrita no segundo exemplo)\n\n")
+                .append("Para exercícios de múltipla escolha:\n")
+                .append("Exercício 2) Escolha a opção correta.\n")
+                .append("a) We _______ to school yesterday.\n")
+                .append("    (a) go   (b) went   (c) going\n")
+                .append("b) She _______ a book.\n")
+                .append("    (a) read   (b) reads   (c) reading\n\n")
 
-                .append("Gere os exercícios agora, seguindo rigorosamente essas diretrizes.");
+                .append("Para exercícios de produção textual:\n")
+                .append("Exercício 3) Escreva um parágrafo de 5-6 linhas descrevendo sua rotina matinal usando o presente simples.\n\n")
+
+                .append("LEMBRE-SE: Não deixe linha em branco entre 'Exercício X)...' e as alternativas 'a)', 'b)', etc. ")
+                .append("A linha em branco deve existir APENAS entre um exercício completo e o próximo exercício.\n\n")
+
+                .append("Gere os exercícios agora, seguindo rigorosamente essas diretrizes de formatação.");
 
         return prompt.toString();
     }
