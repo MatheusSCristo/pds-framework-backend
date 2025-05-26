@@ -131,19 +131,27 @@ public class EnglishSetencesPromptTemplate {
                 .append("- Se interesses específicos foram fornecidos, incorpore-os de forma natural nos contextos dos exercícios\n")
                 .append("- Mantenha o foco no tópico gramatical ou vocabular solicitado\n")
                 .append("- Forneça instruções claras em português para cada exercício\n")
-                .append("- Numere os exercícios sequencialmente\n\n")
+                .append("- Numere os exercícios sequencialmente\n")
+                .append("- IMPORTANTE: Para exercícios que solicitem escrita de textos, parágrafos, redações ou qualquer produção textual extensa, forneça APENAS o enunciado da questão. NÃO gere linhas em branco, linhas pontilhadas ou espaços para escrita.\n")
+                .append("- Para exercícios de completar ou responder com palavras/frases curtas, você pode usar espaços em branco (_______) normalmente.\n\n")
 
                 .append("## Formato de resposta:\n\n")
                 .append("Apresente apenas os exercícios, sem explicações adicionais, introduções ou comentários. Cada exercício deve ter:\n")
                 .append("1. Número do exercício\n")
                 .append("2. Instrução clara em português\n")
-                .append("3. O exercício propriamente dito\n\n")
+                .append("3. O exercício propriamente dito (sem linhas para escrita quando for produção textual)\n\n")
 
-                .append("Exemplo de formato:\n")
+                .append("Exemplos de formato correto:\n\n")
+                .append("Para exercícios de completar:\n")
                 .append("Exercício 1) Complete as frases com a forma correta do verbo no presente simples.\n")
                 .append("a) She _______ (work) at a hospital.\n")
                 .append("b) They _______ (not/like) pizza.\n\n")
-                .append("Gere os exercícios agora.");
+
+                .append("Para exercícios de produção textual:\n")
+                .append("Exercício 2) Escreva um parágrafo de 5-6 linhas descrevendo sua rotina matinal usando o presente simples.\n\n")
+                .append("(Note que não há linhas em branco ou espaços para escrita no segundo exemplo)\n\n")
+
+                .append("Gere os exercícios agora, seguindo rigorosamente essas diretrizes.");
 
         return prompt.toString();
     }
