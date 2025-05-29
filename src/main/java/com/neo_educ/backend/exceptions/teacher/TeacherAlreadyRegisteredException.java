@@ -1,17 +1,13 @@
 package com.neo_educ.backend.exceptions.teacher;
 
-import com.neo_educ.backend.exceptions.CustomHttpStatusException;
+import com.neo_educ.backend.exceptions.ApiException;
 import org.springframework.http.HttpStatus;
 
-import java.io.Serializable;
 
-public class TeacherAlreadyRegisteredException extends RuntimeException implements CustomHttpStatusException {
+public class TeacherAlreadyRegisteredException extends ApiException {
     public TeacherAlreadyRegisteredException() {
-        super("Email já cadastrado");
+        super(HttpStatus.BAD_REQUEST,"Email já cadastrado");
     }
 
-    @Override
-    public HttpStatus getStatus() {
-        return HttpStatus.BAD_REQUEST;
-    }
+
 }

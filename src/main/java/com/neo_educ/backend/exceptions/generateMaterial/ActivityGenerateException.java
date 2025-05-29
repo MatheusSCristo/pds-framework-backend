@@ -1,7 +1,10 @@
 package com.neo_educ.backend.exceptions.generateMaterial;
 
-public class ActivityGenerateException extends RuntimeException {
+import com.neo_educ.backend.exceptions.ApiException;
+import org.springframework.http.HttpStatus;
+
+public class ActivityGenerateException extends ApiException {
     public ActivityGenerateException() {
-        super("Erro ao gerar conteúdo");
+        super(HttpStatus.INTERNAL_SERVER_ERROR, "Erro ao gerar conteúdo");
     }
 }

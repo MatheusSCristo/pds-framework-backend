@@ -1,6 +1,8 @@
+
 package com.neo_educ.backend.exceptions;
 
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import jakarta.persistence.EntityNotFoundException;
 
 import java.util.HashMap;
@@ -21,12 +23,16 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
 
+    @ExceptionHandler(ApiException.class)
+    public ResponseEntity<Object> handleApiException(ApiException ex) {
+        return ApiException.toResponseEntity(ex);
+    }
+
     @ExceptionHandler(InternalAuthenticationServiceException.class)
     public ResponseEntity<Object> handleInternalAuthenticationServiceException(InternalAuthenticationServiceException ex) {
         ApiException apiException = new ApiException(
                 HttpStatus.UNAUTHORIZED,
-                "Email não registrado",
-                ex
+                "Email não registrado"
         );
         return ApiException.toResponseEntity(apiException);
     }
@@ -35,8 +41,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> handleBadCredentialsException(BadCredentialsException ex) {
         ApiException apiException = new ApiException(
                 HttpStatus.UNAUTHORIZED,
-                "Credenciais Inválidas",
-                ex
+                "Credenciais Inválidas"
         );
         return ApiException.toResponseEntity(apiException);
     }
@@ -44,13 +49,16 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<Object> handleEntityNotFoundException(EntityNotFoundException ex) {
-        ApiException apiException = new ApiException(HttpStatus.NOT_FOUND, ex);
+        ApiException apiException = new ApiException(HttpStatus.BAD_REQUEST, ex);
         return ApiException.toResponseEntity(apiException);
     }
 
-    @ExceptionHandler(ExpiredJwtException.class)
-    public ResponseEntity<Object> handleExpiredJwtException(ExpiredJwtException ex) {
-        ApiException apiException = new ApiException(HttpStatus.UNAUTHORIZED, ex);
+    @ExceptionHandler(JwtException.class)
+    public ResponseEntity<Object> handleJwtException(JwtException ex) {
+        ApiException apiException = new ApiException(
+                HttpStatus.UNAUTHORIZED,
+                "Token Inválido"
+        );
         return ApiException.toResponseEntity(apiException);
     }
 
@@ -70,25 +78,9 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return ApiException.toResponseEntity(apiException);
     }
 
-
-    @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<Object> handleCustomRuntimeExceptions(RuntimeException ex) {
-        if (ex instanceof CustomHttpStatusException customEx) {
-            ApiException apiException = new ApiException(customEx.getStatus(), ex);
-            return ApiException.toResponseEntity(apiException);
-        }
-
-        ApiException apiException = new ApiException(
-                HttpStatus.INTERNAL_SERVER_ERROR,
-                "Erro inesperado",
-                ex
-        );
-        return ApiException.toResponseEntity(apiException);
-    }
-
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Object> handleGenericException(Exception ex) {
-        ApiException apiException = new ApiException(HttpStatus.INTERNAL_SERVER_ERROR, "Erro inesperado", ex);
+        ApiException apiException = new ApiException(HttpStatus.INTERNAL_SERVER_ERROR, "Erro inesperado");
         return ApiException.toResponseEntity(apiException);
     }
 
