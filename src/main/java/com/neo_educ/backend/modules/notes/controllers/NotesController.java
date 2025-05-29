@@ -18,12 +18,9 @@ public class NotesController {
     @Autowired
     private NotesService notesService;
 
-    @PostMapping("/")
+    @PostMapping("/{studentId}")
     public ResponseEntity<NotesResponseDTO> create(@PathVariable Long studentId, @RequestBody NotesRequestDTO notesRequestDTO) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String teacherEmail = authentication.getName();
-
-        NotesResponseDTO result = notesService.createNote(teacherEmail, studentId, notesRequestDTO);
+        NotesResponseDTO result = notesService.createNote( studentId, notesRequestDTO);
 
         return ResponseEntity.ok().body(result);
     }
@@ -31,12 +28,6 @@ public class NotesController {
     @GetMapping("/{studentId}")
     public ResponseEntity<Object> getAllNotes(@PathVariable Long studentId) {
         List<NotesResponseDTO> result = notesService.findAllNotes(studentId);
-        return ResponseEntity.ok().body(result);
-    }
-
-    @GetMapping("/{noteId}")
-    public ResponseEntity<Object> getNote(@PathVariable Long noteId) {
-        NotesResponseDTO result = notesService.findNote(noteId);
         return ResponseEntity.ok().body(result);
     }
 
