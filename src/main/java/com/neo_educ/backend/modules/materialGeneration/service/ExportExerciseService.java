@@ -1,12 +1,12 @@
 package com.neo_educ.backend.modules.materialGeneration.service;
 
-import com.neo_educ.backend.exceptions.student.StudentNotFoundException;
 import com.neo_educ.backend.modules.materialGeneration.dto.ExportExerciseDTO;
 import com.neo_educ.backend.modules.student.entity.StudentEntity;
 import com.neo_educ.backend.modules.student.repository.StudentRepository;
 import com.neo_educ.backend.modules.teacher.entity.TeacherEntity;
 import com.neo_educ.backend.modules.teacher.repository.TeacherRepository;
 import jakarta.mail.internet.MimeMessage;
+import jakarta.persistence.EntityNotFoundException;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -49,7 +49,7 @@ public class ExportExerciseService {
             Optional<StudentEntity> studentOptional = studentRepository.findByEmailAndTeacher(exportExerciseDTO.studentEmail(), teacher);
 
             if (studentOptional.isEmpty()) {
-                throw new StudentNotFoundException();
+                throw new EntityNotFoundException();
             }
 
             byte[] pdfBytes = generatePDF(exportExerciseDTO.selectedExercises());

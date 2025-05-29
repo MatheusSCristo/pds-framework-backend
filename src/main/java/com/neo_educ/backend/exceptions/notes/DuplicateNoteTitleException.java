@@ -1,17 +1,12 @@
 package com.neo_educ.backend.exceptions.notes;
 
-import com.neo_educ.backend.exceptions.CustomHttpStatusException;
+import com.neo_educ.backend.exceptions.ApiException;
 import org.springframework.http.HttpStatus;
 
-import java.io.Serializable;
 
-public class DuplicateNoteTitleException extends RuntimeException implements CustomHttpStatusException {
+public class DuplicateNoteTitleException extends ApiException {
     public DuplicateNoteTitleException() {
-        super("Já existe uma nota com este nome para este aluno");
+        super( HttpStatus.BAD_REQUEST,"Já existe uma nota com este nome para este aluno");
     }
 
-    @Override
-    public HttpStatus getStatus() {
-        return HttpStatus.BAD_REQUEST;
-    }
 }
