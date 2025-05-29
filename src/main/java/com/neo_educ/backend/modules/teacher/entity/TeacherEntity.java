@@ -37,9 +37,6 @@ public class TeacherEntity extends AbstractModel implements UserDetails {
     @OneToMany(mappedBy = "teacher", cascade = CascadeType.REMOVE)
     private List<StudentEntity> students;
 
-    @OneToMany(mappedBy = "teacher", cascade = CascadeType.REMOVE)
-    private List<NotesEntity> notes;
-
     @Override
     @Transient
     public Collection<? extends GrantedAuthority> getAuthorities() {

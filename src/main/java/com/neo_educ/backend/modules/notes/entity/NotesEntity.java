@@ -29,17 +29,7 @@ public class NotesEntity extends AbstractModel  {
   private String content;
 
   @ManyToOne
-  @JoinColumn(name = "teacher_email", referencedColumnName = "email", nullable = false, insertable = false, updatable = false)
-  private TeacherEntity teacher;
-
-  @Column(name = "teacher_email", nullable = false)
-  private String teacherEmail;
-
-  @ManyToOne
-  @JoinColumn(name = "student_id", nullable = false, insertable = false, updatable = false)
+  @JoinColumn(name = "student_id", nullable = false)
   private StudentEntity student;
-
-  @Column(name = "student_id", nullable = false)
-  private Long studentId;
 
 }

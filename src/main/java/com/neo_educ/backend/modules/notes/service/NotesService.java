@@ -6,6 +6,7 @@ import com.neo_educ.backend.modules.notes.dto.NotesResponseDTO;
 import com.neo_educ.backend.modules.notes.entity.NotesEntity;
 import com.neo_educ.backend.modules.notes.mapper.NotesMapper;
 import com.neo_educ.backend.modules.notes.repository.NotesRepository;
+import com.neo_educ.backend.modules.student.entity.StudentEntity;
 import com.neo_educ.backend.modules.student.mapper.StudentMapper;
 import com.neo_educ.backend.modules.student.service.StudentService;
 import jakarta.persistence.EntityNotFoundException;
@@ -26,16 +27,17 @@ public class NotesService {
     @Autowired
     private NotesMapper notesMapper;
 
-    public NotesResponseDTO createNote(String teacherEmail, Long studentId, NotesRequestDTO notesRequestDTO) {
-        studentService.findStudent(studentId);
-        if (notesRepository.findByTitleAndTeacherEmailAndStudentId(notesRequestDTO.title(), teacherEmail, studentId)
+    public NotesResponseDTO createNote(Long studentId, NotesRequestDTO notesRequestDTO) {
+        StudentEntity student=studentService.findStudent(studentId);
+        if (notesRepository.findByTitleAndStudentId(notesRequestDTO.title(), studentId)
                 .isPresent()) {
             throw new DuplicateNoteTitleException();
         }
 
         NotesEntity entity = notesMapper.toEntity(notesRequestDTO);
+        entity.setStudent(student);
         notesRepository.save(entity);
-        return NotesResponseDTO.fromEntity(entity);
+        return notesMapper.toResponseDTO(entity);
     }
 
     public void deleteNote(Long noteId) {
@@ -45,7 +47,7 @@ public class NotesService {
     public List<NotesResponseDTO> findAllNotes(Long studentId) {
         List<NotesEntity> notes = notesRepository.findAllByStudentId(studentId);
         return notes.stream()
-                .map(NotesResponseDTO::fromEntity)
+                .map((item)-> notesMapper.toResponseDTO(item))
                 .toList();
     }
 
@@ -53,6 +55,6 @@ public class NotesService {
         NotesEntity entity = notesRepository.findById(noteId)
                 .orElseThrow(() -> new EntityNotFoundException("Nenhuma nota encontrada com ID: " + noteId));
 
-        return NotesResponseDTO.fromEntity(entity);
+        return notesMapper.toResponseDTO(entity);
     }
 }
