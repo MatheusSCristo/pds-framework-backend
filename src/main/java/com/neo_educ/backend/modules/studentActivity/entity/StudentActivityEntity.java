@@ -1,6 +1,7 @@
 package com.neo_educ.backend.modules.studentActivity.entity;
 
 import com.neo_educ.backend.core.model.AbstractModel;
+import com.neo_educ.backend.core.model.ClientProgressMonitoringEntity;
 import com.neo_educ.backend.modules.student.entity.StudentEntity;
 import com.neo_educ.backend.modules.studentActivity.enums.StudentActivityStatus;
 import jakarta.persistence.Entity;
@@ -19,7 +20,7 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
-public class StudentActivityEntity extends AbstractModel {
+public class StudentActivityEntity extends ClientProgressMonitoringEntity {
     private Integer unit;
     private Integer grade;
     private StudentActivityStatus status;
