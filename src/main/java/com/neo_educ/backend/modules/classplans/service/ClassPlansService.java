@@ -67,10 +67,10 @@ public class ClassPlansService {
 
         entity.setTopic(data.topic());
         entity.setClassDate(data.classDate());
-        entity.setInputData(data.inputData());
+        entity.setTopic(data.inputData());
         entity.setTeacher(teacher);
         entity.setStatus(ClassPlanStatus.PENDING);
-        entity.setAiGeneratedContent(geminiResponse);
+        entity.setContent(geminiResponse);
 
         ClassPlansEntity classPlan = classPlansRepository.save(entity);
         return classPlansMapper.toResponse(classPlan);
@@ -103,7 +103,7 @@ public class ClassPlansService {
     public ClassPlansResponseDTO patchAiGeneratedContent(Long id, String input) {
         ClassPlansEntity entity = classPlansRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Plano de aula não encontrado com o ID: " + id));
-        entity.setAiGeneratedContent(input);
+        entity.setContent(input);
 
         ClassPlansEntity classPlan = classPlansRepository.save(entity);
         return classPlansMapper.toResponse(classPlan);

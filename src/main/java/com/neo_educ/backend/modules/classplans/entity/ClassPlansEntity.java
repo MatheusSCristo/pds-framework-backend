@@ -2,6 +2,7 @@ package com.neo_educ.backend.modules.classplans.entity;
 import java.time.LocalDateTime;
 
 import com.neo_educ.backend.core.model.AbstractModel;
+import com.neo_educ.backend.core.model.AbstractPlanEntity;
 import com.neo_educ.backend.modules.classplans.enums.ClassPlanStatus;
 import com.neo_educ.backend.modules.teacher.entity.TeacherEntity;
 
@@ -22,23 +23,15 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @NoArgsConstructor
 @SuperBuilder
-public class ClassPlansEntity extends AbstractModel {
+public class ClassPlansEntity extends AbstractPlanEntity {
 
   @ManyToOne
   @JoinColumn(name="teacher_id", nullable = false)
   private TeacherEntity teacher;
-  private String topic;
   private LocalDateTime classDate;
-
-  @Column(columnDefinition = "TEXT")
-  private String inputData;
-
-  @Column(columnDefinition = "TEXT")
-  private String aiGeneratedContent;
-
   @Enumerated(EnumType.STRING)
   private ClassPlanStatus status = ClassPlanStatus.PENDING;
 
 
-  
+
 }

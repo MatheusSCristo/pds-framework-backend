@@ -1,6 +1,7 @@
 package com.neo_educ.backend.modules.teacher.entity;
 
 import com.neo_educ.backend.core.model.AbstractModel;
+import com.neo_educ.backend.core.model.UserEntity;
 import com.neo_educ.backend.modules.classplans.entity.ClassPlansEntity;
 import com.neo_educ.backend.modules.notes.entity.NotesEntity;
 import com.neo_educ.backend.modules.student.entity.StudentEntity;
@@ -21,14 +22,8 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @SuperBuilder
-public class TeacherEntity extends AbstractModel implements UserDetails {
+public class TeacherEntity extends UserEntity implements UserDetails {
 
-    private String name;
-    private String lastName;
-    @Column(unique = true, nullable = false)
-    private String email;
-    private String password;
-    private String phone;
     @Column(name="invite_token")
     private String inviteToken;
     @Builder.Default
