@@ -8,6 +8,7 @@ import com.neo_educ.backend.apps.english.teacher.dto.TeacherResponseDTO;
 import com.neo_educ.backend.apps.english.teacher.entity.TeacherEntity;
 import com.neo_educ.backend.apps.english.teacher.mappers.TeacherMapper;
 import com.neo_educ.backend.core.factory.ApplicationFactory;
+import com.neo_educ.backend.core.model.UserEntity;
 import com.neo_educ.backend.core.service.AuthService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,9 +42,15 @@ public class AuthController {
     public ResponseEntity<Void> signUp(@RequestBody RegisterDTO registerDTO) {
         AuthService authService = appFactory.createAuthService();
 
-        TeacherEntity newTeacher = teacherMapper.toEntity(registerDTO);
+        TeacherEntity user = new TeacherEntity(
+                registerDTO.name(),
+                registerDTO.lastName(),
+                registerDTO.email(),
+                registerDTO.password(),
+                registerDTO.phone()
 
-        authService.signUp(newTeacher);
+        ) ;
+        authService.signUp(user);
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }

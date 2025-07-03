@@ -40,4 +40,12 @@ public class StudentEntity extends ClientEntity {
 
     @OneToMany(mappedBy = "student", cascade = CascadeType.REMOVE)
     private List<StudentActivityEntity> activities;
+
+    public void setTeacher(TeacherEntity teacher) {
+        this.teacher = teacher;
+    }
+
+    public List<StudentActivityEntity> getActivities() {
+        return activities;
+    }
 }

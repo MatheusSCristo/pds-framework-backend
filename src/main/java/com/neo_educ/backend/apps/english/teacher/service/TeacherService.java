@@ -26,7 +26,7 @@ public class TeacherService implements UserService {
         });
 
         TeacherEntity teacher = (TeacherEntity) user;
-        
+
         String token = UUID.randomUUID().toString().replace("-", "");
         teacher.setInviteToken(token);
 

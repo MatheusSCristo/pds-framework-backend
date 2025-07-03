@@ -23,7 +23,7 @@ import com.neo_educ.backend.core.service.SessionService;
 import com.neo_educ.backend.exceptions.ConflictException;
 
 @Service
-public class ClassPlansService implements SessionService<ClassPlansEntity, ClassPlansCreateDTO, ClassPlansResponseDTO>{
+public class ClassPlansService implements SessionService<ClassPlansEntity, ClassPlansCreateDTO, ClassPlansResponseDTO> {
 
     @Autowired
     private ClassPlansRepository classPlansRepository;
@@ -40,8 +40,7 @@ public class ClassPlansService implements SessionService<ClassPlansEntity, Class
 
     public ClassPlansResponseDTO create(ClassPlansCreateDTO data, Long teacherID) {
 
-        TeacherEntity teacher = teacherRepository.findById(teacherID)
-                .orElseThrow(() -> new EntityNotFoundException("Professor não encontrado"));
+        TeacherEntity teacher = teacherRepository.findById(teacherID).orElseThrow(() -> new EntityNotFoundException("Professor não encontrado"));
 
         LocalDateTime classDate = data.classDate();
         LocalDateTime start = classDate.minusMinutes(30);
@@ -52,23 +51,13 @@ public class ClassPlansService implements SessionService<ClassPlansEntity, Class
         if (conflicts > 0) {
             throw new ConflictException("Já existe uma aula marcada nesse intervalo de 30 minutos.");
         }
+        String generatedContent = activityGenerator.generateClassPlan(data.inputData());
 
-        // Prepara os parâmetros para o serviço de geração
-        Map<String, Object> params = new HashMap<>();
-        params.put("context", "CLASS_PLAN_GENERATION");
-        params.put("topic", data.inputData());
-
-        // Chama o método da interface genérica, sem saber quem vai executar
-        String generatedContent = activityGenerator.generate(params);
-
-        ClassPlansEntity entity = ClassPlansEntity.builder()
-                .title(data.title())
-                .topic(data.inputData())
-                .date(data.classDate())
-                .teacher(teacher)
-                .content(generatedContent)
-                .build();
-
+        ClassPlansEntity entity = new ClassPlansEntity(data.title(),
+                data.inputData(),
+                data.classDate(),
+                teacher,
+                generatedContent);
         ClassPlansEntity classPlan = classPlansRepository.save(entity);
         return classPlansMapper.toResponse(classPlan);
 
@@ -98,8 +87,7 @@ public class ClassPlansService implements SessionService<ClassPlansEntity, Class
     }
 
     public ClassPlansResponseDTO patchAiGeneratedContent(Long id, String input) {
-        ClassPlansEntity entity = classPlansRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Plano de aula não encontrado com o ID: " + id));
+        ClassPlansEntity entity = classPlansRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Plano de aula não encontrado com o ID: " + id));
         entity.setContent(input);
 
         ClassPlansEntity classPlan = classPlansRepository.save(entity);

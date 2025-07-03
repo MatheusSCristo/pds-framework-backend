@@ -1,3 +1,4 @@
+// File: matheusscristo/pds-framework-backend/pds-framework-backend-refactor-migrate-english-to-framework/src/main/java/com/neo_educ/backend/apps/english/llm/service/EnglishActivityService.java
 package com.neo_educ.backend.apps.english.llm.service;
 
 import com.neo_educ.backend.apps.english.materialGeneration.dto.GenerateExerciseDTO;
@@ -27,41 +28,53 @@ public class EnglishActivityService implements ActivityGeneratorService {
     @Autowired
     private EnglishSetencesPromptTemplate promptTemplate;
 
+
     @Override
-    public String generate(Map<String, Object> infos) {
-        String context = (String) infos.getOrDefault("context", "DEFAULT");
-
+    public String generateClassPlan(String topic) {
         try {
-            String prompt;
-            switch (context) {
-                case "CLASS_PLAN_GENERATION":
-                    String topicForPlan = (String) infos.get("topic");
-                    prompt = promptTemplate.createClassPlanPrompt(topicForPlan);
-                    break;
-                case "GENERATE_MATERIAL":
-                    prompt = promptTemplate.createMaterialPrompt((GenerateMaterialDTO) infos.get("dto"));
-                    break;
-                
-                case "STUDENT_ACTIVITY":
-                    StudentResponseDTO student = studentService.findById((Long) infos.get("studentId"));
-                    prompt = promptTemplate.createActivityPrompt(student.interests(), student.proficiencyLevel(), (String) infos.get("subject"));
-                    break;
-
-                case "STUDENT_REPORT":
-                    List<GradeAverageBySubject> averages = (List<GradeAverageBySubject>) infos.get("reportData");
-                    prompt = promptTemplate.createReportPrompt(averages);
-                    break;
-
-                case "EXERCISE":
-                    prompt = promptTemplate.createExercisePrompt((GenerateExerciseDTO) infos.get("dto"));
-                    break;
-                
-                default:
-                    throw new UnsupportedOperationException("Contexto de geração não suportado: " + context);
-            }
-
+            String prompt = promptTemplate.createClassPlanPrompt(topic);
             return llmService.chat(prompt);
+        } catch (Exception e) {
+            throw new ActivityGenerateException();
+        }
+    }
 
+    @Override
+    public String generateMaterialContent(GenerateMaterialDTO dto) {
+        try {
+            String prompt = promptTemplate.createMaterialPrompt(dto);
+            return llmService.chat(prompt);
+        } catch (Exception e) {
+            throw new ActivityGenerateException();
+        }
+    }
+
+    @Override
+    public String generateStudentActivityContent(Long studentId, String subject) {
+        try {
+            StudentResponseDTO student = studentService.findById(studentId);
+            String prompt = promptTemplate.createActivityPrompt(student.interests(), student.proficiencyLevel(), subject);
+            return llmService.chat(prompt);
+        } catch (Exception e) {
+            throw new ActivityGenerateException();
+        }
+    }
+
+    @Override
+    public String generateStudentReportContent(List<GradeAverageBySubject> reportData) {
+        try {
+            String prompt = promptTemplate.createReportPrompt(reportData);
+            return llmService.chat(prompt);
+        } catch (Exception e) {
+            throw new ActivityGenerateException();
+        }
+    }
+
+    @Override
+    public String generateExerciseContent(GenerateExerciseDTO dto) {
+        try {
+            String prompt = promptTemplate.createExercisePrompt(dto);
+            return llmService.chat(prompt);
         } catch (Exception e) {
             throw new ActivityGenerateException();
         }

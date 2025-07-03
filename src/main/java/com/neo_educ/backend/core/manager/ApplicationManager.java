@@ -21,23 +21,11 @@ public class ApplicationManager {
 
     private Map<String, ApplicationFactory> factories;
 
-    /**
-     * O Spring injetará automaticamente todos os beans que implementam ApplicationFactory
-     * no hashmap. A chave do hashmap será o nome do bean (exemplo: "englishApplicationFactory").
-     * Nomeie os beans de fábrica de forma consistente.
-     */
     @Autowired
     public ApplicationManager(Map<String, ApplicationFactory> factories) {
         this.factories = factories;
     }
 
-    /**
-     * Obtém a fábrica apropriada para o tipo de aplicação solicitado.
-     *
-     * @param applicationType O identificador da aplicação (ex: "english", "nutrition").
-     * @return A instância da ApplicationFactory correspondente.
-     * @throws IllegalArgumentException se nenhuma fábrica for encontrada para o tipo especificado.
-     */
     public ApplicationFactory getFactory(String applicationType) {
         String factory = applicationType.toLowerCase() + "ApplicationFactory";
 

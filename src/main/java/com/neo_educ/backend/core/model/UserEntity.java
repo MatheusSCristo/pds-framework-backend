@@ -17,6 +17,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @MappedSuperclass
+@ToString
 public abstract class UserEntity extends AbstractModel implements UserDetails {
 
     @NotBlank
@@ -69,5 +70,13 @@ public abstract class UserEntity extends AbstractModel implements UserDetails {
     @Transient
     public boolean isEnabled() {
         return true;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getEmail(){
+        return this.email;
     }
 }

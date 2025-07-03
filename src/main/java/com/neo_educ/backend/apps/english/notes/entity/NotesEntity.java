@@ -28,4 +28,8 @@ public class NotesEntity extends AbstractNoteEntity {
   @JoinColumn(name = "student_id", nullable = false)
   private StudentEntity student;
 
+  public void setStudent(StudentEntity student) {
+    this.student = student;
+  }
+
 }

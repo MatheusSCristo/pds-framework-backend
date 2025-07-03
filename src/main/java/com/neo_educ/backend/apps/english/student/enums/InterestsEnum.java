@@ -15,13 +15,4 @@ public enum InterestsEnum {
     InterestsEnum(int code) {
         this.code = code;
     }
-
-    public static InterestsEnum fromCode(int code) {
-        for (InterestsEnum interest : values()) {
-            if (interest.getCode() == code) {
-                return interest;
-            }
-        }
-        throw new IllegalArgumentException("Código inválido: " + code);
-    }
 }

@@ -13,11 +13,5 @@ public interface TeacherMapper {
 
     TeacherResponseDTO toDTO(TeacherEntity teacherEntity);
 
-    @Mapping(target = "id", ignore = true)
-    @Mapping(target = "inviteToken", ignore = true) 
-    @Mapping(target = "createdAt", ignore = true) 
-    @Mapping(target = "updatedAt", ignore = true) 
-    @Mapping(target = "classPlans", ignore = true) 
-    @Mapping(target = "students", ignore = true) 
     TeacherEntity toEntity(RegisterDTO registerDTO);
 }
