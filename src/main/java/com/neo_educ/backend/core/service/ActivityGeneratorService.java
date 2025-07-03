@@ -39,6 +39,6 @@ public interface ActivityGeneratorService {
      * Integer quantity = (Integer) generationParams.get("quantity");
      * ... e assim por diante
      */
-    String generateActivity(Map<String, Object> infos);
+    String generate(Map<String, Object> infos);
 
 }
