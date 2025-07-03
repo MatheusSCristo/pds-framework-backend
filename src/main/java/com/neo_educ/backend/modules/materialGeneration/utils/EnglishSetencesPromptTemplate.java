@@ -1,3 +1,4 @@
+// src/main/java/com/neo_educ/backend/modules/materialGeneration/utils/EnglishSetencesPromptTemplate.java
 package com.neo_educ.backend.modules.materialGeneration.utils;
 
 import com.neo_educ.backend.modules.materialGeneration.dto.GenerateExerciseDTO;
@@ -170,4 +171,13 @@ public class EnglishSetencesPromptTemplate {
         return prompt.toString();
     }
 
+    // Método adicionado para consistência com MaterialGeneratorServiceAbstract
+    public String createAncillaryPrompt(String contentType, String query) {
+        if ("vocabulary".equals(contentType)) {
+            return "Liste 10 palavras de vocabulário avançado sobre o tema: " + query + ".";
+        } else if ("grammar_tip".equals(contentType)) {
+            return "Explique uma dica de gramática para: " + query + ".";
+        }
+        return "Gere conteúdo auxiliar de inglês sobre: " + query;
+    }
 }

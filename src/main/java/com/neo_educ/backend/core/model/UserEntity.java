@@ -40,7 +40,7 @@ public abstract class UserEntity extends AbstractModel implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of();
     }
-0
+
     @Override
     @Transient
     public String getUsername() {
