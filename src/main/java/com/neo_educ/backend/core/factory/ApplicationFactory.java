@@ -1,8 +1,9 @@
 package com.neo_educ.backend.core.factory;
 
+
 import com.neo_educ.backend.core.service.ActivityGeneratorService;
+import com.neo_educ.backend.core.service.AuthService;
 import com.neo_educ.backend.core.service.UserService;
-import com.neo_educ.backend.modules.auth.service.AuthService;
 
 /**
  * Abstract Factory que define o contrato para a criação de todos os componentes
