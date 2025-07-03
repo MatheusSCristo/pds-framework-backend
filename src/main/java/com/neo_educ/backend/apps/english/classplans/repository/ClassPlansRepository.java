@@ -13,7 +13,7 @@ public interface ClassPlansRepository extends AbstractRepository<ClassPlansEntit
 
   List<ClassPlansEntity> findAllByTeacher_Id(Long teacherId);
 
-  @Query("SELECT COUNT(cp) FROM class_plan cp WHERE cp.teacher.id = :teacherId AND cp.classDate BETWEEN :start AND :end")
+  @Query("SELECT COUNT(cp) FROM ClassPlansEntity cp WHERE cp.teacher.id = :teacherId AND cp.date BETWEEN :start AND :end")
   Long countConflictingPlans(
       @Param("teacherId") Long teacherId,
       @Param("start") LocalDateTime start,

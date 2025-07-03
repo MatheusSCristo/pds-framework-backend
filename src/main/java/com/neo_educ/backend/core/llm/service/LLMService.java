@@ -1,4 +1,4 @@
-package com.neo_educ.backend.apps.english.llm.service;
+package com.neo_educ.backend.core.llm.service;
 
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.stereotype.Service;

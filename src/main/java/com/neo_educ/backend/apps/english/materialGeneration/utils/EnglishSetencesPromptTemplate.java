@@ -14,6 +14,19 @@ import java.util.stream.Collectors;
 @Component
 public class EnglishSetencesPromptTemplate {
 
+    public String createClassPlanPrompt(String topic) {
+        return "Você é um assistente didático para professores de inglês. Quando o professor digitar um assunto (por exemplo: Present Perfect ou Vocabulary about Travel), você deve gerar um plano de aula completo para uma aula de inglês. O plano deve ser objetivo, prático e adaptado a estudantes de inglês como segunda língua. O professor pode usar esse plano diretamente em sala de aula.\n"
+            + "\n"
+            + "O plano deve conter:\n"
+            + "- Objetivo(s) da aula\n"
+            + "- Materiais necessários (se houver)\n"
+            + "- Duração estimada\n"
+            + "- Etapas da aula (com sugestões de atividades para introdução, prática e encerramento)\n"
+            + "- Dicas para o professor\n"
+            + "- Sugestões de dever de casa (opcional)\n"
+            + "Esse é o assunto: " + topic;
+    }
+
     public String createMaterialPrompt(GenerateMaterialDTO infos) {
         StringBuilder prompt = new StringBuilder();
 

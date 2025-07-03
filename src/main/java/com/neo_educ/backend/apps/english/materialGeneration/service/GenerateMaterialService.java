@@ -1,101 +1,56 @@
 package com.neo_educ.backend.apps.english.materialGeneration.service;
 
-import com.neo_educ.backend.apps.english.llm.service.LLMService;
 import com.neo_educ.backend.apps.english.materialGeneration.dto.GenerateExerciseDTO;
 import com.neo_educ.backend.apps.english.materialGeneration.dto.GenerateMaterialDTO;
 import com.neo_educ.backend.apps.english.materialGeneration.dto.GenerateStudentActivityDTO;
 import com.neo_educ.backend.apps.english.materialGeneration.dto.GenerateStudentReportDTO;
-import com.neo_educ.backend.apps.english.materialGeneration.utils.EnglishSetencesPromptTemplate;
-import com.neo_educ.backend.apps.english.student.dto.StudentResponseDTO;
-import com.neo_educ.backend.apps.english.student.enums.InterestsEnum;
-import com.neo_educ.backend.apps.english.student.enums.ProficiencyLevel;
-import com.neo_educ.backend.apps.english.student.service.StudentService;
 import com.neo_educ.backend.core.service.ActivityGeneratorService;
-import com.neo_educ.backend.exceptions.generateMaterial.ActivityGenerateException;
-import com.neo_educ.backend.exceptions.generateMaterial.LevelNullException;
-import com.neo_educ.backend.exceptions.generateMaterial.TopicNullException;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @Service
-public class GenerateMaterialService implements ActivityGeneratorService{
+public class GenerateMaterialService {
 
     @Autowired
-    private LLMService llmService;
-
-    @Autowired
-    private StudentService studentService;
-
-
-    @Autowired
-    private EnglishSetencesPromptTemplate promptTemplate;
+    @Qualifier("englishActivityService")
+    private ActivityGeneratorService activityGenerator;
 
     public String generate(GenerateMaterialDTO generateMaterialDTO) {
-        if (generateMaterialDTO.topic() == null) {
-            throw new TopicNullException();
-        }
+        Map<String, Object> params = new HashMap<>();
+        params.put("context", "GENERATE_MATERIAL");
+        params.put("dto", generateMaterialDTO);
 
-        if (generateMaterialDTO.level() == null) {
-            throw new LevelNullException();
-        }
-
-        try {
-            String prompt = promptTemplate.createMaterialPrompt(generateMaterialDTO);
-            return llmService.chat(prompt);
-        } catch (Exception e) {
-            throw new ActivityGenerateException();
-        }
+        return activityGenerator.generate(params);
     }
 
     public String generateStudentActivity(GenerateStudentActivityDTO studentActivityDTO) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("context", "STUDENT_ACTIVITY");
+        params.put("studentId", studentActivityDTO.studentId());
+        params.put("subject", studentActivityDTO.subject());
+        params.put("interests", studentActivityDTO.interests() ? null : List.of());
 
-        List<InterestsEnum> interests = new ArrayList<>();
-        ProficiencyLevel level = studentActivityDTO.setLevel();
-        StudentResponseDTO student = studentService.findStudentDTO(studentActivityDTO.studentId());
-        if (studentActivityDTO.interests()) {
-            interests.addAll(student.interests());
-        }
-        if (studentActivityDTO.level()) {
-            level = student.proficiencyLevel();
-        }
-        try {
-
-            String prompt = promptTemplate.createActivityPrompt(interests, level, studentActivityDTO.subject());
-            return llmService.chat(prompt);
-        } catch (Exception e) {
-            throw new ActivityGenerateException();
-        }
-
+        return activityGenerator.generate(params);
     }
 
     public String generateStudentReport(GenerateStudentReportDTO generateStudentReportDTO) {
-        try {
+        Map<String, Object> params = new HashMap<>();
+        params.put("context", "STUDENT_REPORT");
+        params.put("reportData", generateStudentReportDTO.data());
 
-            String prompt = promptTemplate.createReportPrompt(generateStudentReportDTO.data());
-            return llmService.chat(prompt);
-        } catch (Exception e) {
-            throw new ActivityGenerateException();
-        }
+        return activityGenerator.generate(params);
     }
 
     public String generateExercise(GenerateExerciseDTO generateExerciseDTO) {
-        try {
-            String prompt = promptTemplate.createExercisePrompt(generateExerciseDTO);
-            return llmService.chat(prompt);
-        } catch (Exception e) {
-            throw new ActivityGenerateException();
-        }
-    }
+        Map<String, Object> params = new HashMap<>();
+        params.put("context", "EXERCISE");
+        params.put("dto", generateExerciseDTO);
 
-    @Override
-    public String generate(Map<String, Object> infos) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'generate'");
+        return activityGenerator.generate(params);
     }
-
 }

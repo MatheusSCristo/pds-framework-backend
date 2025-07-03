@@ -1,37 +1,34 @@
 package com.neo_educ.backend.apps.english.classplans.entity;
-import java.time.LocalDateTime;
 
-import com.neo_educ.backend.apps.english.classplans.enums.ClassPlanStatus;
 import com.neo_educ.backend.apps.english.teacher.entity.TeacherEntity;
-import com.neo_educ.backend.core.model.AbstractModel;
-import com.neo_educ.backend.core.model.AbstractPlanEntity;
+import com.neo_educ.backend.core.model.Session;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
-@Table(name = "class_plans")
-@Entity(name = "class_plan")
-@Getter
-@Setter
+@Data
+@EqualsAndHashCode(callSuper = true)
+@SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
-@SuperBuilder
-public class ClassPlansEntity extends AbstractPlanEntity {
+@Entity
+@Table(name = "class_plans")
+public class ClassPlansEntity extends Session {
 
-  @ManyToOne
-  @JoinColumn(name="teacher_id", nullable = false)
-  private TeacherEntity teacher;
-  private LocalDateTime classDate;
-  @Enumerated(EnumType.STRING)
-  private ClassPlanStatus status = ClassPlanStatus.PENDING;
+    private String topic;
 
+    @Column(columnDefinition = "TEXT")
+    private String content;
 
-
+    @ManyToOne
+    @JoinColumn(name = "teacher_id", nullable = false)
+    private TeacherEntity teacher;
 }

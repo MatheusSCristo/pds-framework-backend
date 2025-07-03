@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotNull;
 
 public record ClassPlansCreateDTO(
   @NotBlank(message = "O tópico não pode estar em branco")
-  String topic,
+  String title,
 
   @NotNull(message = "A data da aula é obrigatória")
   LocalDateTime classDate,

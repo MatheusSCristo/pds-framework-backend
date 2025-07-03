@@ -1,50 +1,42 @@
 package com.neo_educ.backend.apps.english.classplans.service;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import com.neo_educ.backend.apps.english.classplans.dto.ClassPlansCreateDTO;
 import com.neo_educ.backend.apps.english.classplans.dto.ClassPlansResponseDTO;
 import com.neo_educ.backend.apps.english.classplans.entity.ClassPlansEntity;
-import com.neo_educ.backend.apps.english.classplans.enums.ClassPlanStatus;
 import com.neo_educ.backend.apps.english.classplans.mappers.ClassPlansMapper;
 import com.neo_educ.backend.apps.english.classplans.repository.ClassPlansRepository;
-import com.neo_educ.backend.apps.english.llm.service.LLMService;
 import com.neo_educ.backend.apps.english.teacher.entity.TeacherEntity;
 import com.neo_educ.backend.apps.english.teacher.repository.TeacherRepository;
+import com.neo_educ.backend.core.service.ActivityGeneratorService;
+import com.neo_educ.backend.core.service.SessionService;
 import com.neo_educ.backend.exceptions.ConflictException;
 
 @Service
-public class ClassPlansService {
-
-    private final String iaClassPlansContext = "Você é um assistente didático para professores de inglês. Quando o professor digitar um assunto (por exemplo: Present Perfect ou Vocabulary about Travel), você deve gerar um plano de aula completo para uma aula de inglês. O plano deve ser objetivo, prático e adaptado a estudantes de inglês como segunda língua. O professor pode usar esse plano diretamente em sala de aula.\n"
-            + //
-            "\n" + //
-            "O plano deve conter:\n" + //
-            "- Objetivo(s) da aula\n" + //
-            "- Materiais necessários (se houver)\n" + //
-            "- Duração estimada\n" + //
-            "- Etapas da aula (com sugestões de atividades para introdução, prática e encerramento)\n" + //
-            "- Dicas para o professor\n" + //
-            "- Sugestões de dever de casa (opcional)\n" +
-            "Esse é o assunto:";
+public class ClassPlansService implements SessionService<ClassPlansEntity, ClassPlansCreateDTO, ClassPlansResponseDTO>{
 
     @Autowired
     private ClassPlansRepository classPlansRepository;
-
-    @Autowired
-    private LLMService llmService;
 
     @Autowired
     private TeacherRepository teacherRepository;
 
     @Autowired
     private ClassPlansMapper classPlansMapper;
+
+    @Autowired
+    @Qualifier("englishActivityService")
+    private ActivityGeneratorService activityGenerator;
 
     public ClassPlansResponseDTO create(ClassPlansCreateDTO data, Long teacherID) {
 
@@ -61,16 +53,21 @@ public class ClassPlansService {
             throw new ConflictException("Já existe uma aula marcada nesse intervalo de 30 minutos.");
         }
 
-        ClassPlansEntity entity = new ClassPlansEntity();
+        // Prepara os parâmetros para o serviço de geração
+        Map<String, Object> params = new HashMap<>();
+        params.put("context", "CLASS_PLAN_GENERATION");
+        params.put("topic", data.inputData());
 
-        String geminiResponse = this.llmService.chat(this.iaClassPlansContext + data.inputData());
+        // Chama o método da interface genérica, sem saber quem vai executar
+        String generatedContent = activityGenerator.generate(params);
 
-        entity.setTopic(data.topic());
-        entity.setClassDate(data.classDate());
-        entity.setTopic(data.inputData());
-        entity.setTeacher(teacher);
-        entity.setStatus(ClassPlanStatus.PENDING);
-        entity.setContent(geminiResponse);
+        ClassPlansEntity entity = ClassPlansEntity.builder()
+                .title(data.title())
+                .topic(data.inputData())
+                .date(data.classDate())
+                .teacher(teacher)
+                .content(generatedContent)
+                .build();
 
         ClassPlansEntity classPlan = classPlansRepository.save(entity);
         return classPlansMapper.toResponse(classPlan);

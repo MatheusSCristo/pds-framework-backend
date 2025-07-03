@@ -1,4 +1,4 @@
-package com.neo_educ.backend.core;
+package com.neo_educ.backend.core.model;
 
 import lombok.Data;
 
