@@ -1,13 +1,12 @@
-package com.neo_educ.backend.apps.english.classplans.notes.service;
+package com.neo_educ.backend.apps.english.notes.service;
 
-import com.neo_educ.backend.apps.english.classplans.notes.dto.NotesRequestDTO;
-import com.neo_educ.backend.apps.english.classplans.notes.dto.NotesResponseDTO;
-import com.neo_educ.backend.apps.english.classplans.notes.entity.NotesEntity;
-import com.neo_educ.backend.apps.english.classplans.notes.mapper.NotesMapper;
-import com.neo_educ.backend.apps.english.classplans.notes.repository.NotesRepository;
+import com.neo_educ.backend.apps.english.notes.dto.NotesRequestDTO;
+import com.neo_educ.backend.apps.english.notes.dto.NotesResponseDTO;
+import com.neo_educ.backend.apps.english.notes.entity.NotesEntity;
+import com.neo_educ.backend.apps.english.notes.mapper.NotesMapper;
+import com.neo_educ.backend.apps.english.notes.repository.NotesRepository;
 import com.neo_educ.backend.apps.english.student.entity.StudentEntity;
-import com.neo_educ.backend.apps.english.student.mapper.StudentMapper;
-import com.neo_educ.backend.apps.english.student.service.StudentService;
+import com.neo_educ.backend.apps.english.student.repository.StudentRepository;
 import com.neo_educ.backend.exceptions.notes.DuplicateNoteTitleException;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -23,13 +22,14 @@ public class NotesService {
     private NotesRepository notesRepository;
 
     @Autowired
-    private StudentService studentService;
+    private StudentRepository studentRepository;
 
     @Autowired
     private NotesMapper notesMapper;
 
     public NotesResponseDTO createNote(Long studentId, NotesRequestDTO notesRequestDTO) {
-        StudentEntity student=studentService.findStudent(studentId);
+        StudentEntity student = studentRepository.findById(studentId)
+                .orElseThrow(() -> new EntityNotFoundException("Student not found with ID: " + studentId));
         if (notesRepository.findByTitleAndStudentId(notesRequestDTO.title(), studentId)
                 .isPresent()) {
             throw new DuplicateNoteTitleException();

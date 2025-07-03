@@ -43,7 +43,7 @@ public class EnglishActivityService implements ActivityGeneratorService {
                     break;
                 
                 case "STUDENT_ACTIVITY":
-                    StudentResponseDTO student = studentService.findStudentDTO((Long) infos.get("studentId"));
+                    StudentResponseDTO student = studentService.findById((Long) infos.get("studentId"));
                     prompt = promptTemplate.createActivityPrompt(student.interests(), student.proficiencyLevel(), (String) infos.get("subject"));
                     break;
 

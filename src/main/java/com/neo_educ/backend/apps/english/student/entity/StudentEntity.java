@@ -1,6 +1,6 @@
 package com.neo_educ.backend.apps.english.student.entity;
 
-import com.neo_educ.backend.apps.english.classplans.notes.entity.NotesEntity;
+import com.neo_educ.backend.apps.english.notes.entity.NotesEntity;
 import com.neo_educ.backend.apps.english.student.enums.InterestsEnum;
 import com.neo_educ.backend.apps.english.student.enums.ProficiencyLevel;
 import com.neo_educ.backend.apps.english.studentActivity.entity.StudentActivityEntity;

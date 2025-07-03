@@ -3,22 +3,22 @@ package com.neo_educ.backend.apps.english.student.service;
 import com.neo_educ.backend.apps.english.student.dto.StudentRegisterDTO;
 import com.neo_educ.backend.apps.english.student.dto.StudentResponseDTO;
 import com.neo_educ.backend.apps.english.student.entity.StudentEntity;
-import com.neo_educ.backend.apps.english.student.enums.InterestsEnum;
 import com.neo_educ.backend.apps.english.student.mapper.StudentMapper;
 import com.neo_educ.backend.apps.english.student.repository.StudentRepository;
 import com.neo_educ.backend.apps.english.teacher.entity.TeacherEntity;
-import com.neo_educ.backend.apps.english.teacher.service.TeacherService;
-import com.neo_educ.backend.exceptions.student.*;
-
+import com.neo_educ.backend.apps.english.teacher.repository.TeacherRepository;
+import com.neo_educ.backend.core.service.ClientService;
+import com.neo_educ.backend.exceptions.student.StudentAlreadyExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
+import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
-public class StudentService {
+
+public class StudentService implements ClientService<StudentEntity, StudentRegisterDTO, StudentResponseDTO> {
+
     @Autowired
     private StudentRepository studentRepository;
 
@@ -26,41 +26,43 @@ public class StudentService {
     private StudentMapper studentMapper;
 
     @Autowired
-    private TeacherService teacherService;
+    private TeacherRepository teacherRepository;
 
+    @Override
+    @Transactional
+    public StudentResponseDTO create(StudentRegisterDTO createDto, Long teacherId) {
+        TeacherEntity teacher = teacherRepository.findById(teacherId)
+                .orElseThrow(() -> new EntityNotFoundException("Teacher not found with ID: " + teacherId));
 
-    public List<StudentResponseDTO> getTeacherStudents(String email) {
-        List<StudentEntity> entities = studentRepository.findAllByTeacher_Email(email);
-        return entities.stream().map(item -> studentMapper.toResponseDTO(item)).toList();
-    }
-
-
-    public void createStudent(StudentRegisterDTO studentRegisterDto) {
-        TeacherEntity teacher = teacherService.findTeacherByToken(studentRegisterDto.token());
-        if (studentRepository.findByEmailAndTeacher(studentRegisterDto.email(), teacher).isPresent()) {
+        if (studentRepository.findByEmailAndTeacher(createDto.email(), teacher).isPresent()) {
             throw new StudentAlreadyExistsException();
         }
-        List<InterestsEnum> interestsEnums = studentRegisterDto.interests().stream().map(InterestsEnum::fromCode).toList();
-        StudentEntity entity = studentMapper.toEntity(studentRegisterDto);
+
+        StudentEntity entity = studentMapper.toEntity(createDto);
         entity.setTeacher(teacher);
-        entity.setInterests(interestsEnums);
-        studentRepository.save(entity);
+
+        StudentEntity savedStudent = studentRepository.save(entity);
+        return studentMapper.toResponseDTO(savedStudent);
     }
 
-    public void deleteStudent(Long studentId) {
-        studentRepository.deleteById(studentId);
+    @Override
+    public StudentResponseDTO findById(Long id) {
+        return studentRepository.findById(id)
+                .map(studentMapper::toResponseDTO)
+                .orElseThrow(() -> new EntityNotFoundException("Estudante com ID: " + id + " não encontrado"));
     }
 
-    public StudentEntity findStudent(Long studentId) {
-        return studentRepository.findById(studentId)
-                .orElseThrow(() -> new EntityNotFoundException("Estudante com ID: " + studentId + " não encontrado"));
-
+    @Override
+    public List<StudentResponseDTO> findAll(Long teacherId) {
+        List<StudentEntity> entities = studentRepository.findAllByTeacherId(teacherId);
+        return entities.stream().map(studentMapper::toResponseDTO).toList();
     }
 
-    public StudentResponseDTO findStudentDTO(Long studentId) {
-        StudentEntity entity = findStudent(studentId);
-        return studentMapper.toResponseDTO(entity);
+    @Override
+    public void delete(Long id) {
+        if (!studentRepository.existsById(id)) {
+            throw new EntityNotFoundException("Estudante com ID: " + id + " não encontrado para deleção.");
+        }
+        studentRepository.deleteById(id);
     }
-
-
 }

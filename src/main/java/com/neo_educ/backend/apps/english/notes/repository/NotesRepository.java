@@ -1,6 +1,6 @@
-package com.neo_educ.backend.apps.english.classplans.notes.repository;
+package com.neo_educ.backend.apps.english.notes.repository;
 
-import com.neo_educ.backend.apps.english.classplans.notes.entity.NotesEntity;
+import com.neo_educ.backend.apps.english.notes.entity.NotesEntity;
 import com.neo_educ.backend.core.repository.AbstractRepository;
 
 import java.util.List;

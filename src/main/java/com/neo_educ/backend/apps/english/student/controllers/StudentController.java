@@ -3,11 +3,10 @@ package com.neo_educ.backend.apps.english.student.controllers;
 import com.neo_educ.backend.apps.english.student.dto.StudentRegisterDTO;
 import com.neo_educ.backend.apps.english.student.dto.StudentResponseDTO;
 import com.neo_educ.backend.apps.english.student.service.StudentService;
-import com.neo_educ.backend.core.response.ApiResponse;
-import com.neo_educ.backend.exceptions.student.StudentAlreadyExistsException;
-
-import jakarta.persistence.EntityNotFoundException;
+import com.neo_educ.backend.apps.english.teacher.entity.TeacherEntity;
+import com.neo_educ.backend.core.factory.ApplicationFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -21,61 +20,47 @@ import java.util.List;
 public class StudentController {
 
     @Autowired
-    private StudentService studentService;
+    @Qualifier("englishFactory")
+    private ApplicationFactory appFactory;
 
     @PostMapping("")
-    public ResponseEntity<ApiResponse> create(@RequestBody StudentRegisterDTO studentRequestDTO) {
-        try {
-            studentService.createStudent(studentRequestDTO);
-            return new ResponseEntity<>(HttpStatus.CREATED);
-        } catch (StudentAlreadyExistsException e) {
-            ApiResponse apiResponse = new ApiResponse(
-                    "Usuário já existente"
-            );
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(apiResponse);
-        }
-        catch(EntityNotFoundException e){
-            ApiResponse apiResponse = new ApiResponse("Link de cadastro inválido");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiResponse);
-        }
-        catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(e.getMessage()));
-        }
+    public ResponseEntity<StudentResponseDTO> create(@RequestBody StudentRegisterDTO studentRequestDTO) {
+        StudentService service = (StudentService) appFactory.createClientService();
+        Long teacherId = getAuthenticatedTeacherId();
 
+
+        StudentResponseDTO newStudent = service.create(studentRequestDTO, teacherId);
+        return ResponseEntity.status(HttpStatus.CREATED).body(newStudent);
     }
 
     @GetMapping("")
-    public ResponseEntity<Object> getTeacherStudents() {
-        try {
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            String teacherEmail = authentication.getName();
-            List<StudentResponseDTO> student = studentService.getTeacherStudents(teacherEmail);
-            return ResponseEntity.ok().body(student);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public ResponseEntity<List<StudentResponseDTO>> findAllByTeacher() {
+        StudentService service = (StudentService) appFactory.createClientService();
+        Long teacherId = getAuthenticatedTeacherId();
+
+        List<StudentResponseDTO> students = service.findAll(teacherId);
+        return ResponseEntity.ok(students);
     }
 
     @GetMapping("/{studentId}")
-    public ResponseEntity<Object> getStudentInformations(@PathVariable Long studentId) {
-        try {
-            StudentResponseDTO student = studentService.findStudentDTO(studentId);
-            return ResponseEntity.ok().body(student);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public ResponseEntity<StudentResponseDTO> findById(@PathVariable Long studentId) {
+        StudentService service = (StudentService) appFactory.createClientService();
+
+        StudentResponseDTO student = service.findById(studentId);
+        return ResponseEntity.ok(student);
     }
 
     @DeleteMapping("/{studentId}")
-    public ResponseEntity<Object> delete(@PathVariable Long studentId) {
-        try {
-            studentService.deleteStudent(studentId);
-
-            return ResponseEntity.noContent().build();
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public ResponseEntity<Void> delete(@PathVariable Long studentId) {
+        StudentService service = (StudentService) appFactory.createClientService();
+        
+        service.delete(studentId);
+        return ResponseEntity.noContent().build();
     }
-
-
+    
+    private Long getAuthenticatedTeacherId() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        TeacherEntity teacher = (TeacherEntity) authentication.getPrincipal();
+        return teacher.getId();
+    }
 }

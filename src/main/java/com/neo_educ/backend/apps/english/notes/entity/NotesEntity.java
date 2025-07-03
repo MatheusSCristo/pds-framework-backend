@@ -1,4 +1,4 @@
-package com.neo_educ.backend.apps.english.classplans.notes.entity;
+package com.neo_educ.backend.apps.english.notes.entity;
 
 import com.neo_educ.backend.apps.english.student.entity.StudentEntity;
 import com.neo_educ.backend.apps.english.teacher.entity.TeacherEntity;

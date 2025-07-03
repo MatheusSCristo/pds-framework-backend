@@ -13,5 +13,7 @@ public interface StudentRepository extends AbstractRepository<StudentEntity> {
     StudentEntity findByTeacher(TeacherEntity teacher);
 
     List<StudentEntity> findAllByTeacher_Email(String email);
+
+    List<StudentEntity> findAllByTeacherId(Long teacherId);
 }
 

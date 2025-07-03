@@ -1,4 +1,4 @@
-package com.neo_educ.backend.apps.english.classplans.notes.controllers;
+package com.neo_educ.backend.apps.english.notes.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -6,9 +6,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import com.neo_educ.backend.apps.english.classplans.notes.dto.NotesRequestDTO;
-import com.neo_educ.backend.apps.english.classplans.notes.dto.NotesResponseDTO;
-import com.neo_educ.backend.apps.english.classplans.notes.service.NotesService;
+import com.neo_educ.backend.apps.english.notes.dto.NotesRequestDTO;
+import com.neo_educ.backend.apps.english.notes.dto.NotesResponseDTO;
+import com.neo_educ.backend.apps.english.notes.service.NotesService;
 
 import java.util.List;
 
