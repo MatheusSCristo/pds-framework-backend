@@ -21,14 +21,14 @@ public class GenerateMaterialService {
     }
 
     public String generateStudentActivity(GenerateStudentActivityDTO studentActivityDTO) {
-        return activityGenerator.generateStudentActivityContent(
+        return activityGenerator.generateActivityContent(
                 studentActivityDTO.studentId(),
                 studentActivityDTO.subject()
         );
     }
 
     public String generateStudentReport(GenerateStudentReportDTO generateStudentReportDTO) {
-        return activityGenerator.generateStudentReportContent(generateStudentReportDTO.data());
+        return activityGenerator.generateReportContent(generateStudentReportDTO.data());
     }
 
     public String generateExercise(GenerateExerciseDTO generateExerciseDTO) {

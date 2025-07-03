@@ -11,9 +11,9 @@ public interface ActivityGeneratorService {
 
     String generateMaterialContent(GenerateMaterialDTO dto);
 
-    String generateStudentActivityContent(Long studentId, String subject);
+    String generateActivityContent(Long studentId, String subject);
 
-    String generateStudentReportContent(List<GradeAverageBySubject> reportData);
+    String generateReportContent(List<GradeAverageBySubject> reportData);
 
     String generateExerciseContent(GenerateExerciseDTO dto);
 }

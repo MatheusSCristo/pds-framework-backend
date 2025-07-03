@@ -50,7 +50,7 @@ public class EnglishActivityService implements ActivityGeneratorService {
     }
 
     @Override
-    public String generateStudentActivityContent(Long studentId, String subject) {
+    public String generateActivityContent(Long studentId, String subject) {
         try {
             StudentResponseDTO student = studentService.findById(studentId);
             String prompt = promptTemplate.createActivityPrompt(student.interests(), student.proficiencyLevel(), subject);
@@ -61,7 +61,7 @@ public class EnglishActivityService implements ActivityGeneratorService {
     }
 
     @Override
-    public String generateStudentReportContent(List<GradeAverageBySubject> reportData) {
+    public String generateReportContent(List<GradeAverageBySubject> reportData) {
         try {
             String prompt = promptTemplate.createReportPrompt(reportData);
             return llmService.chat(prompt);
