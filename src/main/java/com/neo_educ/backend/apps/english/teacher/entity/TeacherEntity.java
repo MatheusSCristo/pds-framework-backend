@@ -84,9 +84,4 @@ public class TeacherEntity extends UserEntity implements UserDetails {
         this.phone=phone;
     }
 
-    public TeacherEntity(){
-        super();
-    }
-
-
 }

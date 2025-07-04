@@ -9,6 +9,9 @@ import com.neo_educ.backend.core.service.ActivityGeneratorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+
 @Service
 public class GenerateMaterialService {
 
@@ -28,7 +31,7 @@ public class GenerateMaterialService {
     }
 
     public String generateStudentReport(GenerateStudentReportDTO generateStudentReportDTO) {
-        return activityGenerator.generateReportContent(generateStudentReportDTO.data());
+        return activityGenerator.generateReportContent(generateStudentReportDTO);
     }
 
     public String generateExercise(GenerateExerciseDTO generateExerciseDTO) {

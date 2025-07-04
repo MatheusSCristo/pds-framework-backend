@@ -51,7 +51,7 @@ public class ClassPlansService implements SessionService<ClassPlansEntity, Class
         if (conflicts > 0) {
             throw new ConflictException("Já existe uma aula marcada nesse intervalo de 30 minutos.");
         }
-        String generatedContent = activityGenerator.generateClassPlan(data.inputData());
+        String generatedContent = activityGenerator.generateSession(data.inputData());
 
         ClassPlansEntity entity = new ClassPlansEntity(data.title(),
                 data.inputData(),

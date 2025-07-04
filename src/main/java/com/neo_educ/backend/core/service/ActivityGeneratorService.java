@@ -2,18 +2,19 @@ package com.neo_educ.backend.core.service;
 
 import com.neo_educ.backend.apps.english.materialGeneration.dto.GenerateExerciseDTO;
 import com.neo_educ.backend.apps.english.materialGeneration.dto.GenerateMaterialDTO;
+import com.neo_educ.backend.apps.english.materialGeneration.dto.GenerateStudentReportDTO;
 import com.neo_educ.backend.apps.english.materialGeneration.dto.GradeAverageBySubject;
 
 import java.util.List;
 public interface ActivityGeneratorService {
 
-    String generateClassPlan(String topic);
+    String generateSession(String topic);
 
-    String generateMaterialContent(GenerateMaterialDTO dto);
+    String generateMaterialContent(Object dto);
 
-    String generateActivityContent(Long studentId, String subject);
+    String generateActivityContent(Long userId, String category);
 
-    String generateReportContent(List<GradeAverageBySubject> reportData);
+    String generateReportContent(Object data);
 
-    String generateExerciseContent(GenerateExerciseDTO dto);
+    String generateExerciseContent(Object dto);
 }
