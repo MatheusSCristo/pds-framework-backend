@@ -39,4 +39,8 @@ public class ApiException extends RuntimeException {
     public static ResponseEntity<Object> toResponseEntity(ApiException ex) {
         return new ResponseEntity<>(ex, ex.getStatus());
     }
+
+    public HttpStatus getStatus() {
+        return status;
+    }
 }
