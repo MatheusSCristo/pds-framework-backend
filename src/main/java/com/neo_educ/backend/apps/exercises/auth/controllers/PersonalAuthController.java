@@ -1,16 +1,14 @@
-package com.neo_educ.backend.apps.english.auth.controllers;
+package com.neo_educ.backend.apps.exercises.auth.controllers;
 
-import com.neo_educ.backend.apps.english.auth.dto.LoginDTO;
-import com.neo_educ.backend.apps.english.auth.dto.LoginResponseDTO;
-import com.neo_educ.backend.apps.english.auth.dto.RegisterDTO;
-import com.neo_educ.backend.apps.english.jwt.service.JwtService;
-import com.neo_educ.backend.apps.english.teacher.dto.TeacherResponseDTO;
-import com.neo_educ.backend.apps.english.teacher.entity.TeacherEntity;
-import com.neo_educ.backend.apps.english.teacher.mappers.TeacherMapper;
+import com.neo_educ.backend.apps.exercises.auth.dto.RegisterDTO;
+import com.neo_educ.backend.apps.exercises.personal.entity.PersonalEntity;
+import com.neo_educ.backend.apps.exercises.personal.mappers.PersonalMapper;
+import com.neo_educ.backend.core.dto.auth.LoginResponseDTO;
+import com.neo_educ.backend.core.dto.auth.UserLoginDTO;
+import com.neo_educ.backend.core.dto.user.UserResponseDTO;
 import com.neo_educ.backend.core.factory.ApplicationFactory;
-import com.neo_educ.backend.core.model.UserEntity;
 import com.neo_educ.backend.core.service.AuthService;
-
+import com.neo_educ.backend.core.service.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -23,26 +21,25 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/auth")
-public class AuthController {
+@RequestMapping("/auth/personal")
+public class PersonalAuthController {
     @Autowired
     private JwtService jwtService;
-
-    @Autowired
-    private TeacherMapper teacherMapper;
 
     @Autowired
     private AuthenticationManager authenticationManager;
 
     @Autowired
-    @Qualifier("englishFactory")
+    @Qualifier("exercisesFactory")
     private ApplicationFactory appFactory;
+    @Autowired
+    private PersonalMapper personalMapper;
 
     @PostMapping("/signup")
     public ResponseEntity<Void> signUp(@RequestBody RegisterDTO registerDTO) {
         AuthService authService = appFactory.createAuthService();
 
-        TeacherEntity user = new TeacherEntity(
+        PersonalEntity user = new PersonalEntity(
                 registerDTO.name(),
                 registerDTO.lastName(),
                 registerDTO.email(),
@@ -56,18 +53,18 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponseDTO> signIn(@RequestBody LoginDTO loginDTO) {
+    public ResponseEntity<LoginResponseDTO> signIn(@RequestBody UserLoginDTO loginDTO) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginDTO.email(), loginDTO.password())
         );
 
         AuthService authService = appFactory.createAuthService();
-        
-        TeacherEntity authenticatedUser = (TeacherEntity) authService.signIn(loginDTO);
-        
+
+        PersonalEntity authenticatedUser = (PersonalEntity) authService.signIn(loginDTO);
+
         String jwtToken = jwtService.generateToken(authenticatedUser);
         long expiresIn = jwtService.getExpirationTime();
-        TeacherResponseDTO authenticatedDTO = teacherMapper.toDTO(authenticatedUser);
+        UserResponseDTO authenticatedDTO = personalMapper.toDTO(authenticatedUser);
         LoginResponseDTO loginResponse = new LoginResponseDTO(jwtToken, expiresIn, authenticatedDTO);
 
         return ResponseEntity.ok(loginResponse);
