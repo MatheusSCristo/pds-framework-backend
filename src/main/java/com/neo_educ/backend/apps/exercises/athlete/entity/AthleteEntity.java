@@ -26,7 +26,7 @@ public class AthleteEntity extends ClientEntity {
 
     @NotNull
     @ElementCollection(targetClass = InterestsEnum.class)
-    @CollectionTable(name = "interests", joinColumns = @JoinColumn(name = "athlete_id"))
+    @CollectionTable(name = "athlete_interests", joinColumns = @JoinColumn(name = "athlete_id"))
     @Enumerated(EnumType.STRING)
     @Column(name = "interest")
     private List<InterestsEnum> interests;
@@ -36,10 +36,10 @@ public class AthleteEntity extends ClientEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private PersonalEntity personal;
 
-    @OneToMany(mappedBy = "personal", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "athlete", cascade = CascadeType.REMOVE)
     private List<AthleteNotesEntity> notes;
 
-    @OneToMany(mappedBy = "student", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "athlete", cascade = CascadeType.REMOVE)
     private List<AthleteActivityEntity> activities;
 
 }
