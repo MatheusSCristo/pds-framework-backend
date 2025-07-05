@@ -2,7 +2,7 @@ package com.neo_educ.backend.apps.exercises.factory;
 
 import com.neo_educ.backend.apps.exercises.athlete.service.AthleteService;
 import com.neo_educ.backend.apps.exercises.personal.service.PersonalService;
-import com.neo_educ.backend.apps.exercises.workout.service.WorkoutPlanService;
+import com.neo_educ.backend.apps.exercises.workout.service.WorkoutService;
 import com.neo_educ.backend.core.factory.ApplicationFactory;
 import com.neo_educ.backend.core.service.*;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -16,28 +16,25 @@ public class ExercicesApplicationFactory implements ApplicationFactory {
     private final PersonalService personalService;
     private final PasswordEncoder passwordEncoder;
     private final ActivityGeneratorService activityGeneratorService;
+    private final WorkoutService workoutService;
     private final AthleteService athleteService;
-    private final WorkoutPlanService workoutPlanService;
-    private final AuthService authService;
 
     public ExercicesApplicationFactory(
             PersonalService personalService,
             PasswordEncoder passwordEncoder,
             @Qualifier("exercisesActivityService") ActivityGeneratorService activityGeneratorService,
             AthleteService athleteService,
-            WorkoutPlanService workoutPlanService,
-            AuthService authService) {
+            WorkoutService workoutService) {
         this.personalService = personalService;
         this.passwordEncoder = passwordEncoder;
         this.activityGeneratorService = activityGeneratorService;
-        this.workoutPlanService = workoutPlanService;
-        this.athleteService = athleteService;
-        this.authService = authService;
+        this.workoutService = workoutService;
+        this.athleteService=athleteService;
     }
 
     @Override
     public AuthService createAuthService() {
-        return this.authService;
+        return new AuthService(this.personalService, this.passwordEncoder);
     }
 
     @Override
@@ -52,7 +49,7 @@ public class ExercicesApplicationFactory implements ApplicationFactory {
 
     @Override
     public SessionService<?, ?, ?> createSessionService() {
-        return this.workoutPlanService;
+        return this.workoutService;
     }
 
     @Override

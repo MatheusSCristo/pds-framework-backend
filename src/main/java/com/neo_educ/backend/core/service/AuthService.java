@@ -1,6 +1,6 @@
 package com.neo_educ.backend.core.service;
 
-import com.neo_educ.backend.apps.english.auth.dto.LoginDTO;
+import com.neo_educ.backend.core.dto.auth.UserLoginDTO;
 import com.neo_educ.backend.core.model.UserEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -14,7 +14,7 @@ public class AuthService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public UserEntity signIn(LoginDTO infos) {
+    public UserEntity signIn(UserLoginDTO infos) {
         return (UserEntity) userService.loadUserByUsername(infos.email());
     }
 

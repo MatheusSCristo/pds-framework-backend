@@ -1,11 +1,10 @@
 package com.neo_educ.backend.apps.exercises.materialGeneration.service;
 
-import com.neo_educ.backend.apps.english.materialGeneration.dto.ExportExerciseDTO;
-import com.neo_educ.backend.apps.english.student.entity.StudentEntity;
-import com.neo_educ.backend.apps.english.student.repository.StudentRepository;
-import com.neo_educ.backend.apps.english.teacher.entity.TeacherEntity;
-import com.neo_educ.backend.apps.english.teacher.repository.TeacherRepository;
-
+import com.neo_educ.backend.apps.exercises.athlete.entity.AthleteEntity;
+import com.neo_educ.backend.apps.exercises.athlete.repository.AthleteRepository;
+import com.neo_educ.backend.apps.exercises.materialGeneration.dto.ExportExerciseDTO;
+import com.neo_educ.backend.apps.exercises.personal.entity.PersonalEntity;
+import com.neo_educ.backend.apps.exercises.personal.repository.PersonalRepository;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.persistence.EntityNotFoundException;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -32,10 +31,10 @@ public class ExportExerciseService {
     private JavaMailSender mailSender;
 
     @Autowired
-    private StudentRepository studentRepository;
+    private AthleteRepository athleteRepository;
 
     @Autowired
-    private TeacherRepository teacherRepository;
+    private PersonalRepository personalRepository;
 
     private static final float MARGIN = 50f;
     private static final float FONT_SIZE = 12f;
@@ -44,12 +43,12 @@ public class ExportExerciseService {
 
     public Boolean export(ExportExerciseDTO exportExerciseDTO, String teacherEmail) {
         try {
-            Optional<TeacherEntity> teacherOptional = teacherRepository.findByEmail(teacherEmail);
-            TeacherEntity teacher = teacherOptional.get();
+            Optional<PersonalEntity> personalOptional = personalRepository.findByEmail(teacherEmail);
+            PersonalEntity personal = personalOptional.get();
 
-            Optional<StudentEntity> studentOptional = studentRepository.findByEmailAndTeacher(exportExerciseDTO.studentEmail(), teacher);
+            Optional<AthleteEntity> athleteOptional = athleteRepository.findByEmailAndPersonal(exportExerciseDTO.studentEmail(), personal);
 
-            if (studentOptional.isEmpty()) {
+            if (athleteOptional.isEmpty()) {
                 throw new EntityNotFoundException();
             }
 

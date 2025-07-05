@@ -20,7 +20,7 @@ import java.util.List;
 public class AthleteController {
 
     @Autowired
-    @Qualifier("exercicesFactory")
+    @Qualifier("exercisesFactory")
     private ApplicationFactory appFactory;
 
     @PostMapping("")

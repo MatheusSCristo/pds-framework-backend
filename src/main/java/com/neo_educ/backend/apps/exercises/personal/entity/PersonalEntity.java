@@ -1,7 +1,7 @@
 package com.neo_educ.backend.apps.exercises.personal.entity;
 
-import com.neo_educ.backend.apps.english.classplans.entity.ClassPlansEntity;
-import com.neo_educ.backend.apps.english.student.entity.StudentEntity;
+import com.neo_educ.backend.apps.exercises.athlete.entity.AthleteEntity;
+import com.neo_educ.backend.apps.exercises.workout.entity.WorkoutEntity;
 import com.neo_educ.backend.core.model.UserEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -24,9 +24,9 @@ public class PersonalEntity extends UserEntity implements UserDetails {
     private String inviteToken;
     @Builder.Default
     @OneToMany(mappedBy = "personal", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ClassPlansEntity> classPlans = new ArrayList<>();
+    private List<WorkoutEntity> workoutPlans = new ArrayList<>();
     @OneToMany(mappedBy = "personal", cascade = CascadeType.REMOVE)
-    private List<StudentEntity> students;
+    private List<AthleteEntity> athletes;
 
     public Long getId(){
         return id;

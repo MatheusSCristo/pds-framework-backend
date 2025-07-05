@@ -21,12 +21,12 @@ import java.util.List;
 @SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name = "student")
+@Entity(name = "athlete")
 public class AthleteEntity extends ClientEntity {
 
     @NotNull
     @ElementCollection(targetClass = InterestsEnum.class)
-    @CollectionTable(name = "interests", joinColumns = @JoinColumn(name = "student_id"))
+    @CollectionTable(name = "interests", joinColumns = @JoinColumn(name = "athlete_id"))
     @Enumerated(EnumType.STRING)
     @Column(name = "interest")
     private List<InterestsEnum> interests;

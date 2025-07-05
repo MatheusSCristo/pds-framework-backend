@@ -1,5 +1,8 @@
-package com.neo_educ.backend.apps.english.materialGeneration.controllers;
+package com.neo_educ.backend.apps.exercises.materialGeneration.controllers;
 
+import com.neo_educ.backend.apps.exercises.materialGeneration.dto.*;
+import com.neo_educ.backend.apps.exercises.materialGeneration.service.ExportExerciseService;
+import com.neo_educ.backend.apps.exercises.materialGeneration.service.PersonalGenerateMaterialService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -10,16 +13,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.neo_educ.backend.apps.english.materialGeneration.dto.*;
-import com.neo_educ.backend.apps.english.materialGeneration.service.ExportExerciseService;
-import com.neo_educ.backend.apps.english.materialGeneration.service.GenerateMaterialService;
 
 @RestController
-@RequestMapping("/api/materiais")
-public class MaterialGenerationController {
+@RequestMapping("/personal/materiais")
+public class PersonalMaterialGenerationController {
 
     @Autowired
-    private GenerateMaterialService generateMaterialService;
+    private PersonalGenerateMaterialService generateMaterialService;
 
     @Autowired
     private ExportExerciseService exportExerciseService;

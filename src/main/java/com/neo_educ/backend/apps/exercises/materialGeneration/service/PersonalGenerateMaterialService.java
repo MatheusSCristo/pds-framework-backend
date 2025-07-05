@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 @Service
-public class GenerateMaterialService {
+public class PersonalGenerateMaterialService {
 
     @Autowired
     @Qualifier("exercisesActivityService")

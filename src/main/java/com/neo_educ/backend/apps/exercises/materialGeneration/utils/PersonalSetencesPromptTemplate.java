@@ -1,17 +1,17 @@
 package com.neo_educ.backend.apps.exercises.materialGeneration.utils;
 
+import com.neo_educ.backend.apps.english.student.enums.ProficiencyLevel;
+import com.neo_educ.backend.apps.exercises.athlete.enums.InterestsEnum;
 import com.neo_educ.backend.apps.exercises.materialGeneration.dto.GenerateExerciseDTO;
 import com.neo_educ.backend.apps.exercises.materialGeneration.dto.GenerateMaterialDTO;
 import com.neo_educ.backend.apps.exercises.materialGeneration.dto.GradeAverageBySubject;
-import com.neo_educ.backend.apps.exercises.athlete.enums.InterestsEnum;
-import com.neo_educ.backend.apps.exercises.athlete.enums.ProficiencyLevel;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
-public class EnglishSetencesPromptTemplate {
+public class PersonalSetencesPromptTemplate {
 
     public String createClassPlanPrompt(String topic) {
         return "Você é um assistente didático para professores de inglês. Quando o professor digitar um assunto (por exemplo: Present Perfect ou Vocabulary about Travel), você deve gerar um plano de aula completo para uma aula de inglês. O plano deve ser objetivo, prático e adaptado a estudantes de inglês como segunda língua. O professor pode usar esse plano diretamente em sala de aula.\n"

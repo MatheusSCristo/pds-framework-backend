@@ -1,14 +1,13 @@
 package com.neo_educ.backend.apps.english.auth.controllers;
 
-import com.neo_educ.backend.apps.english.auth.dto.LoginDTO;
 import com.neo_educ.backend.apps.english.auth.dto.LoginResponseDTO;
 import com.neo_educ.backend.apps.english.auth.dto.RegisterDTO;
 import com.neo_educ.backend.apps.english.teacher.dto.TeacherResponseDTO;
 import com.neo_educ.backend.apps.english.teacher.entity.TeacherEntity;
 import com.neo_educ.backend.apps.english.teacher.mappers.TeacherMapper;
+import com.neo_educ.backend.core.dto.auth.UserLoginDTO;
 import com.neo_educ.backend.core.factory.ApplicationFactory;
 import com.neo_educ.backend.core.service.AuthService;
-
 import com.neo_educ.backend.core.service.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -23,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/auth/teacher")
-public class AuthController {
+public class TeacherAuthController {
     @Autowired
     private JwtService jwtService;
 
@@ -55,7 +54,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponseDTO> signIn(@RequestBody LoginDTO loginDTO) {
+    public ResponseEntity<LoginResponseDTO> signIn(@RequestBody UserLoginDTO loginDTO) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginDTO.email(), loginDTO.password())
         );

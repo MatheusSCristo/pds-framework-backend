@@ -27,8 +27,7 @@ public class ClassPlansController {
 
     @PostMapping()
     public ResponseEntity<ClassPlansResponseDTO> createClassPlan(@Valid @RequestBody ClassPlansCreateDTO dto) {
-        //Obtém a instância do serviço a partir da fábrica.
-        SessionService<ClassPlansCreateDTO, ?, ClassPlansResponseDTO> service = getService();
+        SessionService<ClassPlansCreateDTO, ClassPlansCreateDTO, ClassPlansResponseDTO> service = getService();
         Long teacherId = getAuthenticatedTeacherId();
 
         ClassPlansResponseDTO response = service.create(dto, teacherId);
@@ -70,8 +69,8 @@ public class ClassPlansController {
      * Faz o cast para os tipos genéricos esperados.
      */
     @SuppressWarnings("unchecked")
-    private SessionService<ClassPlansCreateDTO, ?, ClassPlansResponseDTO> getService() {
-        return (SessionService<ClassPlansCreateDTO, ?, ClassPlansResponseDTO>) appFactory.createSessionService();
+    private SessionService<ClassPlansCreateDTO, ClassPlansCreateDTO, ClassPlansResponseDTO> getService() {
+        return (SessionService<ClassPlansCreateDTO, ClassPlansCreateDTO, ClassPlansResponseDTO>) appFactory.createSessionService();
     }
 
     private Long getAuthenticatedTeacherId() {

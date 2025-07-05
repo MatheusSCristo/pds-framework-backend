@@ -1,6 +1,6 @@
 package com.neo_educ.backend.apps.exercises.athlete.dto;
 
-import com.neo_educ.backend.apps.english.student.enums.InterestsEnum;
+import com.neo_educ.backend.apps.exercises.athlete.enums.InterestsEnum;
 import com.neo_educ.backend.apps.exercises.athlete.enums.WorkoutLevel;
 
 import java.time.LocalDateTime;

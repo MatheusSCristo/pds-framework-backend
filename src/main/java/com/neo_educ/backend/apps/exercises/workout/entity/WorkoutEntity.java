@@ -18,8 +18,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "workout_plan")
-public class WorkoutPlanEntity extends Session {
+@Table(name = "workout")
+public class WorkoutEntity extends Session {
 
     private String topic;
 
@@ -41,7 +41,7 @@ public class WorkoutPlanEntity extends Session {
     @JoinColumn(name = "personal_id", nullable = false)
     private PersonalEntity personal;
 
-    public WorkoutPlanEntity(String title, String s,LocalDateTime createdAt, PersonalEntity personal, String generatedContent) {
+    public WorkoutEntity(String title, String s,LocalDateTime createdAt, PersonalEntity personal, String generatedContent) {
         super.setTitle(title);
         this.setContent(generatedContent);
         this.personal = personal;
