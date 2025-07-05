@@ -18,8 +18,6 @@ public abstract class Session extends AbstractModel {
     private String title;
     private LocalDateTime date;
 
-
-
     public void setTitle(String title) {
         this.title = title;
     }

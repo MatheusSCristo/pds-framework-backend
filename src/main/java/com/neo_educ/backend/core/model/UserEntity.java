@@ -50,6 +50,12 @@ public abstract class UserEntity extends AbstractModel implements UserDetails {
 
     @Override
     @Transient
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    @Transient
     public boolean isAccountNonExpired() {
         return true;
     }
@@ -72,11 +78,4 @@ public abstract class UserEntity extends AbstractModel implements UserDetails {
         return true;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getEmail(){
-        return this.email;
-    }
 }
