@@ -11,9 +11,6 @@ import com.neo_educ.backend.apps.english.classplans.entity.ClassPlansEntity;
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface ClassPlansMapper {
 
-    @Mapping(source = "date", target = "classDate")
-    @Mapping(source = "topic", target = "inputData")
-    @Mapping(source = "content", target = "aiGeneratedContent")
     ClassPlansResponseDTO toResponse(ClassPlansEntity entity);
 
 }

@@ -29,5 +29,7 @@ public class StudentActivityEntity extends ClientProgressMonitoringEntity {
     @ManyToOne
     private StudentEntity student;
 
-
+    public void setStudent(StudentEntity student) {
+        this.student = student;
+    }
 }

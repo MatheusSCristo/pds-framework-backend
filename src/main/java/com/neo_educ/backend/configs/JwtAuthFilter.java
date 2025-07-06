@@ -1,5 +1,6 @@
 package com.neo_educ.backend.configs;
 
+import com.neo_educ.backend.core.service.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -14,8 +15,6 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.servlet.HandlerExceptionResolver;
-
-import com.neo_educ.backend.apps.english.jwt.service.JwtService;
 
 import java.io.IOException;
 

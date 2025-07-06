@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
-@Service
+@Service("teacherService")
 public class TeacherService implements UserService {
 
     @Autowired
@@ -26,7 +26,7 @@ public class TeacherService implements UserService {
         });
 
         TeacherEntity teacher = (TeacherEntity) user;
-        
+
         String token = UUID.randomUUID().toString().replace("-", "");
         teacher.setInviteToken(token);
 

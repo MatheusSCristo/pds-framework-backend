@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class ExportExerciseService {
+public class TeacherExportExerciseService {
 
     @Autowired
     private JavaMailSender mailSender;

@@ -24,7 +24,7 @@ public class StudentEntity extends ClientEntity {
 
     @NotNull
     @ElementCollection(targetClass = InterestsEnum.class)
-    @CollectionTable(name = "interests", joinColumns = @JoinColumn(name = "student_id"))
+    @CollectionTable(name = "student_interests", joinColumns = @JoinColumn(name = "student_id"))
     @Enumerated(EnumType.STRING)
     @Column(name = "interest")
     private List<InterestsEnum> interests;
@@ -40,4 +40,12 @@ public class StudentEntity extends ClientEntity {
 
     @OneToMany(mappedBy = "student", cascade = CascadeType.REMOVE)
     private List<StudentActivityEntity> activities;
+
+    public void setTeacher(TeacherEntity teacher) {
+        this.teacher = teacher;
+    }
+
+    public List<StudentActivityEntity> getActivities() {
+        return activities;
+    }
 }

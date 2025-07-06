@@ -17,6 +17,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @MappedSuperclass
+@ToString
 public abstract class UserEntity extends AbstractModel implements UserDetails {
 
     @NotBlank
@@ -49,6 +50,12 @@ public abstract class UserEntity extends AbstractModel implements UserDetails {
 
     @Override
     @Transient
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    @Transient
     public boolean isAccountNonExpired() {
         return true;
     }
@@ -70,4 +77,5 @@ public abstract class UserEntity extends AbstractModel implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
 }
