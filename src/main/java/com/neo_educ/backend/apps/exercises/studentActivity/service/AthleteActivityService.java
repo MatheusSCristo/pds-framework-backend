@@ -26,7 +26,7 @@ public class AthleteActivityService {
     private AthleteActivityMapper athleteActivityMapper;
 
     public void createStudentActivity(AthleteActivityCreateDTO athleteActivityCreateDto) {
-        AthleteEntity athleteEntity = athleteRepository.findById(athleteActivityCreateDto.studentId())
+        AthleteEntity athleteEntity = athleteRepository.findById(athleteActivityCreateDto.athleteId())
                 .orElseThrow(EntityNotFoundException::new);
         
         AthleteActivityEntity studentActivityEntity = athleteActivityMapper.toEntity(athleteActivityCreateDto);

@@ -1,11 +1,13 @@
 package com.neo_educ.backend.apps.exercises.athlete.dto;
 
+import com.neo_educ.backend.apps.exercises.athlete.enums.Sex;
 import com.neo_educ.backend.apps.exercises.athlete.enums.WorkoutLevel;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public record AthleteRegisterDTO(
@@ -30,6 +32,13 @@ public record AthleteRegisterDTO(
         @NotNull(message = "O nível de workout é obrigatório.")
         WorkoutLevel workoutLevel,
 
-        @NotBlank(message = "O token é obrigatório.")
-        String token
+        @NotNull(message = "O sexo é obrigatório")
+        Sex sex,
+        @NotNull(message = "O peso é obrigatório.")
+        Double weight,
+        @NotNull(message = "A altura é obrigatória.")
+        Double height,
+        @NotNull(message = "A data de nascimento é obrigatória.")
+        LocalDate dateOfBirth
+
 ) { }

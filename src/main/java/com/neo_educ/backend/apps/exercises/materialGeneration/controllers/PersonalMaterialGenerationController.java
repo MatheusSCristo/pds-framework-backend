@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-@RequestMapping("/personal/materiais")
+@RequestMapping("/exercises/materiais")
 public class PersonalMaterialGenerationController {
 
     @Autowired
