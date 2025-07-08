@@ -6,7 +6,7 @@ public interface ActivityGeneratorService {
 
     String generateMaterialContent(Object dto);
 
-    String generateActivityContent(Long userId, String category);
+    String generateActivityContent(Object data);
 
     String generateReportContent(Object data);
 

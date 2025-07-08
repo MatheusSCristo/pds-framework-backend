@@ -1,16 +1,15 @@
 package com.neo_educ.backend.apps.exercises.materialGeneration.dto;
 
-import com.neo_educ.backend.apps.english.student.enums.ProficiencyLevel;
-
+import com.neo_educ.backend.apps.exercises.athlete.enums.WorkoutLevel;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-public record GenerateStudentActivityDTO(
+public record GenerateAthleteActivityDTO(
         @NotNull
-        Long studentId,
+        Long athleteId,
         @NotBlank
-        String subject,
-        ProficiencyLevel setLevel,
+        String topic,
+        WorkoutLevel workoutLevel,
         Boolean interests,
         Boolean level
 
