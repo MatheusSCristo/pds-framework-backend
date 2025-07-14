@@ -5,7 +5,7 @@ import com.neo_educ.backend.apps.exercises.athlete.enums.Sex;
 import com.neo_educ.backend.apps.exercises.athlete.enums.WorkoutLevel;
 import com.neo_educ.backend.apps.exercises.notes.entity.AthleteNotesEntity;
 import com.neo_educ.backend.apps.exercises.personal.entity.PersonalEntity;
-import com.neo_educ.backend.apps.exercises.studentActivity.entity.AthleteActivityEntity;
+import com.neo_educ.backend.apps.exercises.athleteActivity.entity.AthleteActivityEntity;
 import com.neo_educ.backend.core.model.ClientEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;

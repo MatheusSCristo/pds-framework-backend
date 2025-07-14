@@ -1,12 +1,12 @@
-package com.neo_educ.backend.apps.exercises.studentActivity.service;
+package com.neo_educ.backend.apps.exercises.athleteActivity.service;
 
 import com.neo_educ.backend.apps.exercises.athlete.entity.AthleteEntity;
 import com.neo_educ.backend.apps.exercises.athlete.repository.AthleteRepository;
-import com.neo_educ.backend.apps.exercises.studentActivity.dto.AthleteActivityCreateDTO;
-import com.neo_educ.backend.apps.exercises.studentActivity.dto.AthleteActivityResponseDTO;
-import com.neo_educ.backend.apps.exercises.studentActivity.entity.AthleteActivityEntity;
-import com.neo_educ.backend.apps.exercises.studentActivity.mapper.AthleteActivityMapper;
-import com.neo_educ.backend.apps.exercises.studentActivity.repository.AthleteActivityRepository;
+import com.neo_educ.backend.apps.exercises.athleteActivity.dto.AthleteActivityCreateDTO;
+import com.neo_educ.backend.apps.exercises.athleteActivity.dto.AthleteActivityResponseDTO;
+import com.neo_educ.backend.apps.exercises.athleteActivity.entity.AthleteActivityEntity;
+import com.neo_educ.backend.apps.exercises.athleteActivity.mapper.AthleteActivityMapper;
+import com.neo_educ.backend.apps.exercises.athleteActivity.repository.AthleteActivityRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

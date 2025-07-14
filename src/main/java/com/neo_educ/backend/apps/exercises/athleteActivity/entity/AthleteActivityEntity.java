@@ -1,4 +1,4 @@
-package com.neo_educ.backend.apps.exercises.studentActivity.entity;
+package com.neo_educ.backend.apps.exercises.athleteActivity.entity;
 
 import com.neo_educ.backend.apps.exercises.athlete.entity.AthleteEntity;
 import com.neo_educ.backend.core.model.ClientProgressMonitoringEntity;

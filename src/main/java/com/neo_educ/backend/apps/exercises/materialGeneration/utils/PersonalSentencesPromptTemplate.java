@@ -8,6 +8,8 @@ import com.neo_educ.backend.apps.exercises.materialGeneration.dto.GenerateMateri
 import com.neo_educ.backend.apps.exercises.materialGeneration.dto.MetricsAverageBySubject;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.List;
 
 @Component
@@ -60,14 +62,19 @@ public class PersonalSentencesPromptTemplate {
 
         prompt.append("Você é um assistente especializado em atividades físicas. ")
                 .append("Sua tarefa é gerar uma lista de atividades ou rotinas de treino para um atleta, ")
-                .append("baseadas no foco da atividade, nível do atleta e, quando fornecidos, seus interesses pessoais. ")
+                .append("baseadas no foco da atividade, nível do atleta, idade e, quando fornecidos, seus interesses pessoais. ")
                 .append("O foco da atividade é ").append(activityCreateDTO.topic()).append(", ");
-                if(activityCreateDTO.level()){
-                prompt.append("o nível do atleta é ").append(athlete.workoutLevel()).append(" ");
+                if (activityCreateDTO.level()) {
+                    prompt.append("o nível do atleta é ").append(athlete.workoutLevel()).append(" ");
                 }
                 else{
                     prompt.append("o nivel das atividades devem ser ").append(activityCreateDTO.workoutLevel()).append(", ");
                 }
+                LocalDate today = LocalDate.now();
+                LocalDate birthDate = athlete.dateOfBirth(); // Assuming this is LocalDate
+                int age = Period.between(birthDate, today).getYears();
+                prompt.append("a idade do atleta é ").append(age).append(" anos. ");
+
 
                 if(activityCreateDTO.interests()){
                     if (athlete.interests() != null && !athlete.interests().isEmpty()) {
