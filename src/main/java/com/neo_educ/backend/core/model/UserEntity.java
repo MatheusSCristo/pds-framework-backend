@@ -43,13 +43,11 @@ public abstract class UserEntity extends AbstractModel implements UserDetails {
     }
 
     @Override
-    @Transient
     public String getUsername() {
         return email;
     }
 
     @Override
-    @Transient
     public String getPassword() {
         return password;
     }

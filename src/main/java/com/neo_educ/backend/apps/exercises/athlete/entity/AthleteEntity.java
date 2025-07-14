@@ -1,6 +1,7 @@
 package com.neo_educ.backend.apps.exercises.athlete.entity;
 
 import com.neo_educ.backend.apps.exercises.athlete.enums.InterestsEnum;
+import com.neo_educ.backend.apps.exercises.athlete.enums.Sex;
 import com.neo_educ.backend.apps.exercises.athlete.enums.WorkoutLevel;
 import com.neo_educ.backend.apps.exercises.notes.entity.AthleteNotesEntity;
 import com.neo_educ.backend.apps.exercises.personal.entity.PersonalEntity;
@@ -14,6 +15,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)
@@ -23,7 +25,11 @@ import java.util.List;
 @NoArgsConstructor
 @Entity(name = "athlete")
 public class AthleteEntity extends ClientEntity {
-
+    private Double height;
+    private Double weight;
+    @Column(name="date_of_birth")
+    private LocalDate dateOfBirth;
+    private Sex sex;
     @NotNull
     @ElementCollection(targetClass = InterestsEnum.class)
     @CollectionTable(name = "athlete_interests", joinColumns = @JoinColumn(name = "athlete_id"))

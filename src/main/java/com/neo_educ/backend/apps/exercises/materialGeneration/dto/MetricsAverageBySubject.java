@@ -1,7 +1,7 @@
 package com.neo_educ.backend.apps.exercises.materialGeneration.dto;
 
-public record GradeAverageBySubject(
-        String subject,
+public record MetricsAverageBySubject(
+        String topic,
         Integer average) {
 
 }

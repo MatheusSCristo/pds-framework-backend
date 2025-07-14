@@ -7,6 +7,6 @@ public record AthleteActivityCreateDTO(
         @NotNull String activityType,
         @NotNull Double performanceMetricValue,
         @NotNull String performanceMetricUnit,
-        @NotNull Long studentId
+        @NotNull Long athleteId
 ) {
 }

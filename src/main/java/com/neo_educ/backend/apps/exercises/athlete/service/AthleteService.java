@@ -35,7 +35,7 @@ public class AthleteService implements ClientService<AthleteEntity, AthleteRegis
                 .orElseThrow(() -> new EntityNotFoundException("Personal not found with ID: " + personalId));
 
         if (athleteRepository.findByEmailAndPersonal(createDto.email(), personal).isPresent()) {
-            throw new RuntimeException("Athlete já existente");
+            throw new RuntimeException("Atleta já existente");
         }
 
         AthleteEntity entity = athleteMapper.toEntity(createDto);

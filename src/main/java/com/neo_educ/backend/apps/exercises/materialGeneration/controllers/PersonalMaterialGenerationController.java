@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-@RequestMapping("/personal/materiais")
+@RequestMapping("/exercises/materiais")
 public class PersonalMaterialGenerationController {
 
     @Autowired
@@ -31,14 +31,14 @@ public class PersonalMaterialGenerationController {
     }
 
     @PostMapping("/activity")
-    public ResponseEntity<Object> generateStudentActivity(@RequestBody GenerateStudentActivityDTO studentActivityDTO) {
-            String result = generateMaterialService.generateStudentActivity(studentActivityDTO);
+    public ResponseEntity<Object> generateStudentActivity(@RequestBody GenerateAthleteActivityDTO athleteActivityDTO) {
+            String result = generateMaterialService.generateAthleteActivity(athleteActivityDTO);
             return ResponseEntity.ok().body(result);
     }
 
     @PostMapping("/report")
-    public ResponseEntity<Object> generateStudentReport(@RequestBody GenerateStudentReportDTO generateStudentReportDTO) {
-        String result = generateMaterialService.generateStudentReport(generateStudentReportDTO);
+    public ResponseEntity<Object> generateStudentReport(@RequestBody GenerateAthleteReportDTO generateAthleteReportDTO) {
+        String result = generateMaterialService.generateAthleteReport(generateAthleteReportDTO);
         return ResponseEntity.ok().body(result);
     }
 

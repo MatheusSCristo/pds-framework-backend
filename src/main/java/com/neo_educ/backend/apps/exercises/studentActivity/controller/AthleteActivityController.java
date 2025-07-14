@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/athlete/activity")
+@RequestMapping("/exercises/athlete/activity")
 public class AthleteActivityController {
 
     @Autowired

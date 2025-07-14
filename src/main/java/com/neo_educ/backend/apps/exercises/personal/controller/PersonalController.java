@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/personal")
+@RequestMapping("/exercises/personal")
 public class PersonalController extends UserController<PersonalEntity, UserResponseDTO> {
 
     @Autowired

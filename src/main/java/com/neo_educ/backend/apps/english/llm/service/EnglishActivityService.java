@@ -2,6 +2,7 @@ package com.neo_educ.backend.apps.english.llm.service;
 
 import com.neo_educ.backend.apps.english.materialGeneration.dto.GenerateExerciseDTO;
 import com.neo_educ.backend.apps.english.materialGeneration.dto.GenerateMaterialDTO; // Manter este import
+import com.neo_educ.backend.apps.english.materialGeneration.dto.GenerateStudentActivityDTO;
 import com.neo_educ.backend.apps.english.materialGeneration.dto.GenerateStudentReportDTO;
 import com.neo_educ.backend.apps.english.materialGeneration.utils.EnglishSetencesPromptTemplate;
 import com.neo_educ.backend.apps.english.student.dto.StudentResponseDTO;
@@ -52,11 +53,15 @@ public class EnglishActivityService implements ActivityGeneratorService {
     }
 
     @Override
-    public String generateActivityContent(Long userId, String category) {
+    public String generateActivityContent(Object data) {
         try {
-            StudentResponseDTO student = studentService.findById(userId);
-            String prompt = promptTemplate.createActivityPrompt(student.interests(), student.proficiencyLevel(), category);
-            return llmService.chat(prompt);
+            if(data instanceof GenerateStudentActivityDTO generateStudentActivityDTO) {
+                StudentResponseDTO student = studentService.findById(generateStudentActivityDTO.studentId());
+                String prompt = promptTemplate.createActivityPrompt(student.interests(), student.proficiencyLevel(), generateStudentActivityDTO.subject());
+                return llmService.chat(prompt);
+            }
+            return null;
+
         } catch (Exception e) {
             throw new ActivityGenerateException();
         }
