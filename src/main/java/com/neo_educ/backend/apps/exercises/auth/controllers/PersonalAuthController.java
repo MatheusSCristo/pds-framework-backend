@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,7 +28,8 @@ public class PersonalAuthController {
     private JwtService jwtService;
 
     @Autowired
-    private AuthenticationManager authenticationManager;
+    @Qualifier("personalAuthenticationProvider")
+    private AuthenticationProvider authenticationProvider;
 
     @Autowired
     @Qualifier("exercisesFactory")
@@ -54,7 +56,7 @@ public class PersonalAuthController {
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDTO> signIn(@RequestBody UserLoginDTO loginDTO) {
-        authenticationManager.authenticate(
+        authenticationProvider.authenticate(
                 new UsernamePasswordAuthenticationToken(loginDTO.email(), loginDTO.password())
         );
 
