@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,7 +31,8 @@ public class TeacherAuthController {
     private TeacherMapper teacherMapper;
 
     @Autowired
-    private AuthenticationManager authenticationManager;
+    @Qualifier("teacherAuthenticationProvider")
+    private AuthenticationProvider authenticationProvider;
 
     @Autowired
     @Qualifier("englishFactory")
@@ -55,7 +57,7 @@ public class TeacherAuthController {
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDTO> signIn(@RequestBody UserLoginDTO loginDTO) {
-        authenticationManager.authenticate(
+        authenticationProvider.authenticate(
                 new UsernamePasswordAuthenticationToken(loginDTO.email(), loginDTO.password())
         );
 
