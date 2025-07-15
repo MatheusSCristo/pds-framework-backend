@@ -2,6 +2,7 @@ package com.neo_educ.backend.apps.nutrition.llm.service;
 
 import com.neo_educ.backend.apps.nutrition.entity.NutritionalReport;
 import com.neo_educ.backend.apps.nutrition.llm.utils.NutritionPromptTemplate;
+import com.neo_educ.backend.apps.nutrition.materialGeneration.dto.GenerateMealPlanDTO;
 import com.neo_educ.backend.apps.nutrition.patient.entity.PatientEntity;
 import com.neo_educ.backend.apps.nutrition.patient.repository.PatientRepository;
 import com.neo_educ.backend.core.llm.service.LLMService;
@@ -54,23 +55,56 @@ public class NutritionActivityService implements ActivityGeneratorService {
         throw new IllegalArgumentException("O DTO precisa ser uma String representando o plano alimentar.");
     }
 
-    /**
-     * Gera um plano alimentar a partir dos dados de um paciente.
+/**
+     * Gera um plano alimentar a partir de um objeto de dados genérico.
+     * O método verifica se o objeto é um DTO ou a própria entidade do paciente.
+     *
+     * @param data O objeto contendo os dados. Pode ser um GenerateMealPlanDTO ou uma PatientEntity.
+     * @return Uma String com o conteúdo do plano alimentar gerado pela IA.
      */
     @Override
-    public String generateActivityContent(Long patientId, String category) {
-        PatientEntity patient = patientRepository.findById(patientId)
-                .orElseThrow(() -> new EntityNotFoundException("Paciente com ID " + patientId + " não encontrado."));
+    public String generateActivityContent(Object data) {
+        PatientEntity patient;
+        String category = null;
 
+        // 1. Verifica o tipo do objeto recebido
+        if (data instanceof GenerateMealPlanDTO dto) {
+            // Se for um DTO, busca o paciente no banco e pega a categoria
+            patient = patientRepository.findById(dto.patientId())
+                    .orElseThrow(() -> new EntityNotFoundException("Paciente com ID " + dto.patientId() + " não encontrado."));
+            category = dto.category();
+
+        } else if (data instanceof PatientEntity p) {
+            // Se for a própria entidade, usa ela diretamente
+            patient = p;
+
+        } else {
+            // Se for um tipo inesperado, lança um erro
+            throw new IllegalArgumentException("O dado fornecido deve ser do tipo GenerateMealPlanDTO ou PatientEntity.");
+        }
+
+        // 2. Chama o método auxiliar para gerar o plano
+        return generateMealPlanFromPatient(patient, category);
+    }
+
+    /**
+     * Método auxiliar privado que contém a lógica de geração do prompt
+     * a partir de uma entidade de paciente.
+     */
+    private String generateMealPlanFromPatient(PatientEntity patient, String category) {
         Map<String, String> patientData = new HashMap<>();
-        
+
         String goals = patient.getNutritionalGoals().stream()
-                              .map(goal -> goal.getDescricao())
-                              .collect(Collectors.joining(", "));
+                .map(goal -> goal.getDescricao())
+                .collect(Collectors.joining(", "));
 
         patientData.put("nutritionalGoals", goals);
         patientData.put("allergies", patient.getAllergies());
         patientData.put("anthropometricData", patient.getAnthropometricData());
+
+        if (category != null && !category.isBlank()) {
+            patientData.put("mainFocus", category);
+        }
 
         String prompt = promptTemplate.createMealPlanPrompt(patientData);
         return llmService.chat(prompt);

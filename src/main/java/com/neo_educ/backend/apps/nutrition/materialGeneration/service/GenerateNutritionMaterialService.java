@@ -17,12 +17,10 @@ public class GenerateNutritionMaterialService {
 
 
     public String generateMealPlan(GenerateMealPlanDTO mealPlanDTO) {
-        return activityGenerator.generateActivityContent(
-                mealPlanDTO.patientId(),
-                mealPlanDTO.category()
-        );
+        return activityGenerator.generateActivityContent(mealPlanDTO);
     }
 
+    
     public String generatePatientReport(GeneratePatientReportDTO reportDTO) {
         return activityGenerator.generateReportContent(reportDTO);
     }

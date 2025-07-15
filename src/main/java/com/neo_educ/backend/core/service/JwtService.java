@@ -9,6 +9,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import com.neo_educ.backend.apps.english.teacher.entity.TeacherEntity;
+import com.neo_educ.backend.apps.exercises.personal.entity.PersonalEntity;
+import com.neo_educ.backend.apps.nutrition.nutritionist.entity.NutritionistEntity;
+import com.neo_educ.backend.core.model.UserEntity;
+
 import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
@@ -32,16 +37,40 @@ public class JwtService {
         return claimsResolver.apply(claims);
     }
 
-    public String generateToken(UserDetails userDetails) {
-        return generateToken(new HashMap<>(), userDetails);
-    }
-
     public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
         return buildToken(extraClaims, userDetails, jwtExpiration);
     }
 
-    public long getExpirationTime() {
-        return jwtExpiration;
+        public String generateToken(UserEntity userEntity) {
+        Map<String, Object> extraClaims = new HashMap<>();
+        
+        // Adiciona a "role" com base no tipo da entidade!
+        if (userEntity instanceof TeacherEntity) {
+            extraClaims.put("role", "TEACHER");
+        } else if (userEntity instanceof NutritionistEntity) {
+            extraClaims.put("role", "NUTRITIONIST");
+        } else if (userEntity instanceof PersonalEntity) {
+            extraClaims.put("role", "PERSONAL");
+        }
+        
+        return Jwts.builder()
+                .setClaims(extraClaims) // Adiciona as claims extras
+                .setSubject(userEntity.getEmail()) // Usa o email como subject
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24)) // 24 horas
+                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
+                .compact();
+    }
+    
+    // Crie um método para extrair o papel (role)
+    public String extractRole(String token) {
+        Claims claims = extractAllClaims(token);
+        return (String) claims.get("role");
+    }
+
+    private Key getSigningKey() {
+        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
+        return Keys.hmacShaKeyFor(keyBytes);
     }
 
     private String buildToken(
@@ -66,6 +95,10 @@ public class JwtService {
 
     private boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
+    }
+
+    public long getExpirationTime() {
+        return 1000 * 60 * 60 * 24; 
     }
 
     private Date extractExpiration(String token) {
