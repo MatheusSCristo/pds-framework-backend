@@ -1,12 +1,12 @@
 package com.neo_educ.backend.apps.nutrition.nutritionist.entity;
 
 import com.neo_educ.backend.apps.nutrition.consultation.entity.NutritionalConsultationEntity;
+import com.neo_educ.backend.apps.nutrition.patient.entity.PatientEntity;
 import com.neo_educ.backend.core.model.UserEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
 import java.util.Collection;
