@@ -1,24 +1,32 @@
 package com.neo_educ.backend.apps.nutrition.llm.service;
 
 import com.neo_educ.backend.apps.nutrition.entity.NutritionalReport;
-import com.neo_educ.backend.apps.nutrition.entity.PatientEntity;
 import com.neo_educ.backend.apps.nutrition.llm.utils.NutritionPromptTemplate;
+import com.neo_educ.backend.apps.nutrition.patient.entity.PatientEntity;
+import com.neo_educ.backend.apps.nutrition.patient.repository.PatientRepository;
 import com.neo_educ.backend.core.llm.service.LLMService;
 import com.neo_educ.backend.core.service.ActivityGeneratorService;
+
+import jakarta.persistence.EntityNotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
-public class NutritionAIService implements ActivityGeneratorService {
+public class NutritionActivityService implements ActivityGeneratorService {
 
     @Autowired
     private LLMService llmService;
 
     @Autowired
     private NutritionPromptTemplate promptTemplate;
+
+    @Autowired
+    private PatientRepository patientRepository;
 
     /**
      * Gera um plano alimentar a partir do tópico (simulado como objetivo do paciente).
@@ -29,7 +37,6 @@ public class NutritionAIService implements ActivityGeneratorService {
         patientData.put("nutritionalGoals", topic);
         patientData.put("allergies", "Não informado");
         patientData.put("anthropometricData", "Não informado");
-        patientData.put("medicalHistory", "Não informado");
 
         String prompt = promptTemplate.createMealPlanPrompt(patientData);
         return llmService.chat(prompt);
@@ -48,22 +55,24 @@ public class NutritionAIService implements ActivityGeneratorService {
     }
 
     /**
-     * Gera uma análise nutricional a partir de um paciente e dados fictícios de consulta.
+     * Gera um plano alimentar a partir dos dados de um paciente.
      */
     @Override
-    public String generateActivityContent(Long userId, String category) {
-        // Simulação de dados do paciente para geração da análise
+    public String generateActivityContent(Long patientId, String category) {
+        PatientEntity patient = patientRepository.findById(patientId)
+                .orElseThrow(() -> new EntityNotFoundException("Paciente com ID " + patientId + " não encontrado."));
+
         Map<String, String> patientData = new HashMap<>();
-        patientData.put("Nome", "Paciente #" + userId);
-        patientData.put("Objetivo", category);
-        patientData.put("Peso", "70kg");
-        patientData.put("Altura", "1.70m");
+        
+        String goals = patient.getNutritionalGoals().stream()
+                              .map(goal -> goal.getDescricao())
+                              .collect(Collectors.joining(", "));
 
-        Map<String, String> consultationData = new HashMap<>();
-        consultationData.put("Tipo de Consulta", "Retorno");
-        consultationData.put("Avaliação Antropométrica", "IMC dentro da faixa normal");
+        patientData.put("nutritionalGoals", goals);
+        patientData.put("allergies", patient.getAllergies());
+        patientData.put("anthropometricData", patient.getAnthropometricData());
 
-        String prompt = promptTemplate.createNutritionalAnalysisPrompt(patientData, consultationData);
+        String prompt = promptTemplate.createMealPlanPrompt(patientData);
         return llmService.chat(prompt);
     }
 
@@ -95,10 +104,8 @@ public class NutritionAIService implements ActivityGeneratorService {
     public String generateExerciseContent(Object dto) {
         if (dto instanceof PatientEntity patient) {
             Map<String, String> patientData = new HashMap<>();
-            patientData.put("nutritionalGoals", patient.getNutritionalGoals());
             patientData.put("allergies", patient.getAllergies());
             patientData.put("anthropometricData", patient.getAnthropometricData());
-            patientData.put("medicalHistory", patient.getMedicalHistory());
 
             String prompt = promptTemplate.createMealPlanPrompt(patientData);
             return llmService.chat(prompt);

@@ -1,11 +1,11 @@
-package com.neo_educ.backend.apps.exercises.auth.controllers;
+package com.neo_educ.backend.apps.nutrition.auth.controllers;
 
-import com.neo_educ.backend.apps.exercises.auth.dto.RegisterDTO;
-import com.neo_educ.backend.apps.exercises.personal.entity.PersonalEntity;
-import com.neo_educ.backend.apps.exercises.personal.mappers.PersonalMapper;
-import com.neo_educ.backend.core.dto.auth.LoginResponseDTO;
+import com.neo_educ.backend.apps.nutrition.auth.dto.NutritionistLoginResponseDTO;
+import com.neo_educ.backend.apps.nutrition.auth.dto.NutritionistRegisterDTO;
+import com.neo_educ.backend.apps.nutrition.nutritionist.dto.NutritionistResponseDTO;
+import com.neo_educ.backend.apps.nutrition.nutritionist.entity.NutritionistEntity;
+import com.neo_educ.backend.apps.nutrition.nutritionist.mappers.NutritionistMapper;
 import com.neo_educ.backend.core.dto.auth.UserLoginDTO;
-import com.neo_educ.backend.core.dto.user.UserResponseDTO;
 import com.neo_educ.backend.core.factory.ApplicationFactory;
 import com.neo_educ.backend.core.service.AuthService;
 import com.neo_educ.backend.core.service.JwtService;
@@ -22,52 +22,49 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/auth/personal")
-public class PersonalAuthController {
+@RequestMapping("/auth/nutritionist")
+public class NutritionistAuthController {
     @Autowired
     private JwtService jwtService;
 
     @Autowired
-    @Qualifier("personalAuthenticationProvider")
+    private NutritionistMapper nutritionistMapper;
+
+    @Autowired
+    @Qualifier("nutritionistAuthenticationProvider")
     private AuthenticationProvider authenticationProvider;
 
     @Autowired
-    @Qualifier("exercisesFactory")
+    @Qualifier("nutritionFactory")
     private ApplicationFactory appFactory;
-    @Autowired
-    private PersonalMapper personalMapper;
 
     @PostMapping("/signup")
-    public ResponseEntity<Void> signUp(@RequestBody RegisterDTO registerDTO) {
+    public ResponseEntity<Void> signUp(@RequestBody NutritionistRegisterDTO registerDTO) {
         AuthService authService = appFactory.createAuthService();
 
-        PersonalEntity user = new PersonalEntity(
-                registerDTO.name(),
-                registerDTO.lastName(),
-                registerDTO.email(),
-                registerDTO.password(),
-                registerDTO.phone()
-
-        ) ;
-        authService.signUp(user);
+        NutritionistEntity nutritionist = nutritionistMapper.toEntity(registerDTO);
+        
+        authService.signUp(nutritionist);
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponseDTO> signIn(@RequestBody UserLoginDTO loginDTO) {
+    public ResponseEntity<NutritionistLoginResponseDTO> signIn(@RequestBody UserLoginDTO loginDTO) {
         authenticationProvider.authenticate(
                 new UsernamePasswordAuthenticationToken(loginDTO.email(), loginDTO.password())
         );
 
         AuthService authService = appFactory.createAuthService();
-
-        PersonalEntity authenticatedUser = (PersonalEntity) authService.signIn(loginDTO);
-
+        
+        NutritionistEntity authenticatedUser = (NutritionistEntity) authService.signIn(loginDTO);
+        
         String jwtToken = jwtService.generateToken(authenticatedUser);
         long expiresIn = jwtService.getExpirationTime();
-        UserResponseDTO authenticatedDTO = personalMapper.toDTO(authenticatedUser);
-        LoginResponseDTO loginResponse = new LoginResponseDTO(jwtToken, expiresIn, authenticatedDTO);
+        
+        NutritionistResponseDTO authenticatedDTO = nutritionistMapper.toDTO(authenticatedUser);
+        
+        NutritionistLoginResponseDTO loginResponse = new NutritionistLoginResponseDTO(jwtToken, expiresIn, authenticatedDTO);
 
         return ResponseEntity.ok(loginResponse);
     }
