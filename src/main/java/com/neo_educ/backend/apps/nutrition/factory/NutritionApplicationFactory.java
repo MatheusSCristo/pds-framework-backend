@@ -1,6 +1,7 @@
 package com.neo_educ.backend.apps.nutrition.factory;
 
 import com.neo_educ.backend.apps.nutrition.consultation.service.NutritionalConsultationService;
+import com.neo_educ.backend.apps.nutrition.nutritionist.entity.NutritionistEntity;
 import com.neo_educ.backend.apps.nutrition.nutritionist.service.NutritionistService;
 import com.neo_educ.backend.apps.nutrition.patient.service.PatientService;
 import com.neo_educ.backend.core.factory.ApplicationFactory;
@@ -38,12 +39,12 @@ public class NutritionApplicationFactory implements ApplicationFactory {
     }
 
     @Override
-    public AuthService createAuthService() {
-        return new AuthService(this.nutritionistService, this.passwordEncoder);
+    public AuthService<NutritionistEntity> createAuthService() {
+        return new AuthService<NutritionistEntity>(this.nutritionistService, this.passwordEncoder);
     }
 
     @Override
-    public UserService createUserService() {
+    public UserService<NutritionistEntity> createUserService() {
         return this.nutritionistService;
     }
 

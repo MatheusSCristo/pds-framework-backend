@@ -1,11 +1,8 @@
 package com.neo_educ.backend.apps.english.teacher.entity;
 
 import com.neo_educ.backend.apps.english.classplans.entity.ClassPlansEntity;
-import com.neo_educ.backend.apps.english.notes.entity.NotesEntity;
 import com.neo_educ.backend.apps.english.student.entity.StudentEntity;
-import com.neo_educ.backend.core.model.AbstractModel;
 import com.neo_educ.backend.core.model.UserEntity;
-
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -25,8 +22,6 @@ import java.util.List;
 @SuperBuilder
 public class TeacherEntity extends UserEntity implements UserDetails {
 
-    @Column(name="invite_token")
-    private String inviteToken;
     @Builder.Default
     @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ClassPlansEntity> classPlans = new ArrayList<>();

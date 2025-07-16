@@ -1,15 +1,8 @@
 package com.neo_educ.backend.apps.english.teacher.repository;
 
 import com.neo_educ.backend.apps.english.teacher.entity.TeacherEntity;
-import com.neo_educ.backend.core.repository.AbstractRepository;
+import com.neo_educ.backend.core.repository.AbstractUserRepository;
 
-import java.util.Optional;
-
-public interface TeacherRepository extends AbstractRepository<TeacherEntity> {
-
-    Optional<TeacherEntity> findByEmail(String email);
-
-    Optional<TeacherEntity> findByInviteToken(String token);
-
+public interface TeacherRepository extends AbstractUserRepository<TeacherEntity> {
 
 }
