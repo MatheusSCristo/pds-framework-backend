@@ -2,6 +2,7 @@ package com.neo_educ.backend.apps.english.factory;
 
 import com.neo_educ.backend.apps.english.classplans.service.ClassPlansService;
 import com.neo_educ.backend.apps.english.student.service.StudentService;
+import com.neo_educ.backend.apps.english.teacher.entity.TeacherEntity;
 import com.neo_educ.backend.apps.english.teacher.service.TeacherService;
 import com.neo_educ.backend.core.factory.ApplicationFactory;
 import com.neo_educ.backend.core.service.ActivityGeneratorService;
@@ -38,12 +39,12 @@ public class EnglishApplicationFactory implements ApplicationFactory {
     }
 
     @Override
-    public AuthService createAuthService() {
-        return new AuthService(this.teacherService, this.passwordEncoder);
+    public AuthService<TeacherEntity> createAuthService() {
+        return new AuthService<TeacherEntity>(this.teacherService, this.passwordEncoder);
     }
 
     @Override
-    public UserService createUserService() {
+    public UserService<TeacherEntity> createUserService() {
         return this.teacherService;
     }
 

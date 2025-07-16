@@ -34,7 +34,6 @@ public class StudentEntity extends ClientEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private TeacherEntity  teacher;
 
-
     @OneToMany(mappedBy = "student", cascade = CascadeType.REMOVE)
     private List<NotesEntity> notes;
 

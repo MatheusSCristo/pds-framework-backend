@@ -5,8 +5,6 @@ import com.neo_educ.backend.apps.nutrition.nutritionist.entity.NutritionistEntit
 import com.neo_educ.backend.apps.nutrition.nutritionist.mappers.NutritionistMapper;
 import com.neo_educ.backend.core.controller.UserController;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,9 +20,4 @@ public class NutritionistController extends UserController<NutritionistEntity, N
         return nutritionistMapper.toDTO(entity);
     }
 
-    @GetMapping("/me")
-    @Override
-    public ResponseEntity<NutritionistResponseDTO> authenticatedUser() {
-        return super.authenticatedUser();
-    }
 }

@@ -36,6 +36,9 @@ public abstract class UserEntity extends AbstractModel implements UserDetails {
     @NotBlank
     protected String phone;
 
+    @Column(name="invite_token", unique = true)
+    protected String inviteToken;
+
     @Override
     @Transient
     public Collection<? extends GrantedAuthority> getAuthorities() {
