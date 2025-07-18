@@ -7,6 +7,8 @@ import com.neo_educ.backend.apps.english.student.mapper.StudentMapper;
 import com.neo_educ.backend.apps.english.student.repository.StudentRepository;
 import com.neo_educ.backend.apps.english.teacher.entity.TeacherEntity;
 import com.neo_educ.backend.apps.english.teacher.repository.TeacherRepository;
+import com.neo_educ.backend.core.mapper.ClientMapper;
+import com.neo_educ.backend.core.repository.AbstractClientRepository;
 import com.neo_educ.backend.core.service.ClientService;
 import com.neo_educ.backend.exceptions.student.StudentAlreadyExistsException;
 import jakarta.persistence.EntityNotFoundException;
@@ -58,10 +60,5 @@ public class StudentService implements ClientService<StudentEntity, StudentRegis
         StudentEntity savedStudent = getRepository().save(entity);
         return getModelMapper().toResponse(savedStudent);
     }
-    
-    @Override
-    public List<StudentResponseDTO> findAll(Long ownerId) {
-        List<StudentEntity> entities = studentRepository.findAllByTeacherId(ownerId);
-        return entities.stream().map(studentMapper::toResponse).toList();
-    }
+
 }

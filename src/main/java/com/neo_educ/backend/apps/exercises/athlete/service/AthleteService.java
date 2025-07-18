@@ -58,10 +58,5 @@ public class AthleteService implements ClientService<AthleteEntity, AthleteRegis
         AthleteEntity savedAthlete = athleteRepository.save(entity);
         return athleteMapper.toResponse(savedAthlete);
     }
-    @Override
-    public List<AthleteResponseDTO> findAll(Long ownerId) {
-        List<AthleteEntity> entities = athleteRepository.findAllByOwnerId(ownerId);
-        return entities.stream().map(athleteMapper::toResponse).toList();
-    }
 
 }
