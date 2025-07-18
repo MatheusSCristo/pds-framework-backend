@@ -61,7 +61,7 @@ public class NutritionalConsultationService implements SessionService<Nutritiona
         NutritionistEntity nutritionist = nutritionistRepository.findById(ownerId)
                 .orElseThrow(() -> new EntityNotFoundException("Nutricionista não encontrado"));
 
-        LocalDateTime consultationDate = data.consultationDate();
+        LocalDateTime consultationDate = data.date();
         LocalDateTime start = consultationDate.minusMinutes(30);
         LocalDateTime end = consultationDate.plusMinutes(30);
 
@@ -71,7 +71,7 @@ public class NutritionalConsultationService implements SessionService<Nutritiona
 
         NutritionalConsultationEntity entity = NutritionalConsultationEntity.builder()
                 .title(data.title())
-                .date(data.consultationDate())
+                .date(data.date())
                 .owner(nutritionist)
                 .consultationType(data.consultationType())
                 .build();

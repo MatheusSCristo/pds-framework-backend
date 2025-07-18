@@ -17,9 +17,14 @@ public interface ClientService<E extends ClientEntity<U>, C, R, U extends Abstra
     ClientMapper<C, R, E> getModelMapper();
     JpaRepository<U, Long> getOwnerRepository();
 
-    List<R> findAll(Long userId);
-
     R create(C createDto, Long ownerId);
+
+    default List<R> findAll(Long ownerId) {
+        return getRepository().findAllByOwnerId(ownerId)
+                .stream()
+                .map(getModelMapper()::toResponse)
+                .toList();
+    }
 
     default R findById(Long id) {
         E clientEntity = getRepository().findById(id)

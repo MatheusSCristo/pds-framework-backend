@@ -16,9 +16,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 @Service
 @AllArgsConstructor
 public class PatientService implements ClientService<PatientEntity, PatientRegisterDTO, PatientResponseDTO, NutritionistEntity> {
@@ -41,14 +38,6 @@ public class PatientService implements ClientService<PatientEntity, PatientRegis
     public ClientMapper<PatientRegisterDTO, PatientResponseDTO, PatientEntity> getModelMapper() {
         return this.patientMapper;
     }
-    
-    @Override
-    public List<PatientResponseDTO> findAll(Long ownerId) {
-        return patientRepository.findAllByOwnerId(ownerId)
-                .stream()
-                .map(patientMapper::toResponse)
-                .collect(Collectors.toList());
-    }
 
     @Override
     @Transactional
@@ -60,10 +49,6 @@ public class PatientService implements ClientService<PatientEntity, PatientRegis
             throw new PatientAlreadyExistsException();
         });
 
-        /**
-         * ✅ A CORREÇÃO DE LÓGICA: Usamos o builder para criar a entidade,
-         * garantindo explicitamente que o 'owner' está sendo definido.
-         */
         PatientEntity entity = PatientEntity.builder()
                 .name(createDto.name())
                 .lastName(createDto.lastName())
@@ -74,7 +59,6 @@ public class PatientService implements ClientService<PatientEntity, PatientRegis
                 .owner(nutritionist)
                 .build();
 
-        // 4. Salva a entidade e retorna a resposta
         PatientEntity savedPatient = patientRepository.save(entity);
         return patientMapper.toResponse(savedPatient);
      }

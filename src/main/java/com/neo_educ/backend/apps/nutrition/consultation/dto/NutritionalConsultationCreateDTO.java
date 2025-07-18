@@ -13,6 +13,6 @@ public record NutritionalConsultationCreateDTO(
   String consultationType,
 
   @NotNull(message = "A data da consulta é obrigatória")
-  LocalDateTime consultationDate
+  LocalDateTime date
 
 ) {}
