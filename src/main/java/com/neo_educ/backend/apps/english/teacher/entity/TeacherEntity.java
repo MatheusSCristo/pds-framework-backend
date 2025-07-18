@@ -23,9 +23,9 @@ import java.util.List;
 public class TeacherEntity extends UserEntity implements UserDetails {
 
     @Builder.Default
-    @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ClassPlansEntity> classPlans = new ArrayList<>();
-    @OneToMany(mappedBy = "teacher", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.REMOVE)
     private List<StudentEntity> students;
 
     @Override

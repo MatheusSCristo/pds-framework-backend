@@ -44,7 +44,7 @@ public class ExercicesApplicationFactory implements ApplicationFactory {
     }
 
     @Override
-    public SessionService<?, ?, ?> createSessionService() {
+    public SessionService<?, ?, ?, ?> createSessionService() {
         return this.workoutService;
     }
 
@@ -54,7 +54,7 @@ public class ExercicesApplicationFactory implements ApplicationFactory {
     }
 
     @Override
-    public ClientService<?, ?, ?> createClientService() {
+    public ClientService<?, ?, ?, ?> createClientService() {
         return this.athleteService;
     }
 }

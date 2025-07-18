@@ -23,9 +23,9 @@ public class PersonalEntity extends UserEntity implements UserDetails {
     @Column(name="invite_token")
     private String inviteToken;
     @Builder.Default
-    @OneToMany(mappedBy = "personal", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<WorkoutEntity> workoutPlans = new ArrayList<>();
-    @OneToMany(mappedBy = "personal", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.REMOVE)
     private List<AthleteEntity> athletes;
 
     public Long getId(){

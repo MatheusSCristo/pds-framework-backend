@@ -28,13 +28,13 @@ public class SecurityConfig {
     private final JwtAuthFilter jwtAuthFilter;
     private final AuthenticationProvider teacherAuthenticationProvider;
     private final AuthenticationProvider nutritionistAuthenticationProvider;
-    private final AuthenticationProvider personalAuthenticationProvider; // <-- Provider do Personal
+    private final AuthenticationProvider personalAuthenticationProvider; 
 
     public SecurityConfig(
             JwtAuthFilter jwtAuthFilter,
             @Qualifier("teacherAuthenticationProvider") AuthenticationProvider teacherProvider,
             @Qualifier("nutritionistAuthenticationProvider") AuthenticationProvider nutritionistProvider,
-            @Qualifier("personalAuthenticationProvider") AuthenticationProvider personalProvider // <-- Injetando aqui
+            @Qualifier("personalAuthenticationProvider") AuthenticationProvider personalProvider 
     ) {
         this.jwtAuthFilter = jwtAuthFilter;
         this.teacherAuthenticationProvider = teacherProvider;
@@ -62,7 +62,7 @@ public class SecurityConfig {
         // Registra TODOS os provedores no gerenciador de autenticação
         auth.authenticationProvider(teacherAuthenticationProvider);
         auth.authenticationProvider(nutritionistAuthenticationProvider);
-        auth.authenticationProvider(personalAuthenticationProvider); // <-- Registrando aqui
+        auth.authenticationProvider(personalAuthenticationProvider); 
     }
 
     @Bean
@@ -72,7 +72,6 @@ public class SecurityConfig {
 
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
-        // Seu código de CORS...
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(List.of("http://localhost:5173"));
         configuration.setAllowedMethods(List.of("GET", "POST", "PATCH", "DELETE", "PUT"));

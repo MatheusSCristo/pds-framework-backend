@@ -46,7 +46,7 @@ public class ExportExerciseService {
             Optional<PersonalEntity> personalOptional = personalRepository.findByEmail(teacherEmail);
             PersonalEntity personal = personalOptional.get();
 
-            Optional<AthleteEntity> athleteOptional = athleteRepository.findByEmailAndPersonal(exportExerciseDTO.athleteEmail(), personal);
+            Optional<AthleteEntity> athleteOptional = athleteRepository.findByEmailAndOwner(exportExerciseDTO.athleteEmail(), personal);
 
             if (athleteOptional.isEmpty()) {
                 throw new EntityNotFoundException();

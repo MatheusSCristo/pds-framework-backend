@@ -54,12 +54,12 @@ public class NutritionApplicationFactory implements ApplicationFactory {
     }
 
     @Override
-    public SessionService<?, ?, ?> createSessionService() {
+    public SessionService<?, ?, ?, ?> createSessionService() {
         return this.nutritionalConsultationService;
     }
 
     @Override
-    public ClientService<?, ?, ?> createClientService() {
+    public ClientService<?, ?, ?, ?> createClientService() {
         return this.patientService;
     }
 }

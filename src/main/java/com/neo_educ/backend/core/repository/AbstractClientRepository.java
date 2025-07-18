@@ -1,10 +1,11 @@
 package com.neo_educ.backend.core.repository;
 
 import com.neo_educ.backend.core.model.AbstractModel;
-
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.NoRepositoryBean;
+import java.util.List;
 
 @NoRepositoryBean
-public interface AbstractRepository<M extends AbstractModel> extends JpaRepository<M, Long> {
+public interface AbstractClientRepository<T extends AbstractModel> extends AbstractRepository<T> {
+
+    List<T> findAllByOwnerId(Long ownerId);
 }

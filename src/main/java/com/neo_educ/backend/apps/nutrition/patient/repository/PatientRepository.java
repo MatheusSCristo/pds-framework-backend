@@ -2,17 +2,14 @@ package com.neo_educ.backend.apps.nutrition.patient.repository;
 
 import com.neo_educ.backend.apps.nutrition.nutritionist.entity.NutritionistEntity;
 import com.neo_educ.backend.apps.nutrition.patient.entity.PatientEntity;
-import com.neo_educ.backend.core.repository.AbstractRepository;
+import com.neo_educ.backend.core.repository.AbstractClientRepository;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface PatientRepository extends AbstractRepository<PatientEntity> {
+public interface PatientRepository extends AbstractClientRepository<PatientEntity> {
 
-    Optional<PatientEntity> findByEmailAndNutritionist(String email, NutritionistEntity nutritionist);
+    Optional<PatientEntity> findByEmailAndOwner(String email, NutritionistEntity owner);
 
-    List<PatientEntity> findAllByNutritionist_Email(String email);
-
-    List<PatientEntity> findAllByNutritionistId(Long nutritionistId);
-    
+    List<PatientEntity> findAllByOwnerId(Long ownerId);
 }

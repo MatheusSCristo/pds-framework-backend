@@ -18,8 +18,8 @@ public abstract class AbstractClientController<C, R> {
     private final ApplicationFactory appFactory;
 
     @SuppressWarnings("unchecked")
-    private ClientService<?, C, R> getService() {
-        return (ClientService<?, C, R>) appFactory.createClientService();
+    private ClientService<?, C, R, ?> getService() {
+        return (ClientService<?, C, R, ?>) appFactory.createClientService();
     }
 
     private Long getAuthenticatedUserId() {

@@ -54,12 +54,12 @@ public class EnglishApplicationFactory implements ApplicationFactory {
     }
 
     @Override
-    public SessionService<?, ?, ?> createSessionService() {
+    public SessionService<?, ?, ?, ?> createSessionService() {
         return this.classPlansService;
     }
 
     @Override
-    public ClientService<?, ?, ?> createClientService() {
+    public ClientService<?, ?, ?, ?> createClientService() {
         return this.studentService;
     }
 }

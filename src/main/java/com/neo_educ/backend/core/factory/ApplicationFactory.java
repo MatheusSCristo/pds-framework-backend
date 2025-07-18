@@ -8,8 +8,8 @@ public interface ApplicationFactory {
 
         AuthService<?> createAuthService();
         UserService<?> createUserService();
-    SessionService<?, ?, ?> createSessionService();
+    SessionService<?, ?, ?, ?> createSessionService();
     ActivityGeneratorService createActivityGeneratorService();
-    ClientService<?, ?, ?> createClientService();
+    ClientService<?, ?, ?, ?> createClientService();
 
 }

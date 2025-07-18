@@ -1,0 +1,6 @@
+package com.neo_educ.backend.core.mapper;
+
+public interface ClientMapper<C, R, E> {
+  E toEntity(C createDto);
+  R toResponse(E entity);
+}
