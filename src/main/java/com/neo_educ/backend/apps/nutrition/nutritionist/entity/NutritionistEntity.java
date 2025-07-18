@@ -28,11 +28,11 @@ public class NutritionistEntity extends UserEntity {
 
     // Relação com as consultas que o nutricionista realiza
     @Builder.Default
-    @OneToMany(mappedBy = "nutritionist", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<NutritionalConsultationEntity> consultations = new ArrayList<>();
 
     // Relação com os pacientes do nutricionista
-    @OneToMany(mappedBy = "nutritionist", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.REMOVE)
     private List<PatientEntity> patients;
 
     public NutritionistEntity(String name, String lastName, String email, String password, String phone, String specialty) {

@@ -37,7 +37,7 @@ public class AuthConfig {
 
     @Bean(name = "personalAuthenticationProvider")
     public AuthenticationProvider personalAuthenticationProvider(
-            @Qualifier("personalService") UserDetailsService userDetailsService // <-- Usando o "personalService"
+            @Qualifier("personalService") UserDetailsService userDetailsService
     ) {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(userDetailsService);

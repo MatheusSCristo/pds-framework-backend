@@ -1,17 +1,17 @@
 package com.neo_educ.backend.apps.english.student.mapper;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.MappingConstants;
-
 import com.neo_educ.backend.apps.english.student.dto.StudentRegisterDTO;
 import com.neo_educ.backend.apps.english.student.dto.StudentResponseDTO;
 import com.neo_educ.backend.apps.english.student.entity.StudentEntity;
+import com.neo_educ.backend.core.mapper.ClientMapper;
+import org.mapstruct.Mapper;
 
-@Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
-public interface StudentMapper {
+@Mapper(componentModel = "spring")
+public interface StudentMapper extends ClientMapper<StudentRegisterDTO, StudentResponseDTO, StudentEntity> {
 
-    StudentEntity toEntity(StudentRegisterDTO studentRegisterDTO);
+    @Override
+    StudentEntity toEntity(StudentRegisterDTO createDto);
 
-    StudentResponseDTO toResponseDTO(StudentEntity studentEntity);
-
+    @Override
+    StudentResponseDTO toResponse(StudentEntity entity);
 }

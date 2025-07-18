@@ -20,7 +20,7 @@ public class ApiException extends RuntimeException {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
     private LocalDateTime timestamp;
 
-    private ApiException() {
+    public ApiException() {
         timestamp = LocalDateTime.now(ZoneOffset.UTC);
     }
 

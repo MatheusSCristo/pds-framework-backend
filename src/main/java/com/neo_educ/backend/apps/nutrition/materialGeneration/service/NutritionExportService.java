@@ -53,7 +53,7 @@ public class NutritionExportService {
             NutritionistEntity nutritionist = nutritionistRepository.findByEmail(nutritionistEmail)
                 .orElseThrow(() -> new EntityNotFoundException("Nutricionista não encontrado."));
 
-            patientRepository.findByEmailAndNutritionist(exportDTO.patientEmail(), nutritionist)
+            patientRepository.findByEmailAndOwner(exportDTO.patientEmail(), nutritionist)
                 .orElseThrow(() -> new EntityNotFoundException("Paciente não encontrado ou não pertence a este nutricionista."));
 
             byte[] pdfBytes = generatePDF(exportDTO.mealPlanTitle(), exportDTO.mealPlanContent());
