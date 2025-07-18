@@ -46,14 +46,14 @@ public class ExportExerciseService {
             Optional<PersonalEntity> personalOptional = personalRepository.findByEmail(teacherEmail);
             PersonalEntity personal = personalOptional.get();
 
-            Optional<AthleteEntity> athleteOptional = athleteRepository.findByEmailAndPersonal(exportExerciseDTO.studentEmail(), personal);
+            Optional<AthleteEntity> athleteOptional = athleteRepository.findByEmailAndOwner(exportExerciseDTO.athleteEmail(), personal);
 
             if (athleteOptional.isEmpty()) {
                 throw new EntityNotFoundException();
             }
 
             byte[] pdfBytes = generatePDF(exportExerciseDTO.selectedExercises());
-            sendEmailWithAttachment(exportExerciseDTO.studentEmail(), pdfBytes);
+            sendEmailWithAttachment(exportExerciseDTO.athleteEmail(), pdfBytes);
 
             return true;
         } catch (Exception e) {

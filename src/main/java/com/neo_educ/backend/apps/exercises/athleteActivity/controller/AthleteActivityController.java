@@ -1,8 +1,8 @@
-package com.neo_educ.backend.apps.exercises.studentActivity.controller;
+package com.neo_educ.backend.apps.exercises.athleteActivity.controller;
 
-import com.neo_educ.backend.apps.exercises.studentActivity.dto.AthleteActivityCreateDTO;
-import com.neo_educ.backend.apps.exercises.studentActivity.dto.AthleteActivityResponseDTO;
-import com.neo_educ.backend.apps.exercises.studentActivity.service.AthleteActivityService;
+import com.neo_educ.backend.apps.exercises.athleteActivity.dto.AthleteActivityCreateDTO;
+import com.neo_educ.backend.apps.exercises.athleteActivity.dto.AthleteActivityResponseDTO;
+import com.neo_educ.backend.apps.exercises.athleteActivity.service.AthleteActivityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/athlete/activity")
+@RequestMapping("/exercises/athlete/activity")
 public class AthleteActivityController {
 
     @Autowired

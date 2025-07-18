@@ -20,7 +20,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity(name = "student")
-public class StudentEntity extends ClientEntity {
+public class StudentEntity extends ClientEntity<TeacherEntity> {
 
     @NotNull
     @ElementCollection(targetClass = InterestsEnum.class)
@@ -34,18 +34,17 @@ public class StudentEntity extends ClientEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private TeacherEntity  teacher;
 
-
     @OneToMany(mappedBy = "student", cascade = CascadeType.REMOVE)
     private List<NotesEntity> notes;
 
     @OneToMany(mappedBy = "student", cascade = CascadeType.REMOVE)
     private List<StudentActivityEntity> activities;
 
-    public void setTeacher(TeacherEntity teacher) {
-        this.teacher = teacher;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "teacher_id", nullable = false)
+    @Override
+    public void setOwner(TeacherEntity teacher) {
+        super.setOwner(teacher);
     }
 
-    public List<StudentActivityEntity> getActivities() {
-        return activities;
-    }
 }

@@ -1,11 +1,9 @@
 package com.neo_educ.backend.core.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.*; 
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 @MappedSuperclass
@@ -14,18 +12,26 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public abstract class ClientEntity extends AbstractModel {
+@EqualsAndHashCode(callSuper = true)
+public abstract class ClientEntity<U extends AbstractModel> extends AbstractModel {
 
-    @NotBlank
+    
+    @NotBlank(message = "O nome não pode estar em branco.")
+    @Column(name = "name", nullable = false)
     protected String name;
 
     @Column(name = "last_name")
     protected String lastName;
 
+    @Email(message = "O formato do e-mail é inválido.")
+    @NotBlank(message = "O e-mail não pode estar em branco.")
+    @Column(name = "email", unique = true, nullable = false)
     protected String email;
 
-    @NotBlank
+    @NotBlank(message = "O telefone não pode estar em branco.")
+    @Column(name = "phone", nullable = false)
     protected String phone;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    protected U owner;
 }
-

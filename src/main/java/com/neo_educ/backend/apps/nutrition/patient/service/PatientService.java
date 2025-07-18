@@ -7,63 +7,60 @@ import com.neo_educ.backend.apps.nutrition.patient.dto.PatientResponseDTO;
 import com.neo_educ.backend.apps.nutrition.patient.entity.PatientEntity;
 import com.neo_educ.backend.apps.nutrition.patient.mapper.PatientMapper;
 import com.neo_educ.backend.apps.nutrition.patient.repository.PatientRepository;
+import com.neo_educ.backend.core.mapper.ClientMapper;
 import com.neo_educ.backend.core.service.ClientService;
 import com.neo_educ.backend.exceptions.patient.PatientAlreadyExistsException;
-
 import jakarta.persistence.EntityNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.transaction.Transactional;
+import lombok.AllArgsConstructor;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
-public class PatientService implements ClientService<PatientEntity, PatientRegisterDTO, PatientResponseDTO> {
+@AllArgsConstructor
+public class PatientService implements ClientService<PatientEntity, PatientRegisterDTO, PatientResponseDTO, NutritionistEntity> {
 
-    @Autowired
-    private PatientRepository patientRepository;
+    private final PatientRepository patientRepository;
+    private final PatientMapper patientMapper;
+    private final NutritionistRepository nutritionistRepository;
 
-    @Autowired
-    private PatientMapper patientMapper;
+    @Override
+    public PatientRepository getRepository() {
+        return this.patientRepository;
+    }
 
-    @Autowired
-    private NutritionistRepository nutritionistRepository;
+    @Override
+    public JpaRepository<NutritionistEntity, Long> getOwnerRepository() {
+        return this.nutritionistRepository;
+    }
+
+    @Override
+    public ClientMapper<PatientRegisterDTO, PatientResponseDTO, PatientEntity> getModelMapper() {
+        return this.patientMapper;
+    }
 
     @Override
     @Transactional
-    public PatientResponseDTO create(PatientRegisterDTO createDto, Long nutritionistId) {
-        NutritionistEntity nutritionist = nutritionistRepository.findById(nutritionistId)
-                .orElseThrow(() -> new EntityNotFoundException("Nutricionista não encontrado com o ID: " + nutritionistId));
+    public PatientResponseDTO create(PatientRegisterDTO createDto, Long ownerId) {
+        NutritionistEntity nutritionist = nutritionistRepository.findById(ownerId)
+                .orElseThrow(() -> new EntityNotFoundException("Nutricionista não encontrado com o ID: " + ownerId));
 
-        if (patientRepository.findByEmailAndNutritionist(createDto.email(), nutritionist).isPresent()) {
+        patientRepository.findByEmailAndOwner(createDto.email(), nutritionist).ifPresent(patient -> {
             throw new PatientAlreadyExistsException();
-        }
+        });
 
-        PatientEntity entity = patientMapper.toEntity(createDto);
-        entity.setNutritionist(nutritionist);
+        PatientEntity entity = PatientEntity.builder()
+                .name(createDto.name())
+                .lastName(createDto.lastName())
+                .email(createDto.email())
+                .phone(createDto.phone())
+                .allergies(createDto.allergies())
+                .nutritionalGoals(createDto.nutritionalGoals())
+                .owner(nutritionist)
+                .build();
 
         PatientEntity savedPatient = patientRepository.save(entity);
-        return patientMapper.toResponseDTO(savedPatient);
-    }
+        return patientMapper.toResponse(savedPatient);
+     }
 
-    @Override
-    public PatientResponseDTO findById(Long id) {
-        return patientRepository.findById(id)
-                .map(patientMapper::toResponseDTO)
-                .orElseThrow(() -> new EntityNotFoundException("Paciente com ID: " + id + " não encontrado"));
-    }
-
-    @Override
-    public List<PatientResponseDTO> findAll(Long nutritionistId) {
-        List<PatientEntity> entities = patientRepository.findAllByNutritionistId(nutritionistId);
-        return entities.stream().map(patientMapper::toResponseDTO).toList();
-    }
-
-    @Override
-    public void delete(Long id) {
-        if (!patientRepository.existsById(id)) {
-            throw new EntityNotFoundException("Paciente com ID: " + id + " não encontrado para deleção.");
-        }
-        patientRepository.deleteById(id);
-    }
 }

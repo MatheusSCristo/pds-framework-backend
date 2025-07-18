@@ -1,6 +1,7 @@
 package com.neo_educ.backend.apps.exercises.factory;
 
 import com.neo_educ.backend.apps.exercises.athlete.service.AthleteService;
+import com.neo_educ.backend.apps.exercises.personal.entity.PersonalEntity;
 import com.neo_educ.backend.apps.exercises.personal.service.PersonalService;
 import com.neo_educ.backend.apps.exercises.workout.service.WorkoutService;
 import com.neo_educ.backend.core.factory.ApplicationFactory;
@@ -33,13 +34,18 @@ public class ExercicesApplicationFactory implements ApplicationFactory {
     }
 
     @Override
-    public AuthService createAuthService() {
-        return new AuthService(this.personalService, this.passwordEncoder);
+    public AuthService<PersonalEntity> createAuthService() {
+        return new AuthService<PersonalEntity>(this.personalService, this.passwordEncoder);
     }
 
     @Override
-    public UserService createUserService() {
+    public UserService<PersonalEntity> createUserService() {
         return this.personalService;
+    }
+
+    @Override
+    public SessionService<?, ?, ?, ?> createSessionService() {
+        return this.workoutService;
     }
 
     @Override
@@ -48,12 +54,7 @@ public class ExercicesApplicationFactory implements ApplicationFactory {
     }
 
     @Override
-    public SessionService<?, ?, ?> createSessionService() {
-        return this.workoutService;
-    }
-
-    @Override
-    public ClientService<?, ?, ?> createClientService() {
+    public ClientService<?, ?, ?, ?> createClientService() {
         return this.athleteService;
     }
 }

@@ -11,84 +11,84 @@ import com.neo_educ.backend.core.service.ActivityGeneratorService;
 import com.neo_educ.backend.core.service.SessionService;
 import com.neo_educ.backend.exceptions.ConflictException;
 import jakarta.persistence.EntityNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
-public class WorkoutService implements SessionService<WorkoutEntity, WorkoutCreateDTO, WorkoutResponseDTO> {
+public class WorkoutService
+        implements SessionService<WorkoutEntity, WorkoutCreateDTO, WorkoutResponseDTO, PersonalEntity> {
 
-    @Autowired
-    private WorkoutRepository workoutRepository;
+    private final WorkoutRepository workoutRepository;
+    private final PersonalRepository personalRepository;
+    private final WorkoutMapper workoutMapper;
+    private final ActivityGeneratorService activityGenerator;
 
-    @Autowired
-    private PersonalRepository personalRepository;
+    public WorkoutService(
+            WorkoutRepository workoutRepository,
+            PersonalRepository personalRepository,
+            WorkoutMapper workoutMapper,
+            @Qualifier("exercisesActivityService") ActivityGeneratorService activityGenerator) {
+        this.workoutRepository = workoutRepository;
+        this.personalRepository = personalRepository;
+        this.workoutMapper = workoutMapper;
+        this.activityGenerator = activityGenerator;
+    }
 
-    @Autowired
-    private WorkoutMapper workoutMapper;
+    @Override
+    public JpaRepository<WorkoutEntity, Long> getRepository() {
+        return this.workoutRepository;
+    }
 
-    @Autowired
-    @Qualifier("exercisesActivityService")
-    private ActivityGeneratorService activityGenerator;
+    @Override
+    public WorkoutMapper getMapper() {
+        return this.workoutMapper;
+    }
 
-    public WorkoutResponseDTO create(WorkoutCreateDTO data, Long personalID) {
+    @Override
+    public JpaRepository<PersonalEntity, Long> getOwnerRepository() {
+        return this.personalRepository;
+    }
 
-        PersonalEntity personal = personalRepository.findById(personalID).orElseThrow(() -> new EntityNotFoundException("Personal não encontrado"));
+    @Override
+    public List<WorkoutResponseDTO> findAll(Long ownerId) {
+        return workoutRepository.findAllByOwnerId(ownerId)
+                .stream()
+                .map(workoutMapper::toResponse)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional
+    public WorkoutResponseDTO create(WorkoutCreateDTO data, Long ownerId) {
+        PersonalEntity personal = personalRepository.findById(ownerId)
+                .orElseThrow(() -> new EntityNotFoundException("Personal não encontrado"));
 
         LocalDateTime classDate = data.classDate();
         LocalDateTime start = classDate.minusMinutes(30);
         LocalDateTime end = classDate.plusMinutes(30);
 
-        Long conflicts = workoutRepository.countConflictingPlans(personalID, start, end);
-
-        if (conflicts > 0) {
-            throw new ConflictException("Já existe um treino marcada nesse intervalo de 30 minutos.");
+        if (workoutRepository.countConflictingPlans(ownerId, start, end) > 0) {
+            throw new ConflictException("Já existe um treino marcado nesse intervalo de 30 minutos.");
         }
+
         String generatedContent = activityGenerator.generateSession(data.inputData());
 
-        WorkoutEntity entity = new WorkoutEntity(data.title(),
-                data.inputData(),
-                data.classDate(),
-                personal,
-                generatedContent);
-        WorkoutEntity classPlan = workoutRepository.save(entity);
-        return workoutMapper.toResponse(classPlan);
+        WorkoutEntity entity = WorkoutEntity.builder()
+                .title(data.title())
+                .topic(data.inputData())
+                .date(data.classDate())
+                .owner(personal)
+                .content(generatedContent)
+                .build();
 
+        WorkoutEntity savedWorkout = workoutRepository.save(entity);
+        return workoutMapper.toResponse(savedWorkout);
     }
-
-
-    public WorkoutResponseDTO findByID(Long id) {
-
-        Optional<WorkoutEntity> optionalClassPlan = workoutRepository.findById(id);
-
-        if (optionalClassPlan.isEmpty()) {
-            throw new EntityNotFoundException("Treino não encontrado com o ID: " + id);
-        }
-
-        return workoutMapper.toResponse(optionalClassPlan.get());
-
-    }
-
-    public List<WorkoutResponseDTO> findAll(Long personalID) {
-
-        List<WorkoutEntity> classPlans = workoutRepository.findAllByPersonalId(personalID);
-        return classPlans.stream().map(workoutMapper::toResponse).toList();
-
-    }
-
-    public void delete(Long id) {
-        this.workoutRepository.deleteById(id);
-    }
-
-    public WorkoutResponseDTO patchAiGeneratedContent(Long id, String input) {
-        WorkoutEntity entity = workoutRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Treino não encontrado com o ID: " + id));
-        entity.setContent(input);
-        WorkoutEntity classPlan = workoutRepository.save(entity);
-        return workoutMapper.toResponse(classPlan);
-    }
-
 }

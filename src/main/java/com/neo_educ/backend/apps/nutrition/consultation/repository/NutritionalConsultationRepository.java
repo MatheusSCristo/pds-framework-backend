@@ -10,11 +10,11 @@ import java.util.List;
 
 public interface NutritionalConsultationRepository extends AbstractRepository<NutritionalConsultationEntity> {
 
-    List<NutritionalConsultationEntity> findAllByNutritionist_Id(Long nutritionistId);
+    List<NutritionalConsultationEntity> findAllByOwnerId(Long ownerId);
 
-    @Query("SELECT COUNT(nc) FROM NutritionalConsultationEntity nc WHERE nc.nutritionist.id = :nutritionistId AND nc.date BETWEEN :start AND :end")
+    @Query("SELECT COUNT(nc) FROM NutritionalConsultationEntity nc WHERE nc.owner.id = :ownerId AND nc.date BETWEEN :start AND :end")
     Long countConflictingConsultations(
-            @Param("nutritionistId") Long nutritionistId,
+            @Param("ownerId") Long ownerId,
             @Param("start") LocalDateTime start,
             @Param("end") LocalDateTime end
     );

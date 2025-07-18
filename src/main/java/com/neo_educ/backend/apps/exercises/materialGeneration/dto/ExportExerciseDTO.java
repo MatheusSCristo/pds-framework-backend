@@ -12,6 +12,6 @@ public record ExportExerciseDTO(
         List<String> selectedExercises,
 
         @NotBlank(message = "O campo [email] não pode ser vazio")
-        String studentEmail
+        String athleteEmail
 ) {
 }

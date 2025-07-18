@@ -7,62 +7,56 @@ import com.neo_educ.backend.apps.exercises.athlete.mapper.AthleteMapper;
 import com.neo_educ.backend.apps.exercises.athlete.repository.AthleteRepository;
 import com.neo_educ.backend.apps.exercises.personal.entity.PersonalEntity;
 import com.neo_educ.backend.apps.exercises.personal.repository.PersonalRepository;
+import com.neo_educ.backend.core.mapper.ClientMapper;
 import com.neo_educ.backend.core.service.ClientService;
 import jakarta.persistence.EntityNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
+
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@AllArgsConstructor
+public class AthleteService implements ClientService<AthleteEntity, AthleteRegisterDTO, AthleteResponseDTO, PersonalEntity> {
 
-public class AthleteService implements ClientService<AthleteEntity, AthleteRegisterDTO, AthleteResponseDTO> {
+    private final AthleteRepository athleteRepository;
+    private final AthleteMapper athleteMapper;
+    private final PersonalRepository personalRepository;
 
-    @Autowired
-    private AthleteRepository athleteRepository;
+    @Override
+    public AthleteRepository getRepository() {
+        return this.athleteRepository;
+    }
 
-    @Autowired
-    private AthleteMapper athleteMapper;
+    @Override
+    public ClientMapper<AthleteRegisterDTO, AthleteResponseDTO, AthleteEntity> getModelMapper() {
+        return this.athleteMapper;
+    }
 
-    @Autowired
-    private PersonalRepository personalRepository;
+    @Override
+    public JpaRepository<PersonalEntity, Long> getOwnerRepository() {
+        return this.personalRepository;
+    }
+
 
     @Override
     @Transactional
-    public AthleteResponseDTO create(AthleteRegisterDTO createDto, Long personalId) {
-        PersonalEntity personal = personalRepository.findById(personalId)
-                .orElseThrow(() -> new EntityNotFoundException("Personal not found with ID: " + personalId));
+    public AthleteResponseDTO create(AthleteRegisterDTO createDto, Long ownerId) {
+        PersonalEntity personal = personalRepository.findById(ownerId)
+                .orElseThrow(() -> new EntityNotFoundException("Personal não encontrado com ID: " + ownerId));
 
-        if (athleteRepository.findByEmailAndPersonal(createDto.email(), personal).isPresent()) {
-            throw new RuntimeException("Athlete já existente");
-        }
+        athleteRepository.findByEmailAndOwner(createDto.email(), personal).ifPresent(athlete -> {
+            throw new RuntimeException("Atleta já existente para este personal.");
+        });
 
         AthleteEntity entity = athleteMapper.toEntity(createDto);
-        entity.setPersonal(personal);
+        entity.setOwner(personal);
 
         AthleteEntity savedAthlete = athleteRepository.save(entity);
-        return athleteMapper.toResponseDTO(savedAthlete);
+        return athleteMapper.toResponse(savedAthlete);
     }
 
-    @Override
-    public AthleteResponseDTO findById(Long id) {
-        return athleteRepository.findById(id)
-                .map(athleteMapper::toResponseDTO)
-                .orElseThrow(() -> new EntityNotFoundException("Atleta com ID: " + id + " não encontrado"));
-    }
-
-    @Override
-    public List<AthleteResponseDTO> findAll(Long personalId) {
-        List<AthleteEntity> entities = athleteRepository.findAllByPersonalId(personalId);
-        return entities.stream().map(athleteMapper::toResponseDTO).toList();
-    }
-
-    @Override
-    public void delete(Long id) {
-        if (!athleteRepository.existsById(id)) {
-            throw new EntityNotFoundException("Atleta com ID: " + id + " não encontrado para deleção.");
-        }
-        athleteRepository.deleteById(id);
-    }
 }

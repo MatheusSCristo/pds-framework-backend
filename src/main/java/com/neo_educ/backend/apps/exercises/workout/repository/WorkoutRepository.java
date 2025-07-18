@@ -10,12 +10,12 @@ import java.util.List;
 
 public interface WorkoutRepository extends AbstractRepository<WorkoutEntity> {
 
-  List<WorkoutEntity> findAllByPersonalId(Long teacherId);
+    List<WorkoutEntity> findAllByOwnerId(Long ownerId);
 
-  @Query("SELECT COUNT(cp) FROM WorkoutEntity cp WHERE cp.personal.id = :personalId AND cp.date BETWEEN :start AND :end")
-  Long countConflictingPlans(
-      @Param("personalId") Long personalId,
-      @Param("start") LocalDateTime start,
-      @Param("end") LocalDateTime end
-  );
+    @Query("SELECT COUNT(w) FROM WorkoutEntity w WHERE w.owner.id = :ownerId AND w.date BETWEEN :start AND :end")
+    Long countConflictingPlans(
+            @Param("ownerId") Long ownerId,
+            @Param("start") LocalDateTime start,
+            @Param("end") LocalDateTime end
+    );
 }

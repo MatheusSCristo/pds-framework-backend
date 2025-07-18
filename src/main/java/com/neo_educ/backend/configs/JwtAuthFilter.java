@@ -17,21 +17,23 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 
 import java.io.IOException;
+import java.util.Map;
 
 @Component
 public class JwtAuthFilter extends OncePerRequestFilter {
     private final JwtService jwtService;
-    private final UserDetailsService userDetailsService;
     private final HandlerExceptionResolver handlerExceptionResolver;
+
+    private final Map<String, UserDetailsService> userDetailsServices;
 
     public JwtAuthFilter(
             JwtService jwtService,
-            UserDetailsService userDetailsService,
-            HandlerExceptionResolver handlerExceptionResolver
+            HandlerExceptionResolver handlerExceptionResolver,
+            Map<String, UserDetailsService> userDetailsServices
     ) {
         this.jwtService = jwtService;
-        this.userDetailsService = userDetailsService;
         this.handlerExceptionResolver = handlerExceptionResolver;
+        this.userDetailsServices = userDetailsServices;
     }
 
     @Override
@@ -50,11 +52,15 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         try {
             final String jwt = authHeader.substring(7);
             final String userEmail = jwtService.extractUsername(jwt);
+            final String role = jwtService.extractRole(jwt); // <-- EXTRAI O PAPEL DO TOKEN
 
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
             if (userEmail != null && authentication == null) {
-                UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
+                // ESCOLHE O UserDetailsService CORRETO COM BASE NO PAPEL
+                UserDetailsService userDetailsService = getUserDetailsServiceForRole(role);
+                
+                UserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);
 
                 if (jwtService.isTokenValid(jwt, userDetails)) {
                     UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
@@ -62,15 +68,25 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                             null,
                             userDetails.getAuthorities()
                     );
-
                     authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(authToken);
                 }
             }
-
             filterChain.doFilter(request, response);
         } catch (Exception exception) {
             handlerExceptionResolver.resolveException(request, response, null, exception);
         }
+    }
+    
+    // MÉTODO AUXILIAR PARA ESCOLHER O SERVIÇO
+    private UserDetailsService getUserDetailsServiceForRole(String role) {
+        if ("TEACHER".equals(role)) {
+            return userDetailsServices.get("teacherService");
+        } else if ("NUTRITIONIST".equals(role)) {
+            return userDetailsServices.get("nutritionistService");
+        } else if ("PERSONAL".equals(role)) {
+            return userDetailsServices.get("personalService");
+        }
+        throw new IllegalArgumentException("Papel (role) inválido no token: " + role);
     }
 }

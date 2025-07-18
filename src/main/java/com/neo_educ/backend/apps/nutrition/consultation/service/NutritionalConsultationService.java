@@ -7,84 +7,77 @@ import com.neo_educ.backend.apps.nutrition.consultation.mappers.NutritionalConsu
 import com.neo_educ.backend.apps.nutrition.consultation.repository.NutritionalConsultationRepository;
 import com.neo_educ.backend.apps.nutrition.nutritionist.entity.NutritionistEntity;
 import com.neo_educ.backend.apps.nutrition.nutritionist.repository.NutritionistRepository;
-import com.neo_educ.backend.core.service.ActivityGeneratorService;
+import com.neo_educ.backend.core.mapper.SessionMapper;
 import com.neo_educ.backend.core.service.SessionService;
 import com.neo_educ.backend.exceptions.ConflictException;
 import jakarta.persistence.EntityNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+import lombok.AllArgsConstructor;
+
+import org.mapstruct.Mapper;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
-public class NutritionalConsultationService implements SessionService<NutritionalConsultationEntity, NutritionalConsultationCreateDTO, NutritionalConsultationResponseDTO> {
+@AllArgsConstructor
+public class NutritionalConsultationService implements SessionService<NutritionalConsultationEntity, NutritionalConsultationCreateDTO, NutritionalConsultationResponseDTO, NutritionistEntity> {
 
-    @Autowired
-    private NutritionalConsultationRepository nutritionalConsultationRepository;
+    private final NutritionalConsultationRepository consultationRepository;
+    private final NutritionistRepository nutritionistRepository;
+    private final NutritionalConsultationMapper consultationMapper;
 
-    @Autowired
-    private NutritionistRepository nutritionistRepository; // Repositório do nutricionista
-
-    @Autowired
-    private NutritionalConsultationMapper nutritionalConsultationMapper;
-
-    @Autowired
-    @Qualifier("nutritionActivityService") // Gerador de atividade de nutrição
-    private ActivityGeneratorService activityGenerator;
 
     @Override
-    public NutritionalConsultationResponseDTO create(NutritionalConsultationCreateDTO data, Long nutritionistID) {
-        // 1. Busca o nutricionista ou lança uma exceção
-        NutritionistEntity nutritionist = nutritionistRepository.findById(nutritionistID)
+    public JpaRepository<NutritionalConsultationEntity, Long> getRepository() {
+        return this.consultationRepository;
+    }
+
+    @Override
+    public SessionMapper<NutritionalConsultationCreateDTO, NutritionalConsultationResponseDTO, NutritionalConsultationEntity> getMapper() {
+        return this.consultationMapper;
+    }
+
+    @Override
+    public JpaRepository<NutritionistEntity, Long> getOwnerRepository() {
+        return this.nutritionistRepository;
+    }
+    
+    @Override
+    public List<NutritionalConsultationResponseDTO> findAll(Long ownerId) {
+        return consultationRepository.findAllByOwnerId(ownerId)
+                .stream()
+                .map(consultationMapper::toResponse)
+                .collect(Collectors.toList());
+    }
+
+
+    @Override
+    @Transactional
+    public NutritionalConsultationResponseDTO create(NutritionalConsultationCreateDTO data, Long ownerId) {
+        NutritionistEntity nutritionist = nutritionistRepository.findById(ownerId)
                 .orElseThrow(() -> new EntityNotFoundException("Nutricionista não encontrado"));
 
-        // 2. Verifica se há conflito de horários
-        LocalDateTime consultationDate = data.consultationDate();
+        LocalDateTime consultationDate = data.date();
         LocalDateTime start = consultationDate.minusMinutes(30);
         LocalDateTime end = consultationDate.plusMinutes(30);
 
-        Long conflicts = nutritionalConsultationRepository.countConflictingConsultations(nutritionistID, start, end);
-
-        if (conflicts > 0) {
+        if (consultationRepository.countConflictingConsultations(ownerId, start, end) > 0) {
             throw new ConflictException("Já existe uma consulta marcada nesse intervalo de 30 minutos.");
         }
-    
 
-        // 4. Cria e salva a nova entidade de consulta
-        NutritionalConsultationEntity entity = new NutritionalConsultationEntity(
-                data.title(),
-                data.consultationType(),
-                data.consultationDate(),
-                nutritionist
-        );
+        NutritionalConsultationEntity entity = NutritionalConsultationEntity.builder()
+                .title(data.title())
+                .date(data.date())
+                .owner(nutritionist)
+                .consultationType(data.consultationType())
+                .build();
         
-        NutritionalConsultationEntity consultation = nutritionalConsultationRepository.save(entity);
-        return nutritionalConsultationMapper.toResponse(consultation);
-    }
-
-    @Override
-    public NutritionalConsultationResponseDTO findByID(Long id) {
-        Optional<NutritionalConsultationEntity> optionalConsultation = nutritionalConsultationRepository.findById(id);
-
-        if (optionalConsultation.isEmpty()) {
-            throw new EntityNotFoundException("Consulta não encontrada com o ID: " + id);
-        }
-
-        return nutritionalConsultationMapper.toResponse(optionalConsultation.get());
-    }
-
-    @Override
-    public List<NutritionalConsultationResponseDTO> findAll(Long nutritionistID) {
-        List<NutritionalConsultationEntity> consultations = nutritionalConsultationRepository.findAllByNutritionist_Id(nutritionistID);
-        return consultations.stream().map(nutritionalConsultationMapper::toResponse).toList();
-    }
-
-    @Override
-    public void delete(Long id) {
-        this.nutritionalConsultationRepository.deleteById(id);
+        NutritionalConsultationEntity consultation = consultationRepository.save(entity);
+        return consultationMapper.toResponse(consultation);
     }
 
 }

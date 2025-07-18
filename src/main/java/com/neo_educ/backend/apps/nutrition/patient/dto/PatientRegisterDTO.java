@@ -5,6 +5,9 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.util.List;
+import java.util.Set;
+
+import com.neo_educ.backend.apps.nutrition.patient.enums.NutritionalGoal;
 
 public record PatientRegisterDTO(
 
@@ -24,9 +27,7 @@ public record PatientRegisterDTO(
     @NotBlank(message = "O campo de alergias é obrigatório. Se não houver, escreva 'Nenhuma'.")
     String allergies,
 
-    @NotNull(message = "As metas nutricionais são obrigatórias.")
-    @Size(min = 1, message = "Selecione pelo menos uma meta.")
-    List<@NotNull(message = "O código da meta não pode ser nulo.") Integer> nutritionalGoals,
+    Set<NutritionalGoal> nutritionalGoals,
 
     @NotBlank(message = "O token de convite é obrigatório.")
     String token

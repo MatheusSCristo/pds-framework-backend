@@ -10,7 +10,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
-@Primary // Mark this as the primary UserDetailsService bean
+@Primary
 public class CombinedUserDetailsService implements UserDetailsService {
 
     private final TeacherService teacherService;
@@ -25,14 +25,11 @@ public class CombinedUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         try {
-            // Try to load as a Teacher
             return teacherService.loadUserByUsername(username);
         } catch (UsernameNotFoundException e) {
-            // If not found as a Teacher, try to load as a Personal
             try {
                 return personalService.loadUserByUsername(username);
             } catch (UsernameNotFoundException ex) {
-                // If still not found, throw the original exception
                 throw new UsernameNotFoundException("User not found with email: " + username);
             }
         }

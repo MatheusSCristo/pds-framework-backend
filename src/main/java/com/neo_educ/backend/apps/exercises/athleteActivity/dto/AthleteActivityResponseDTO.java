@@ -1,4 +1,4 @@
-package com.neo_educ.backend.apps.exercises.studentActivity.dto;
+package com.neo_educ.backend.apps.exercises.athleteActivity.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

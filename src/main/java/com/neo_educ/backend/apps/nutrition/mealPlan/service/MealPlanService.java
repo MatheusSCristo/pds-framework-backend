@@ -1,5 +1,6 @@
 package com.neo_educ.backend.apps.nutrition.mealPlan.service;
 
+import com.neo_educ.backend.apps.nutrition.materialGeneration.dto.GenerateMealPlanDTO;
 import com.neo_educ.backend.apps.nutrition.mealPlan.dto.MealPlanResponseDTO;
 import com.neo_educ.backend.apps.nutrition.mealPlan.entity.MealPlanEntity;
 import com.neo_educ.backend.apps.nutrition.mealPlan.mapper.MealPlanMapper;
@@ -37,7 +38,10 @@ public class MealPlanService {
         PatientEntity patient = patientRepository.findById(patientId)
                 .orElseThrow(() -> new EntityNotFoundException("Paciente com ID " + patientId + " não encontrado."));
 
-        String generatedContent = activityGenerator.generateActivityContent(patientId, category);
+        GenerateMealPlanDTO generatorDTO = new GenerateMealPlanDTO(patientId, category);
+
+
+        String generatedContent = activityGenerator.generateActivityContent(generatorDTO);
 
         MealPlanEntity newMealPlan = MealPlanEntity.builder()
                 .title(category) 

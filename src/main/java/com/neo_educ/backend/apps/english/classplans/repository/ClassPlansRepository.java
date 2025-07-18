@@ -11,9 +11,9 @@ import com.neo_educ.backend.core.repository.AbstractRepository;
 
 public interface ClassPlansRepository extends AbstractRepository<ClassPlansEntity> {
 
-  List<ClassPlansEntity> findAllByTeacher_Id(Long teacherId);
+  List<ClassPlansEntity> findAllByOwnerId(Long ownerId);
 
-  @Query("SELECT COUNT(cp) FROM ClassPlansEntity cp WHERE cp.teacher.id = :teacherId AND cp.date BETWEEN :start AND :end")
+  @Query("SELECT COUNT(cp) FROM ClassPlansEntity cp WHERE cp.owner.id = :ownerId AND cp.date BETWEEN :start AND :end")
   Long countConflictingPlans(
       @Param("teacherId") Long teacherId,
       @Param("start") LocalDateTime start,
