@@ -84,6 +84,9 @@ public class WorkoutService
                 .title(data.title())
                 .topic(data.inputData())
                 .date(data.classDate())
+                .goal(data.goal()) 
+                .duration(data.duration()) 
+                .workoutsPerWeek(data.workoutsPerWeek()) 
                 .owner(personal)
                 .content(generatedContent)
                 .build();

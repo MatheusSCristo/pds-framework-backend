@@ -25,7 +25,7 @@ public abstract class ClientEntity<U extends AbstractModel> extends AbstractMode
 
     @Email(message = "O formato do e-mail é inválido.")
     @NotBlank(message = "O e-mail não pode estar em branco.")
-    @Column(name = "email", unique = true, nullable = false)
+    @Column(name = "email", nullable = false)
     protected String email;
 
     @NotBlank(message = "O telefone não pode estar em branco.")

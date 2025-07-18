@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 public record WorkoutResponseDTO(
   Long id,
   String title,
-  LocalDateTime classDate,
+  LocalDateTime date,
   String inputData,
   String aiGeneratedContent
 ) {} 

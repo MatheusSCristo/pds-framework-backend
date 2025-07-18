@@ -1,5 +1,6 @@
 package com.neo_educ.backend.apps.exercises.athlete.dto;
 
+import com.neo_educ.backend.apps.exercises.athlete.enums.InterestsEnum;
 import com.neo_educ.backend.apps.exercises.athlete.enums.Sex;
 import com.neo_educ.backend.apps.exercises.athlete.enums.WorkoutLevel;
 import jakarta.validation.constraints.Email;
@@ -27,7 +28,7 @@ public record AthleteRegisterDTO(
 
         @NotNull(message = "Os interesses são obrigatórios.")
         @Size(min = 1, message = "Selecione pelo menos um interesse.")
-        List<@NotNull(message = "O ID do interesse não pode ser nulo.") Integer> interests,
+        List<@NotNull(message = "O ID do interesse não pode ser nulo.") InterestsEnum> interests,
 
         @NotNull(message = "O nível de workout é obrigatório.")
         WorkoutLevel workoutLevel,
