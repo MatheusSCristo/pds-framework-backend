@@ -14,87 +14,37 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service("englishActivityService")
-public class EnglishActivityService implements ActivityGeneratorService {
+public class EnglishActivityService extends ActivityGeneratorService<GenerateStudentActivityDTO, GenerateStudentReportDTO, GenerateMaterialDTO, GenerateExerciseDTO>{
 
     @Autowired
-    private LLMService llmService;
-
-    @Autowired
-    private StudentService studentService; // Se ainda for necessário
+    private StudentService studentService;
 
     @Autowired
     private EnglishSetencesPromptTemplate promptTemplate;
 
     @Override
-    public String generateSession(String topic) {
-        try {
-            String prompt = promptTemplate.createClassPlanPrompt(topic);
-            return llmService.chat(prompt);
-        } catch (Exception e) {
-            throw new ActivityGenerateException();
-        }
-    }
-
-    // MÉTODO CORRIGIDO
-    @Override
-    public String generateMaterialContent(Object dto) { // O tipo do parâmetro DEVE ser Object
-        try {
-            // Fazer a verificação de tipo e o cast dentro do método
-            if (dto instanceof GenerateMaterialDTO) {
-                GenerateMaterialDTO materialDTO = (GenerateMaterialDTO) dto;
-                String prompt = promptTemplate.createMaterialPrompt(materialDTO);
-                return llmService.chat(prompt);
-            } else {
-                throw new IllegalArgumentException("Tipo de DTO não suportado para generateMaterialContent no EnglishActivityService.");
-            }
-        } catch (Exception e) {
-            throw new ActivityGenerateException();
-        }
+    protected String buildPromptForSession(String topic) {
+        return promptTemplate.createClassPlanPrompt(topic);
     }
 
     @Override
-    public String generateActivityContent(Object data) {
-        try {
-            if(data instanceof GenerateStudentActivityDTO generateStudentActivityDTO) {
-                StudentResponseDTO student = studentService.findById(generateStudentActivityDTO.studentId());
-                String prompt = promptTemplate.createActivityPrompt(student.interests(), student.proficiencyLevel(), generateStudentActivityDTO.subject());
-                return llmService.chat(prompt);
-            }
-            return null;
-
-        } catch (Exception e) {
-            throw new ActivityGenerateException();
-        }
+    protected String buildPromptForActivity(GenerateStudentActivityDTO data) {
+        StudentResponseDTO student = studentService.findById(data.studentId());
+        return promptTemplate.createActivityPrompt(student.interests(), student.proficiencyLevel(), data.subject());
     }
 
     @Override
-    public String generateReportContent(Object reportData) {
-        if(reportData instanceof GenerateStudentReportDTO) {
-            try {
-                String prompt = promptTemplate.createReportPrompt(((GenerateStudentReportDTO) reportData).data());
-                return llmService.chat(prompt);
-            } catch (Exception e) {
-            throw new ActivityGenerateException();
-            }
-        }
-        else{
-            throw new ClassCastException();
-        }
-
+    protected String buildPromptForReport(GenerateStudentReportDTO reportData) {
+        return promptTemplate.createReportPrompt(reportData.data());
     }
 
     @Override
-    public String generateExerciseContent(Object dto) {
-        try {
-            if (dto instanceof GenerateExerciseDTO) {
-                GenerateExerciseDTO exerciseDTO = (GenerateExerciseDTO) dto;
-                String prompt = promptTemplate.createExercisePrompt(exerciseDTO);
-                return llmService.chat(prompt);
-            } else {
-                throw new IllegalArgumentException("Tipo de DTO não suportado para generateStructuredTasks no EnglishActivityService.");
-            }
-        } catch (Exception e) {
-            throw new ActivityGenerateException();
-        }
+    protected String buildPromptForExercise(GenerateExerciseDTO exerciseDto) {
+        return promptTemplate.createExercisePrompt(exerciseDto);
+    }
+
+    @Override
+    protected String buildPromptForMaterial(GenerateMaterialDTO materialDto) {
+        return promptTemplate.createMaterialPrompt(materialDto);
     }
 }
